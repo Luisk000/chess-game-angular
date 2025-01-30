@@ -1,0 +1,15 @@
+<div class="background">
+  <div class="tabuleiro">
+    <div class="casas">
+      <div class="coluna" *ngFor="let coluna of colunaCasas">
+        <div
+          class="casa"
+          *ngFor="let casa of coluna"
+          [ngStyle]="{ 'background-color': casa.cor }"
+        >
+          <p class="peca" style="color: red">{{ casa.peca }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
