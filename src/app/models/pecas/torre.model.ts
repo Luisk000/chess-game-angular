@@ -5,8 +5,9 @@ export class Torre extends InitPeca{
         super(cor, "torre"); 
     }
 
-    override acao() {
-        
+    override verificarAcoes(colunaInicio: number, linhaInicio: number) {
+        let acoes: { colunaPossivel: number, linhaPossivel: number }[] = [];
+        let movimentoColuna = this.cor === "branco" ? -1 : 1;     
     }
 
 }

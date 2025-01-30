@@ -12,5 +12,5 @@ export abstract class InitPeca implements Peca{
         this.imagem = `${this.nome}_${this.cor}.png`;
     }
 
-    acao(coluna: number, linha: number): { novaColuna: number; novaLinha: number; } | void {}
+    verificarAcoes(colunaInicio: number, linhaInicio: number): { colunaPossivel: number; linhaPossivel: number; }[] | void {}
 }

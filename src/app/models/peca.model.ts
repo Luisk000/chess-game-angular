@@ -3,5 +3,5 @@ export interface Peca {
     nome: string;
     cor: string;
     vivo: boolean;
-    acao(coluna: number, linha: number): { novaColuna: number; novaLinha: number; } | void;
+    verificarAcoes(colunaInicio: number, linhaInicio: number): { colunaPossivel: number; linhaPossivel: number; }[] | void;
 }

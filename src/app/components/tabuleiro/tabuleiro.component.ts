@@ -3,6 +3,7 @@ import { Casa } from '../../models/casa.model';
 import { InitPeca } from '../../models/init-peca.model';
 import { Cavalo } from '../../models/pecas/cavalo.model';
 import { Bispo } from '../../models/pecas/bispo.model';
+import { Peao } from '../../models/pecas/peao.model';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -17,10 +18,11 @@ export class TabuleiroComponent implements OnInit {
 
   ngOnInit() {
     this.definirArray();
-    this.designarPecas();
+    this.designarPecasTeste();
 
-    let cavalo: Bispo = new Bispo("branco");
-    console.log(cavalo)
+    let peao: Peao = new Peao("branco");
+    let teste = peao.verificarAcoes(3, 2);
+    console.log(teste)
   }
 
   definirArray(){
@@ -57,32 +59,32 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  designarPecas(){
+  designarPecasTeste(){
 
     for (let i = 0; i < 8; i++){
-      this.colunaCasas[1][i].peca = "peao";
-      this.colunaCasas[6][i].peca = "peao";
+      this.colunaCasas[1][i].peca = "peao" + "[1][" + i +"]";
+      this.colunaCasas[6][i].peca = "peao" + "[6][" + i +"]";
     }
 
-    this.colunaCasas[0][0].peca = "torre";
-    this.colunaCasas[0][7].peca = "torre";
-    this.colunaCasas[7][0].peca = "torre";
-    this.colunaCasas[7][7].peca = "torre";
+    this.colunaCasas[0][0].peca = "torre" + "[0][0]";
+    this.colunaCasas[0][7].peca = "torre" + "[0][7]";
+    this.colunaCasas[7][0].peca = "torre" + "[7][0]";
+    this.colunaCasas[7][7].peca = "torre" + "[7][7]";
 
-    this.colunaCasas[0][1].peca = "cavalo";
-    this.colunaCasas[0][6].peca = "cavalo";
-    this.colunaCasas[7][1].peca = "cavalo";
-    this.colunaCasas[7][6].peca = "cavalo";
+    this.colunaCasas[0][1].peca = "cavalo" + "[0][1]";
+    this.colunaCasas[0][6].peca = "cavalo" + "[0][6]";
+    this.colunaCasas[7][1].peca = "cavalo" + "[7][1]";
+    this.colunaCasas[7][6].peca = "cavalo" + "[7][6]";
 
-    this.colunaCasas[0][2].peca = "bispo";
-    this.colunaCasas[0][5].peca = "bispo";
-    this.colunaCasas[7][2].peca = "bispo";
-    this.colunaCasas[7][5].peca = "bispo";
+    this.colunaCasas[0][2].peca = "bispo" + "[0][2]";
+    this.colunaCasas[0][5].peca = "bispo" + "[0][5]";
+    this.colunaCasas[7][2].peca = "bispo" + "[7][2]";
+    this.colunaCasas[7][5].peca = "bispo" + "[7][5]";
 
-    this.colunaCasas[0][4].peca = "rei";
-    this.colunaCasas[7][4].peca = "rei";
+    this.colunaCasas[0][4].peca = "rei" + "[0][4]";
+    this.colunaCasas[7][4].peca = "rei" + "[7][4]";
 
-    this.colunaCasas[0][3].peca = "rainha";
-    this.colunaCasas[7][3].peca = "rainha";
+    this.colunaCasas[0][3].peca = "rainha" + "[0][3]";
+    this.colunaCasas[7][3].peca = "rainha" + "[7][3]";
   }
 }
