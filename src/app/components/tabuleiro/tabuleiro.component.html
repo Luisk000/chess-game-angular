@@ -1,7 +1,19 @@
 <div class="background">
   <div class="tabuleiro">
-    <div class="casas">
-      <div class="coluna" *ngFor="let coluna of colunaCasas; let col = index">
+  
+    <div class="casas-tabuleiro">
+      <div class="coluna" *ngFor="let coluna of colunaCasasTabuleiro">
+        <div
+          class="casa"
+          *ngFor="let casa of coluna"
+          [ngStyle]="{ 'background-color': casa.cor }"
+        >
+
+        </div>
+      </div>
+    </div>
+    <div class="casas-acao">
+      <div class="coluna" *ngFor="let coluna of colunaCasasAcao; let col = index">
         <div
           class="casa"
           *ngFor="let casa of coluna; let ca = index"

@@ -26,67 +26,62 @@ export abstract class Peca {
     };
 
     verificarMovimentosDiagonais(colunaInicio: number, linhaInicio: number) {
-        this.acoes = [];
-        
         let coluna = colunaInicio - 1;
         let linha = linhaInicio - 1;
         while (coluna >= 0 && linha >= 0){
             this.adicionarMovimentoUnico(coluna, linha);
-            coluna - 1;
-            linha - 1;
+            coluna--;
+            linha--;
         }
 
         coluna = colunaInicio - 1;
         linha = linhaInicio + 1;
         while (coluna >= 0 && linha <= 7){
             this.adicionarMovimentoUnico(coluna, linha);
-            coluna - 1;
-            linha + 1;
+            coluna--;
+            linha++;
         }
 
         coluna = colunaInicio + 1;
         linha = linhaInicio - 1;
         while (coluna <= 7 && linha >= 0){
             this.adicionarMovimentoUnico(coluna, linha);
-            coluna + 1;
-            linha - 1;
+            coluna++;
+            linha--;
         }
 
         coluna = colunaInicio + 1;
         linha = linhaInicio + 1;
         while (coluna <= 7 && linha <= 7){
             this.adicionarMovimentoUnico(coluna, linha);
-            coluna + 1;
-            linha + 1;
+            coluna++;
+            linha++;
         }
     }
 
     verificarMovimentosRetos(colunaInicio: number, linhaInicio: number) {
-        this.acoes = [];
-        
         let coluna = colunaInicio - 1;
         while (coluna >= 0){
             this.adicionarMovimentoUnico(coluna, linhaInicio);
-            coluna - 1;
+            coluna--;
         }
 
         coluna = colunaInicio + 1;
         while (coluna <= 7){
             this.adicionarMovimentoUnico(coluna, linhaInicio);
-            coluna - 1;
+            coluna++;
         }
 
         let linha = linhaInicio - 1;
         while (linha >= 0){
             this.adicionarMovimentoUnico(colunaInicio, linha);
-            linha - 1;
+            linha--;
         }
 
         linha = linhaInicio + 1;
         while (linha <= 7){
             this.adicionarMovimentoUnico(colunaInicio, linha);
-            coluna + 1;
-            linha + 1;
+            linha++;
         }
     }
 

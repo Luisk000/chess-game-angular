@@ -8,11 +8,15 @@ export class Peao extends Peca{
     override verMovimentosPossiveis(colunaInicio: number, linhaInicio: number) {   
         this.acoes = [];
 
-        let direcaoColuna = this.cor === "branco" ? -1 : 1;
-        let movimentoColuna = colunaInicio + direcaoColuna;
-
-        this.verificarEAdicionarMovimentoUnico(movimentoColuna, linhaInicio - 1);
-        this.verificarEAdicionarMovimentoUnico(movimentoColuna, linhaInicio + 1); 
+        if (this.cor === "branco"){
+            this.verificarEAdicionarMovimentoUnico(colunaInicio - 1, linhaInicio);
+            this.verificarEAdicionarMovimentoUnico(colunaInicio - 2, linhaInicio);
+        }
+        else{
+            this.verificarEAdicionarMovimentoUnico(colunaInicio + 1, linhaInicio);
+            this.verificarEAdicionarMovimentoUnico(colunaInicio + 2, linhaInicio);
+        }
+    
     }
 
 }

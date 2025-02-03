@@ -17,7 +17,9 @@ import { Torre } from '../../models/pecas/torre.model';
 })
 export class TabuleiroComponent implements OnInit {
   
-  colunaCasas: Casa[][] = [];
+  colunaCasasAcao: Casa[][] = [];
+  colunaCasasTabuleiro: Casa[][] = [];
+  locaisPecaSelecionada: Casa[] = [];
 
   async ngOnInit() {
     await this.definirArray();
@@ -25,24 +27,24 @@ export class TabuleiroComponent implements OnInit {
   }
 
   async definirArray(){
-    for (let i = 0; i < 8; i + 1) {
-      
+    for (let i = 0; i <= 7; i++) {
       let coluna = "par";
       if (i % 2 != 0) coluna = "impar";
 
-      this.colunaCasas[i] = [];
-      for (let j = 0; j < 8; j + 1) {
-        this.colunaCasas[i].push(new Casa());
+      this.colunaCasasTabuleiro[i] = [];
+      for (let j = 0; j <= 7; j++) {
+        this.colunaCasasTabuleiro[i].push(new Casa());
       }
 
-      this.definirCasas(this.colunaCasas[i], coluna)
+      this.colunaCasasAcao = JSON.parse(JSON.stringify(this.colunaCasasTabuleiro));
+      await this.definirCasas(this.colunaCasasTabuleiro[i], coluna)
     }
   }
 
-  definirCasas(casas: Casa[], coluna: string){
+  async definirCasas(casas: Casa[], coluna: string){
     let i = 0;
     for (let casa of casas){
-      if (coluna == "par"){
+      if (coluna === "par"){
         if (i % 2 == 0)
           casa.cor = "white"
         else
@@ -54,46 +56,58 @@ export class TabuleiroComponent implements OnInit {
         else
           casa.cor = "white"
       }      
-      i + 1;
+      i++;
     }
   }
 
   async prepararPecas(){
-    for (let i = 0; i < 8; i + 1){
-      this.colunaCasas[1][i].peca = new Peao("preto")
-      this.colunaCasas[6][i].peca = new Peao("branco")
+    for (let i = 0; i <= 7; i++){
+      this.colunaCasasAcao[1][i].peca = new Peao("preto")
+      this.colunaCasasAcao[6][i].peca = new Peao("branco")
     }
 
-    this.colunaCasas[0][0].peca = new Torre("preto")
-    this.colunaCasas[0][7].peca = new Torre("preto")
-    this.colunaCasas[7][0].peca = new Torre("branco")
-    this.colunaCasas[7][7].peca = new Torre("branco")
+    this.colunaCasasAcao[0][0].peca = new Torre("preto")
+    this.colunaCasasAcao[0][7].peca = new Torre("preto")
+    this.colunaCasasAcao[7][0].peca = new Torre("branco")
+    this.colunaCasasAcao[7][7].peca = new Torre("branco")
 
-    this.colunaCasas[0][1].peca = new Cavalo("preto")
-    this.colunaCasas[0][6].peca = new Cavalo("preto")
-    this.colunaCasas[7][1].peca = new Cavalo("branco")
-    this.colunaCasas[7][6].peca = new Cavalo("branco")
+    this.colunaCasasAcao[0][1].peca = new Cavalo("preto")
+    this.colunaCasasAcao[0][6].peca = new Cavalo("preto")
+    this.colunaCasasAcao[7][1].peca = new Cavalo("branco")
+    this.colunaCasasAcao[7][6].peca = new Cavalo("branco")
 
-    this.colunaCasas[0][2].peca = new Bispo("preto")
-    this.colunaCasas[0][5].peca = new Bispo("preto")
-    this.colunaCasas[7][2].peca = new Bispo("branco")
-    this.colunaCasas[7][5].peca = new Bispo("branco")
+    this.colunaCasasAcao[0][2].peca = new Bispo("preto")
+    this.colunaCasasAcao[0][5].peca = new Bispo("preto")
+    this.colunaCasasAcao[7][2].peca = new Bispo("branco")
+    this.colunaCasasAcao[7][5].peca = new Bispo("branco")
 
-    this.colunaCasas[0][4].peca = new Rei("preto")
-    this.colunaCasas[7][4].peca = new Rei("branco")
+    this.colunaCasasAcao[0][4].peca = new Rei("preto")
+    this.colunaCasasAcao[7][4].peca = new Rei("branco")
 
-    this.colunaCasas[0][3].peca = new Rainha("preto");
-    this.colunaCasas[7][3].peca = new Rainha("branco");
-    console.log(this.colunaCasas[7][3].peca?.imagem);
+    this.colunaCasasAcao[0][3].peca = new Rainha("preto");
+    this.colunaCasasAcao[7][3].peca = new Rainha("branco");
+
+    console.log(this.colunaCasasTabuleiro)
+    console.log(this.colunaCasasAcao)
   }
 
   verificarMovimentos(peca: Peca, coluna: number, casa: number){
     peca.verMovimentosPossiveis(coluna, casa);
-    console.log(peca.acoes)
-    if (peca.acoes)
+    if (peca.acoes){
+      this.apagarLocaisAnteriores();
       for (let acao of peca.acoes){
-        this.colunaCasas[acao.colunaPossivel][acao.linhaPossivel].cor = "green";
+        let localPecaSelecionada = this.colunaCasasAcao[acao.colunaPossivel][acao.linhaPossivel]
+        localPecaSelecionada.cor = "green";
+        this.locaisPecaSelecionada.push(localPecaSelecionada)
       }
+    }
+      
+  }
+
+  apagarLocaisAnteriores(){
+    for (let local of this.locaisPecaSelecionada){
+      local.cor = "";
+    }
   }
 
 }
