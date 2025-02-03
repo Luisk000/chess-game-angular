@@ -1,17 +1,21 @@
+import { PecaService } from "../../services/peca.service";
+import { Acao } from "../acao.model";
 import { Peca } from "../peca.model";
 export class Rei extends Peca{  
     
-    constructor(cor: string) {
+    constructor(cor: string, private pecaService: PecaService) {
         super(cor, "rei"); 
     }
     
     override verMovimentosPossiveis(colunaInicio: number, linhaInicio: number) {
-        this.acoes = [];
+        let acoesPossiveis = [
+            new Acao(colunaInicio + 1, linhaInicio),   
+            new Acao(colunaInicio - 1, linhaInicio), 
+            new Acao(colunaInicio, linhaInicio + 1), 
+            new Acao(colunaInicio, linhaInicio - 1),  
+        ];
 
-        this.verificarEAdicionarMovimentoUnico(colunaInicio + 1, linhaInicio);
-        this.verificarEAdicionarMovimentoUnico(colunaInicio - 1, linhaInicio); 
-        this.verificarEAdicionarMovimentoUnico(colunaInicio, linhaInicio + 1);
-        this.verificarEAdicionarMovimentoUnico(colunaInicio, linhaInicio - 1); 
+        this.acoes = this.pecaService.verificarMovimentos(acoesPossiveis);
     }
 
 }

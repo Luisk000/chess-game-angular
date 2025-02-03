@@ -7,6 +7,7 @@ import { Peao } from '../../models/pecas/peao.model';
 import { Rainha } from '../../models/pecas/rainha.mode';
 import { Rei } from '../../models/pecas/rei.model';
 import { Torre } from '../../models/pecas/torre.model';
+import { PecaService } from '../../services/peca.service';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -20,6 +21,10 @@ export class TabuleiroComponent implements OnInit {
   colunaCasasAcao: Casa[][] = [];
   colunaCasasTabuleiro: Casa[][] = [];
   locaisPecaSelecionada: Casa[] = [];
+
+  constructor(private pecaService: PecaService){
+    
+  }
 
   async ngOnInit() {
     await this.definirArray();
@@ -62,30 +67,30 @@ export class TabuleiroComponent implements OnInit {
 
   async prepararPecas(){
     for (let i = 0; i <= 7; i++){
-      this.colunaCasasAcao[1][i].peca = new Peao("preto")
-      this.colunaCasasAcao[6][i].peca = new Peao("branco")
+      this.colunaCasasAcao[1][i].peca = new Peao("preto", this.pecaService)
+      this.colunaCasasAcao[6][i].peca = new Peao("branco", this.pecaService)
     }
 
-    this.colunaCasasAcao[0][0].peca = new Torre("preto")
-    this.colunaCasasAcao[0][7].peca = new Torre("preto")
-    this.colunaCasasAcao[7][0].peca = new Torre("branco")
-    this.colunaCasasAcao[7][7].peca = new Torre("branco")
+    this.colunaCasasAcao[0][0].peca = new Torre("preto", this.pecaService)
+    this.colunaCasasAcao[0][7].peca = new Torre("preto", this.pecaService)
+    this.colunaCasasAcao[7][0].peca = new Torre("branco", this.pecaService)
+    this.colunaCasasAcao[7][7].peca = new Torre("branco", this.pecaService)
 
-    this.colunaCasasAcao[0][1].peca = new Cavalo("preto")
-    this.colunaCasasAcao[0][6].peca = new Cavalo("preto")
-    this.colunaCasasAcao[7][1].peca = new Cavalo("branco")
-    this.colunaCasasAcao[7][6].peca = new Cavalo("branco")
+    this.colunaCasasAcao[0][1].peca = new Cavalo("preto", this.pecaService)
+    this.colunaCasasAcao[0][6].peca = new Cavalo("preto", this.pecaService)
+    this.colunaCasasAcao[7][1].peca = new Cavalo("branco", this.pecaService)
+    this.colunaCasasAcao[7][6].peca = new Cavalo("branco", this.pecaService)
 
-    this.colunaCasasAcao[0][2].peca = new Bispo("preto")
-    this.colunaCasasAcao[0][5].peca = new Bispo("preto")
-    this.colunaCasasAcao[7][2].peca = new Bispo("branco")
-    this.colunaCasasAcao[7][5].peca = new Bispo("branco")
+    this.colunaCasasAcao[0][2].peca = new Bispo("preto", this.pecaService)
+    this.colunaCasasAcao[0][5].peca = new Bispo("preto", this.pecaService)
+    this.colunaCasasAcao[7][2].peca = new Bispo("branco", this.pecaService)
+    this.colunaCasasAcao[7][5].peca = new Bispo("branco", this.pecaService)
 
-    this.colunaCasasAcao[0][4].peca = new Rei("preto")
-    this.colunaCasasAcao[7][4].peca = new Rei("branco")
+    this.colunaCasasAcao[0][4].peca = new Rei("preto", this.pecaService)
+    this.colunaCasasAcao[7][4].peca = new Rei("branco", this.pecaService)
 
-    this.colunaCasasAcao[0][3].peca = new Rainha("preto");
-    this.colunaCasasAcao[7][3].peca = new Rainha("branco");
+    this.colunaCasasAcao[0][3].peca = new Rainha("preto", this.pecaService);
+    this.colunaCasasAcao[7][3].peca = new Rainha("branco", this.pecaService);
 
     console.log(this.colunaCasasTabuleiro)
     console.log(this.colunaCasasAcao)
@@ -97,7 +102,7 @@ export class TabuleiroComponent implements OnInit {
       this.apagarLocaisAnteriores();
       for (let acao of peca.acoes){
         let localPecaSelecionada = this.colunaCasasAcao[acao.colunaPossivel][acao.linhaPossivel]
-        localPecaSelecionada.cor = "green";
+        localPecaSelecionada.cor = "LimeGreen";
         this.locaisPecaSelecionada.push(localPecaSelecionada)
       }
     }

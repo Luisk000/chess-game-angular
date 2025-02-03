@@ -40,6 +40,7 @@
     width: 70px;
 }
 
+
 .peca, .casa{
     display: flex;
     justify-content: center;
