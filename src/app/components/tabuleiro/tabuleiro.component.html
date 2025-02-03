@@ -1,13 +1,15 @@
 <div class="background">
   <div class="tabuleiro">
     <div class="casas">
-      <div class="coluna" *ngFor="let coluna of colunaCasas">
+      <div class="coluna" *ngFor="let coluna of colunaCasas; let col = index">
         <div
           class="casa"
-          *ngFor="let casa of coluna"
+          *ngFor="let casa of coluna; let ca = index"
           [ngStyle]="{ 'background-color': casa.cor }"
         >
-          <p class="peca" style="color: red; font-size: 14px">{{ casa.peca }}</p>
+        <span *ngIf="casa.peca">
+          <img src="{{casa.peca.imagem}}" alt="" class="imagem-peca" (click)="verificarMovimentos(casa.peca, col, ca)">
+        </span>
         </div>
       </div>
     </div>

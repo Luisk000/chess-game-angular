@@ -1,5 +1,5 @@
-import { InitPeca } from "../init-peca.model";
-export class Peao extends InitPeca{  
+import { Peca } from "../peca.model";
+export class Peao extends Peca{  
     
     constructor(cor: string) {
         super(cor, "peao"); 
@@ -11,12 +11,8 @@ export class Peao extends InitPeca{
         let direcaoColuna = this.cor === "branco" ? -1 : 1;
         let movimentoColuna = colunaInicio + direcaoColuna;
 
-        if (movimentoColuna >= 0 && movimentoColuna <= 7){
-            if (linhaInicio - 1 >= 0)
-                this.adicionarMovimentoPossivel(movimentoColuna, linhaInicio - 1);
-            if (linhaInicio + 1 <= 7)
-                this.adicionarMovimentoPossivel(movimentoColuna, linhaInicio + 1);
-        }  
+        this.verificarEAdicionarMovimentoUnico(movimentoColuna, linhaInicio - 1);
+        this.verificarEAdicionarMovimentoUnico(movimentoColuna, linhaInicio + 1); 
     }
 
 }
