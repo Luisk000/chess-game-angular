@@ -5,27 +5,18 @@ export class Peao extends InitPeca{
         super(cor, "peao"); 
     }
     
-    override verificarAcoes(colunaInicio: number, linhaInicio: number) {
-        let acoes: { colunaPossivel: number, linhaPossivel: number }[] = [];
-        let movimentoColuna = this.cor === "branco" ? -1 : 1;
+    override verMovimentosPossiveis(colunaInicio: number, linhaInicio: number) {   
+        this.acoes = [];
 
-        if (colunaInicio + movimentoColuna > 0){
-            if (linhaInicio - 1 > 0)
-            {
-                acoes.push({ 
-                    colunaPossivel: colunaInicio + movimentoColuna, 
-                    linhaPossivel: linhaInicio - 1 
-                });
-            }
-            if (linhaInicio + 1 < 8)
-            {
-                acoes.push({ 
-                    colunaPossivel: colunaInicio + movimentoColuna, 
-                    linhaPossivel: linhaInicio + 1 
-                });
-            }
-        }   
-        return acoes;
+        let direcaoColuna = this.cor === "branco" ? -1 : 1;
+        let movimentoColuna = colunaInicio + direcaoColuna;
+
+        if (movimentoColuna >= 0 && movimentoColuna <= 7){
+            if (linhaInicio - 1 >= 0)
+                this.adicionarMovimentoPossivel(movimentoColuna, linhaInicio - 1);
+            if (linhaInicio + 1 <= 7)
+                this.adicionarMovimentoPossivel(movimentoColuna, linhaInicio + 1);
+        }  
     }
 
 }

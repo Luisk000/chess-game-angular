@@ -5,10 +5,20 @@ export class Cavalo extends InitPeca{
         super(cor, "cavalo"); 
     }  
     
-    override verificarAcoes(colunaInicio: number, linhaInicio: number) {
-        let acoes: { colunaPossivel: number, linhaPossivel: number }[] = [];
-        let movimentoColuna = this.cor === "branco" ? -1 : 1;
+    override verMovimentosPossiveis(colunaInicio: number, linhaInicio: number) {
+
+        //top
+
+        //bottom
+
+        //left
+
+        //right
         
+    }
+
+    verMovimentoPossivel(coluna: number, linha: number){
+
     }
 
 }

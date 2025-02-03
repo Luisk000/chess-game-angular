@@ -5,6 +5,7 @@ export abstract class InitPeca implements Peca{
     cor;
     imagem;
     vivo = true;
+    acoes: { colunaPossivel: number, linhaPossivel: number }[] = [];
 
     constructor(cor: string, nome:string){
         this.cor = cor;
@@ -12,5 +13,12 @@ export abstract class InitPeca implements Peca{
         this.imagem = `${this.nome}_${this.cor}.png`;
     }
 
-    verificarAcoes(colunaInicio: number, linhaInicio: number): { colunaPossivel: number; linhaPossivel: number; }[] | void {}
+    verMovimentosPossiveis(colunaInicio: number, linhaInicio: number): void {}
+
+    adicionarMovimentoPossivel(colunaPossivel: number, linhaPossivel: number) {
+        this.acoes.push({ 
+            colunaPossivel: colunaPossivel, 
+            linhaPossivel: linhaPossivel
+        });
+    };
 }

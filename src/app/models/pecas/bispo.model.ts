@@ -5,10 +5,42 @@ export class Bispo extends InitPeca{
         super(cor, "bispo"); 
     }
     
-    override verificarAcoes(colunaInicio: number, linhaInicio: number) {
-        let acoes: { colunaPossivel: number, linhaPossivel: number }[] = [];
-        let movimentoColuna = this.cor === "branco" ? -1 : 1;
+
+    override verMovimentosPossiveis(colunaInicio: number, linhaInicio: number) {
+        this.acoes = [];
         
+        let coluna = colunaInicio--;
+        let linha = linhaInicio--;
+        for (;coluna >= 0 && linha >= 0;){
+            this.adicionarMovimentoPossivel(coluna, linha);
+            coluna--;
+            linha--;
+        }
+
+        coluna = colunaInicio--;
+        linha = linhaInicio++;
+        for (;coluna >= 0 && linha <= 7;){
+            this.adicionarMovimentoPossivel(coluna, linha);
+            coluna--;
+            linha++;
+        }
+
+        coluna = colunaInicio++;
+        linha = linhaInicio--;
+        for (;coluna <= 7 && linha >= 0;){
+            this.adicionarMovimentoPossivel(coluna, linha);
+            coluna++;
+            linha--;
+        }
+
+        coluna = colunaInicio++;
+        linha = linhaInicio++;
+        for (;coluna <= 7 && linha <= 7;){
+            this.adicionarMovimentoPossivel(coluna, linha);
+            coluna++;
+            linha++;
+        }
     }
 
+ 
 }

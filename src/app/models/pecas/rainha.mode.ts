@@ -5,9 +5,11 @@ export class Rainha extends InitPeca{
         super(cor, "rainha"); 
     }
     
-    override verificarAcoes(colunaInicio: number, linhaInicio: number) {
-        let acoes: { colunaPossivel: number, linhaPossivel: number }[] = [];
-        let movimentoColuna = this.cor === "branco" ? -1 : 1;
+    override verMovimentosPossiveis(colunaInicio: number, linhaInicio: number) {
+
+
+        
+
     }
 
 }

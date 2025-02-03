@@ -5,9 +5,11 @@ export class Rei extends InitPeca{
         super(cor, "rei"); 
     }
     
-    override verificarAcoes(colunaInicio: number, linhaInicio: number) {
-        let acoes: { colunaPossivel: number, linhaPossivel: number }[] = [];
-        let movimentoColuna = this.cor === "branco" ? -1 : 1;
+    override verMovimentosPossiveis(colunaInicio: number, linhaInicio: number) {
+
+
+
+
     }
 
 }

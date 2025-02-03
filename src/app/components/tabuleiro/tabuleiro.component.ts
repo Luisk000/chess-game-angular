@@ -21,7 +21,7 @@ export class TabuleiroComponent implements OnInit {
     this.designarPecasTeste();
 
     let peao: Peao = new Peao("branco");
-    let teste = peao.verificarAcoes(3, 2);
+    let teste = peao.verMovimentosPossiveis(1, 2);
     console.log(teste)
   }
 
