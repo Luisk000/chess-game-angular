@@ -17,7 +17,9 @@
         <div
           class="casa"
           *ngFor="let casa of coluna; let ca = index"
-          [ngStyle]="{ 'background-color': casa.cor }"
+          [ngClass]="{
+            'acao-possivel': casa.cor === 'LimeGreen'
+          }"
         >
         <span *ngIf="casa.peca">
           <img src="{{casa.peca.imagem}}" alt="" class="imagem-peca" (click)="verificarMovimentos(casa.peca, col, ca)">

@@ -99,7 +99,6 @@ export class TabuleiroComponent implements OnInit {
     peca.verMovimentosPossiveis(new Posicao(coluna, linha), peca.cor, this.colunaCasasAcao);
     if (peca.acoes){
       this.apagarLocaisAnteriores();
-      console.log(peca.acoes)
       for (let acao of peca.acoes){
         let localPecaSelecionada = this.colunaCasasAcao[acao.coluna][acao.linha]
         localPecaSelecionada.cor = "LimeGreen";
