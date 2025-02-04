@@ -8,6 +8,7 @@ import { Rainha } from '../../models/pecas/rainha.mode';
 import { Rei } from '../../models/pecas/rei.model';
 import { Torre } from '../../models/pecas/torre.model';
 import { PecaService } from '../../services/peca.service';
+import { Posicao } from '../../models/posicao.model';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -92,21 +93,19 @@ export class TabuleiroComponent implements OnInit {
     this.colunaCasasAcao[0][3].peca = new Rainha("preto", this.pecaService);
     this.colunaCasasAcao[7][3].peca = new Rainha("branco", this.pecaService);
 
-    console.log(this.colunaCasasTabuleiro)
-    console.log(this.colunaCasasAcao)
   }
 
-  verificarMovimentos(peca: Peca, coluna: number, casa: number){
-    peca.verMovimentosPossiveis(coluna, casa);
+  verificarMovimentos(peca: Peca, coluna: number, linha: number){
+    peca.verMovimentosPossiveis(new Posicao(coluna, linha), peca.cor, this.colunaCasasAcao);
     if (peca.acoes){
       this.apagarLocaisAnteriores();
+      console.log(peca.acoes)
       for (let acao of peca.acoes){
-        let localPecaSelecionada = this.colunaCasasAcao[acao.colunaPossivel][acao.linhaPossivel]
+        let localPecaSelecionada = this.colunaCasasAcao[acao.coluna][acao.linha]
         localPecaSelecionada.cor = "LimeGreen";
         this.locaisPecaSelecionada.push(localPecaSelecionada)
       }
-    }
-      
+    }      
   }
 
   apagarLocaisAnteriores(){

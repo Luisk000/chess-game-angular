@@ -1,11 +1,12 @@
-import { Acao } from "./acao.model";
+import { Posicao } from "./posicao.model";
+import { Casa } from "./casa.model";
 
 export abstract class Peca {
     nome : string;
     cor: string;
     imagem : string;
     vivo = true;
-    acoes: Acao[] = [];
+    acoes: Posicao[] = [];
 
     constructor(cor: string, nome:string){
         this.cor = cor;
@@ -13,6 +14,6 @@ export abstract class Peca {
         this.imagem = `assets/${this.nome}_${this.cor}.png`;
     }
 
-    verMovimentosPossiveis(colunaInicio: number, linhaInicio: number): void {}
+    verMovimentosPossiveis(posicao: Posicao, cor: string, tabuleiro: Casa[][]): void {}
 }
 

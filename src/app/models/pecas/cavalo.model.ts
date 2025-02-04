@@ -1,25 +1,26 @@
 import { PecaService } from "../../services/peca.service";
-import { Acao } from "../acao.model";
+import { Posicao } from "../posicao.model";
 import { Peca } from "../peca.model";
+import { Casa } from "../casa.model";
 export class Cavalo extends Peca{  
     
     constructor(cor: string, private pecaService: PecaService) {
         super(cor, "cavalo"); 
     }  
     
-    override verMovimentosPossiveis(colunaInicio: number, linhaInicio: number) {
+    override verMovimentosPossiveis(posicao: Posicao, cor: string, tabuleiro: Casa[][]) {
         let acoesPossiveis = [
-            new Acao(colunaInicio - 1, linhaInicio+2),   
-            new Acao(colunaInicio - 1, linhaInicio-2), 
-            new Acao(colunaInicio + 1, linhaInicio+2), 
-            new Acao(colunaInicio + 1, linhaInicio-2),  
-            new Acao(colunaInicio-2, linhaInicio + 1),   
-            new Acao(colunaInicio-2, linhaInicio - 1), 
-            new Acao(colunaInicio+2, linhaInicio + 1), 
-            new Acao(colunaInicio+2, linhaInicio - 1),  
+            new Posicao(posicao.coluna - 1, posicao.linha +2),   
+            new Posicao(posicao.coluna - 1, posicao.linha-2), 
+            new Posicao(posicao.coluna + 1, posicao.linha+2), 
+            new Posicao(posicao.coluna + 1, posicao.linha-2),  
+            new Posicao(posicao.coluna-2, posicao.linha + 1),   
+            new Posicao(posicao.coluna-2, posicao.linha - 1), 
+            new Posicao(posicao.coluna+2, posicao.linha + 1), 
+            new Posicao(posicao.coluna+2, posicao.linha - 1),  
         ];
         
-        this.acoes = this.pecaService.verificarMovimentos(acoesPossiveis);
+        this.acoes = this.pecaService.verificarMovimentos(acoesPossiveis, cor, tabuleiro);
     }
 
 }
