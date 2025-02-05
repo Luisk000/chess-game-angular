@@ -129,7 +129,13 @@ export class TabuleiroComponent implements OnInit {
       ].peca = undefined;
       this.apagarLocaisAnteriores();
       this.mudarTimeJogando();
+      this.verificarPeaoIniciando(casa.peca!);
     }
+  }
+
+  verificarPeaoIniciando(peca: Peca){
+    if (peca instanceof Peao && peca.iniciando == true)
+      peca.iniciando = false;
   }
 
   mudarTimeJogando(){

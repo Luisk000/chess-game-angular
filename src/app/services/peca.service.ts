@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Posicao } from '../models/posicao.model';
 import { Casa } from '../models/casa.model';
 import { Peca } from '../models/peca.model';
+import { PeaoService } from './peao.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PecaService {
 
-  constructor() { }
+  constructor(private peaoService: PeaoService) { }
 
   verificarMovimentos(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
     let acoes: Posicao[] = [];
@@ -23,9 +24,17 @@ export class PecaService {
           }     
           else
             acoes.push(acao);
+      }
     }
-  }
     return acoes;
+  }
+
+  verificarMovimentosPeaoMover(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
+    return this.peaoService.verificarMovimentosPeaoMover(acoesPossiveis, cor, tabuleiro);
+  }
+
+  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
+    return this.peaoService.verificarMovimentosPeaoComer(acoesPossiveis, cor, tabuleiro);
   }
 
   verificarMovimentosDiagonal(posicao: Posicao, cor: string, tabuleiro: Casa[][]): Posicao[] | []{
