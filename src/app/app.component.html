@@ -1,2 +1,16 @@
-<app-tabuleiro></app-tabuleiro>
-<router-outlet></router-outlet>
+<div class="background">
+    <app-painel 
+        time="branco" 
+        [jogando]="true"
+        [pecasComidas]="pecasComidasJogador1"
+    ></app-painel>
+    <app-tabuleiro 
+        (pecaComida)="adicionarPecaComida($event)"
+    ></app-tabuleiro>
+    <app-painel 
+        time="preto" 
+        [jogando]="false"
+        [pecasComidas]="pecasComidasJogador2"
+    ></app-painel>
+</div>
+

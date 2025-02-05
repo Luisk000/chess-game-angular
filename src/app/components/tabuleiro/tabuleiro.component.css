@@ -3,7 +3,7 @@
     height: 560px;
     padding: 10px;
     background-color: saddlebrown;
-    border-radius: 12px;
+    border-radius: 10px;
 
     box-shadow: 14px 10px 98px 25px rgba(0,0,0,0.5);
     -webkit-box-shadow: 14px 10px 98px 25px rgba(0,0,0,0.5);
@@ -21,14 +21,7 @@
     position: relative;
 }
 
-.background {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 97vh;
-    width: 100%;
-    color: black
-}
+
 
 .coluna{
     display:flex;

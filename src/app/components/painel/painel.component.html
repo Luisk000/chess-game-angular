@@ -1,1 +1,25 @@
-<p>painel works!</p>
+<div
+  class="painel"
+  [ngClass]="{
+    branco: time === 'branco',
+    preto: time === 'preto',
+    jogando: jogando == true
+  }"
+>
+  <div class="painel-title">
+    <p class="title">{{ title }}</p>
+  </div>
+  <div class="title-jogando">
+
+    
+    
+  </div>
+
+    <div class="pecas-comidas">
+      <img
+        *ngFor="let pecaComida of pecasComidas"
+        src="{{ pecaComida.imagem }}"
+      />
+    </div>
+
+</div>

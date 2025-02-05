@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Casa } from '../../models/casa.model';
 import { Peca } from '../../models/peca.model';
 import { Cavalo } from '../../models/pecas/cavalo.model';
@@ -18,6 +18,9 @@ import { Posicao } from '../../models/posicao.model';
   styleUrl: './tabuleiro.component.css',
 })
 export class TabuleiroComponent implements OnInit {
+
+  @Output() pecaComida = new EventEmitter<Peca>();
+
   colunaCasasAcao: Casa[][] = [];
   colunaCasasTabuleiro: Casa[][] = [];
   acoesPecaSelecionada: Casa[] = [];
@@ -114,28 +117,29 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
+  moverPeca(casa: Casa, coluna: number, linha: number) {
+    if (casa.cor === 'LimeGreen') {
+      if (casa.peca != undefined)
+        this.sendPecaComida(casa.peca);
+      casa.peca = this.casaPecaSelecionada?.peca;
+      //this.casaPecaSelecionada = undefined;
+      this.colunaCasasAcao[this.posicaoPecaSelecionada!.coluna][
+        this.posicaoPecaSelecionada!.linha].peca = undefined;
+      this.apagarLocaisAnteriores();
+      this.mudarTimeJogando();
+      if (casa.peca instanceof Peao)
+        this.verificarPeao(casa.peca, coluna, linha);
+    }
+  }
+
+  sendPecaComida(peca: Peca){
+    this.pecaComida.emit(peca);
+  }
+
   apagarLocaisAnteriores() {
     for (let local of this.acoesPecaSelecionada) {
       local.cor = '';
     }
-  }
-
-  moverPeca(casa: Casa) {
-    if (casa.cor === 'LimeGreen') {
-      casa.peca = this.casaPecaSelecionada?.peca;
-      this.casaPecaSelecionada = undefined;
-      this.colunaCasasAcao[this.posicaoPecaSelecionada!.coluna][
-        this.posicaoPecaSelecionada!.linha
-      ].peca = undefined;
-      this.apagarLocaisAnteriores();
-      this.mudarTimeJogando();
-      this.verificarPeaoIniciando(casa.peca!);
-    }
-  }
-
-  verificarPeaoIniciando(peca: Peca){
-    if (peca instanceof Peao && peca.iniciando == true)
-      peca.iniciando = false;
   }
 
   mudarTimeJogando(){
@@ -143,5 +147,16 @@ export class TabuleiroComponent implements OnInit {
       this.timeJogando = "preto"
     else
      this.timeJogando = "branco"
+  }
+
+  verificarPeao(peao: Peao, coluna: number, linha: number){
+    if (peao.iniciando == true)
+      peao.iniciando = false;
+    if ((peao.cor === "branco" && coluna == 0) || (peao.cor === "preto" && coluna == 7))
+      this.promoverPeao(peao.cor, coluna, linha);
+  }
+
+  promoverPeao(cor: string, coluna: number, linha: number){
+    this.colunaCasasAcao[coluna][linha].peca = new Rainha(cor, this.pecaService)
   }
 }

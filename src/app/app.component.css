@@ -1,0 +1,8 @@
+.background {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 97vh;
+    width: 100%;
+    color: black
+}

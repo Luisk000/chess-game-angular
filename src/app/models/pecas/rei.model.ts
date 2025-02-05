@@ -14,6 +14,10 @@ export class Rei extends Peca{
             new Posicao(posicao.coluna - 1, posicao.linha), 
             new Posicao(posicao.coluna, posicao.linha + 1), 
             new Posicao(posicao.coluna, posicao.linha - 1),  
+            new Posicao(posicao.coluna + 1, posicao.linha + 1),   
+            new Posicao(posicao.coluna - 1, posicao.linha - 1), 
+            new Posicao(posicao.coluna + 1, posicao.linha - 1), 
+            new Posicao(posicao.coluna - 1, posicao.linha + 1),  
         ];
 
         this.acoes = this.pecaService.verificarMovimentos(acoesPossiveis, cor, tabuleiro);

@@ -1,0 +1,63 @@
+.painel{
+    width: 240px;
+    height: 554px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 3px solid #464341;
+    background-color: #464341;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    box-shadow: 14px 10px 98px 25px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 14px 10px 98px 25px rgba(0,0,0,0.5);
+    -moz-box-shadow: 14px 10px 98px 25px rgba(0,0,0,0.5);   
+}
+
+.jogando {
+    border: 3px solid #32CD32;
+}
+
+.painel-title{
+    display: flex;
+    justify-content: center;
+}
+
+.title{
+    font-size: 18px;
+    font-weight:bold;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.branco > .painel-title > .title{
+    color:rgb(235, 235, 235);
+}
+
+.preto > .painel-title > .title{
+    color: #1E1C1A;
+}
+
+.pecas-comidas{
+    margin-top: auto;
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    width: 240px;
+    height: auto;
+}
+
+.title-jogando{
+    margin-top: 10%;
+    font-size: 22px;
+    font-weight:bold;   
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title-xeque{
+    color:#E63946;
+}
+
+.title-vitoria{
+    color: #32CD32;
+}

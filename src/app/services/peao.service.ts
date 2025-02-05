@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Posicao } from '../models/posicao.model';
 import { Casa } from '../models/casa.model';
-import { PecaService } from './peca.service';
 import { Peca } from '../models/peca.model';
 
 @Injectable({
@@ -47,5 +46,9 @@ export class PeaoService {
             return peca.cor;
           else
             return undefined;
+    }
+
+    verificarPromocao(){
+      
     }
 }
