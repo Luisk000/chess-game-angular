@@ -1,6 +1,6 @@
 import { Peca } from "./peca.model";
 
 export class Casa{
-    cor: string | undefined;
+    cor: string = "";
     peca: Peca | undefined;
 }

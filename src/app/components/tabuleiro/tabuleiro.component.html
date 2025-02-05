@@ -1,29 +1,37 @@
 <div class="background">
   <div class="tabuleiro">
-  
     <div class="casas-tabuleiro">
       <div class="coluna" *ngFor="let coluna of colunaCasasTabuleiro">
         <div
           class="casa"
           *ngFor="let casa of coluna"
           [ngStyle]="{ 'background-color': casa.cor }"
-        >
-
-        </div>
+        ></div>
       </div>
     </div>
     <div class="casas-acao">
-      <div class="coluna" *ngFor="let coluna of colunaCasasAcao; let col = index">
+      <div
+        class="coluna"
+        *ngFor="let coluna of colunaCasasAcao; let col = index"
+      >
         <div
           class="casa"
           *ngFor="let casa of coluna; let ca = index"
           [ngClass]="{
             'acao-possivel': casa.cor === 'LimeGreen'
           }"
+          (click)="moverPeca(casa)"
         >
-        <span *ngIf="casa.peca">
-          <img src="{{casa.peca.imagem}}" alt="" class="imagem-peca" (click)="verificarMovimentos(casa.peca, col, ca)">
-        </span>
+          <span *ngIf="casa.peca">
+            <img
+              src="{{ casa.peca.imagem }}"
+              class="imagem-peca"
+              [ngClass]="{
+                'peca-jogando': casa.peca.cor === timeJogando
+              }"
+              (click)="verificarMovimentos(casa.peca, col, ca)"
+            />
+          </span>
         </div>
       </div>
     </div>

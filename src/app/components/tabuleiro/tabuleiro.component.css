@@ -49,11 +49,14 @@
 
 .imagem-peca{
     width: 60px; 
+}
+
+.peca-jogando{
     cursor: pointer;
     transition: transform 0.3s ease;
 }
 
-.imagem-peca:hover {
+.peca-jogando:hover {
     transform: scale(1.15);
 }
 
