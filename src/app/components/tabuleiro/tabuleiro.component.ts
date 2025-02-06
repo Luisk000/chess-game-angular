@@ -19,7 +19,8 @@ import { Posicao } from '../../models/posicao.model';
 })
 export class TabuleiroComponent implements OnInit {
 
-  @Output() pecaComida = new EventEmitter<Peca>();
+  @Output() pecaComidaEmit = new EventEmitter<Peca>();
+  @Output() timeJogandoEmit = new EventEmitter();
 
   colunaCasasAcao: Casa[][] = [];
   colunaCasasTabuleiro: Casa[][] = [];
@@ -133,7 +134,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   sendPecaComida(peca: Peca){
-    this.pecaComida.emit(peca);
+    this.pecaComidaEmit.emit(peca);
   }
 
   apagarLocaisAnteriores() {
@@ -143,6 +144,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   mudarTimeJogando(){
+    this.timeJogandoEmit.emit();
     if (this.timeJogando === "branco")
       this.timeJogando = "preto"
     else

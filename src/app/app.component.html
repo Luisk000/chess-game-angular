@@ -1,16 +1,16 @@
 <div class="background">
     <app-painel 
         time="branco" 
-        [jogando]="true"
+        [jogando]="jogador1Jogando"
         [pecasComidas]="pecasComidasJogador1"
     ></app-painel>
     <app-tabuleiro 
-        (pecaComida)="adicionarPecaComida($event)"
+        (pecaComidaEmit)="adicionarPecaComida($event)"
+        (timeJogandoEmit)="mudarTimeJogando()"
     ></app-tabuleiro>
     <app-painel 
         time="preto" 
-        [jogando]="false"
+        [jogando]="jogador2Jogando"
         [pecasComidas]="pecasComidasJogador2"
     ></app-painel>
 </div>
-

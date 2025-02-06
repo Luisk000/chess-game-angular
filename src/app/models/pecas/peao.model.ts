@@ -5,6 +5,7 @@ import { Casa } from "../casa.model";
 export class Peao extends Peca{  
     
     iniciando: boolean = true;
+    promocao: boolean = false;
     
     constructor(cor: string, private pecaService: PecaService) {
         super(cor, "peao"); 
