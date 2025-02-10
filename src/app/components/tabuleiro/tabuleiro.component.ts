@@ -28,8 +28,10 @@ export class TabuleiroComponent implements OnInit {
 
   casaPecaSelecionada: Casa | undefined;
   posicaoPecaSelecionada: Posicao | undefined;
+  posicaoPromocao: Posicao | undefined;
 
   timeJogando = 'branco';
+  jogoParado = false;
 
   constructor(private pecaService: PecaService) {}
 
@@ -123,7 +125,6 @@ export class TabuleiroComponent implements OnInit {
       if (casa.peca != undefined)
         this.sendPecaComida(casa.peca);
       casa.peca = this.casaPecaSelecionada?.peca;
-      //this.casaPecaSelecionada = undefined;
       this.colunaCasasAcao[this.posicaoPecaSelecionada!.coluna][
         this.posicaoPecaSelecionada!.linha].peca = undefined;
       this.apagarLocaisAnteriores();
@@ -159,6 +160,14 @@ export class TabuleiroComponent implements OnInit {
   }
 
   promoverPeao(cor: string, coluna: number, linha: number){
-    this.colunaCasasAcao[coluna][linha].peca = new Rainha(cor, this.pecaService)
+    this.posicaoPromocao = new Posicao(coluna, linha);
+    this.jogoParado = true;
+  }
+
+  confirmarPecaPeaoPromovido($event: any){
+    console.log($event.targe.value)
+    if (this.posicaoPromocao)
+      this.colunaCasasAcao[this.posicaoPromocao.coluna][this.posicaoPromocao.linha].peca = 
+        $event.target.value;
   }
 }

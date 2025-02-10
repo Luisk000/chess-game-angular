@@ -1,8 +1,8 @@
 <div class="widget-promocao">
     <div class="opcoes-pecas" *ngIf="time != ''">
-        <img [src]="rainha?.imagem" alt="">
-        <img [src]="cavalo?.imagem" alt="">
-        <img [src]="bispo?.imagem" alt="">
-        <img [src]="torre?.imagem" alt="">
+        <img [src]="rainha?.imagem" (click)="escolherPeca(rainha)">
+        <img [src]="cavalo?.imagem" (click)="escolherPeca(cavalo)">
+        <img [src]="bispo?.imagem" (click)="escolherPeca(bispo)">
+        <img [src]="torre?.imagem" (click)="escolherPeca(torre)">
     </div>
 </div>

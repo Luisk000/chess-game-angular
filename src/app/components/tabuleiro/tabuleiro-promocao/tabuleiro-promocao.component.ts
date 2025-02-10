@@ -1,9 +1,10 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Cavalo } from '../../../models/pecas/cavalo.model';
 import { Rainha } from '../../../models/pecas/rainha.mode';
 import { Bispo } from '../../../models/pecas/bispo.model';
 import { Torre } from '../../../models/pecas/torre.model';
 import { PecaService } from '../../../services/peca.service';
+import { Peca } from '../../../models/peca.model';
 
 @Component({
   selector: 'app-tabuleiro-promocao',
@@ -15,6 +16,7 @@ import { PecaService } from '../../../services/peca.service';
 export class TabuleiroPromocaoComponent implements OnChanges{
 
   @Input() time = "";
+  @Output() confirmarPeca = new EventEmitter<Peca | undefined>();
   rainha?: Rainha = undefined;
   cavalo?: Cavalo = undefined;
   bispo?: Bispo = undefined;
@@ -29,5 +31,9 @@ export class TabuleiroPromocaoComponent implements OnChanges{
       this.bispo = new Bispo(this.time, this.pecaService)
       this.torre = new Torre(this.time, this.pecaService)
     }
+  }
+
+  escolherPeca(peca: Peca | undefined){
+    this.confirmarPeca.emit(peca);
   }
 }

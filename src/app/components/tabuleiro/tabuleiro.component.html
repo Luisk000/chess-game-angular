@@ -27,7 +27,12 @@
             }"
             (click)="verificarMovimentos(casa.peca, col, ca)"
           />
-          <!-- <app-tabuleiro-promocao></app-tabuleiro-promocao> -->
+          <app-tabuleiro-promocao 
+            *ngIf="posicaoPromocao?.coluna == col 
+            && posicaoPromocao?.linha == ca"
+            [time]="casa.peca.cor"
+            (confirmarPeca)="confirmarPecaPeaoPromovido($event)"
+          ></app-tabuleiro-promocao>
         </span>
       </div>
     </div>
