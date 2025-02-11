@@ -8,8 +8,26 @@
 
     -webkit-box-shadow: 0px -1px 37px 5px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px -1px 37px 5px rgba(0,0,0,0.75);
-    box-shadow: 0px -1px 37px 5px rgba(0,0,0,0.75); 
+    box-shadow: 0px -1px 37px 5px rgba(0,0,0,0.75);   
+}
+
+.time-branco{
     margin-top: -35px;
+    margin-left: 35px;
+}
+
+.time-preto{
+    margin-top: -175px;
+    margin-left: 35px;
+}
+
+.time-branco-right{
+    margin-top: -35px;
+    margin-left: 35px;
+}
+
+.time-preto-right{
+    margin-top: -175px;
     margin-left: 35px;
 }
 

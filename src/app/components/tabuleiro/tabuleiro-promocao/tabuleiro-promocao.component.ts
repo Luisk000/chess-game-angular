@@ -16,7 +16,7 @@ import { Peca } from '../../../models/peca.model';
 export class TabuleiroPromocaoComponent implements OnChanges{
 
   @Input() time = "";
-  @Output() confirmarPeca = new EventEmitter<Peca | undefined>();
+  @Output() confirmarPeca = new EventEmitter<Peca>();
   rainha?: Rainha = undefined;
   cavalo?: Cavalo = undefined;
   bispo?: Bispo = undefined;
@@ -34,6 +34,8 @@ export class TabuleiroPromocaoComponent implements OnChanges{
   }
 
   escolherPeca(peca: Peca | undefined){
-    this.confirmarPeca.emit(peca);
+    if (peca)
+      this.confirmarPeca.emit(peca);
+    this.time = "";
   }
 }

@@ -100,7 +100,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarMovimentos(peca: Peca, coluna: number, linha: number) {
-    if (peca.cor === this.timeJogando) {
+    if (peca.cor === this.timeJogando && !this.jogoParado) {
       this.casaPecaSelecionada = this.colunaCasasAcao[coluna][linha];
       this.posicaoPecaSelecionada = new Posicao(coluna, linha);
       peca.verMovimentosPossiveis(
@@ -155,19 +155,30 @@ export class TabuleiroComponent implements OnInit {
   verificarPeao(peao: Peao, coluna: number, linha: number){
     if (peao.iniciando == true)
       peao.iniciando = false;
-    if ((peao.cor === "branco" && coluna == 0) || (peao.cor === "preto" && coluna == 7))
-      this.promoverPeao(peao.cor, coluna, linha);
+    if (
+      ((peao.cor === "branco" && coluna == 0) 
+      || (peao.cor === "preto" && coluna == 7))
+      && peao.promocao == false
+    ){
+      peao.promocao = true;
+      console.log(peao)
+      this.promoverPeao(coluna, linha);
+    }
+      
   }
 
-  promoverPeao(cor: string, coluna: number, linha: number){
+  promoverPeao(coluna: number, linha: number){
     this.posicaoPromocao = new Posicao(coluna, linha);
     this.jogoParado = true;
   }
 
-  confirmarPecaPeaoPromovido($event: any){
-    console.log($event.targe.value)
-    if (this.posicaoPromocao)
-      this.colunaCasasAcao[this.posicaoPromocao.coluna][this.posicaoPromocao.linha].peca = 
-        $event.target.value;
+  confirmarPecaPeaoPromovido($event: Peca){
+    if (this.posicaoPromocao){
+      this.colunaCasasAcao[this.posicaoPromocao.coluna][this.posicaoPromocao.linha]
+      .peca = $event
+      this.posicaoPromocao = undefined
+      this.jogoParado = false;
+    }
+      
   }
 }

@@ -14,7 +14,7 @@
         class="casa"
         *ngFor="let casa of coluna; let ca = index"
         [ngClass]="{
-          'acao-possivel': casa.cor === 'LimeGreen'
+          'acao-possivel': casa.cor === 'LimeGreen' && !jogoParado
         }"
         (click)="moverPeca(casa, col, ca)"
       >
@@ -23,7 +23,7 @@
             src="{{ casa.peca.imagem }}"
             class="imagem-peca"
             [ngClass]="{
-              'peca-jogando': casa.peca.cor === timeJogando
+              'peca-jogando': casa.peca.cor === timeJogando && !jogoParado
             }"
             (click)="verificarMovimentos(casa.peca, col, ca)"
           />
