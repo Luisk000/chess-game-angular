@@ -26,16 +26,25 @@ export class PeaoService {
       return acoes;
     }
   
-    verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
+    verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined): Posicao[] | []{
       let acoes: Posicao[] = [];
       for (let acaoPossivel of acoesPossiveis){
         if (acaoPossivel.coluna >= 0 && acaoPossivel.coluna <= 7 
           && acaoPossivel.linha >= 0 && acaoPossivel.linha <= 7){
+
             var acao = new Posicao(acaoPossivel.coluna, acaoPossivel.linha);
             var corPeca = this.verificarPecaNaCasa(acao, tabuleiro)
             if (corPeca != undefined && corPeca != cor)
               acoes.push(acao);   
+
+            if (posicaoEnPassant && 
+              posicaoEnPassant && 
+              this.permitirEnPassant(posicaoEnPassant, acao)
+            )
+              acoes.push(posicaoEnPassant)  
         }
+
+             
       }
       return acoes;
     }
@@ -48,7 +57,11 @@ export class PeaoService {
             return undefined;
     }
 
-    verificarPromocao(){
-      
+    permitirEnPassant(posicaoEnPassant: Posicao, acao: Posicao): boolean{
+      if (posicaoEnPassant.coluna == acao.coluna && 
+        posicaoEnPassant.linha == acao.linha)
+        return true;
+      else
+        return false;
     }
 }

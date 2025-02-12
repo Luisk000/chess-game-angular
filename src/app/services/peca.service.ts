@@ -33,8 +33,8 @@ export class PecaService {
     return this.peaoService.verificarMovimentosPeaoMover(acoesPossiveis, cor, tabuleiro);
   }
 
-  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
-    return this.peaoService.verificarMovimentosPeaoComer(acoesPossiveis, cor, tabuleiro);
+  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined): Posicao[] | []{
+    return this.peaoService.verificarMovimentosPeaoComer(acoesPossiveis, cor, tabuleiro, posicaoEnPassant);
   }
 
   verificarMovimentosDiagonal(posicao: Posicao, cor: string, tabuleiro: Casa[][]): Posicao[] | []{

@@ -11,7 +11,7 @@ export class Peao extends Peca{
         super(cor, "peao"); 
     }
     
-    override verMovimentosPossiveis(posicao: Posicao, cor: string, tabuleiro: Casa[][]) {   
+    override verMovimentosPossiveis(posicao: Posicao, cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined = undefined) {   
         let acoesMoverPossiveis: Posicao[] = [];
         let acoesComerPossiveis: Posicao[] = [];
         
@@ -30,9 +30,11 @@ export class Peao extends Peca{
 
             acoesComerPossiveis.push(new Posicao(posicao.coluna + 1, posicao.linha - 1))
             acoesComerPossiveis.push(new Posicao(posicao.coluna + 1, posicao.linha + 1))
-        }           
+        }   
+        
         let acoesMover = this.pecaService.verificarMovimentosPeaoMover(acoesMoverPossiveis, cor, tabuleiro);
-        let acoesComer = this.pecaService.verificarMovimentosPeaoComer(acoesComerPossiveis, cor, tabuleiro);
+        let acoesComer = this.pecaService.verificarMovimentosPeaoComer(acoesComerPossiveis, cor, tabuleiro, posicaoEnPassant);
+
 
         this.acoes = [];
         if (acoesMover)

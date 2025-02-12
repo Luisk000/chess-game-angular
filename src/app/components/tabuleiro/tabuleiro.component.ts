@@ -18,7 +18,6 @@ import { Posicao } from '../../models/posicao.model';
   styleUrl: './tabuleiro.component.css',
 })
 export class TabuleiroComponent implements OnInit {
-
   @Output() pecaComidaEmit = new EventEmitter<Peca>();
   @Output() timeJogandoEmit = new EventEmitter();
 
@@ -29,6 +28,7 @@ export class TabuleiroComponent implements OnInit {
   casaPecaSelecionada: Casa | undefined;
   posicaoPecaSelecionada: Posicao | undefined;
   posicaoPromocao: Posicao | undefined;
+  posicaoEnPassant: Posicao | undefined = undefined;
 
   timeJogando = 'branco';
   jogoParado = false;
@@ -103,11 +103,21 @@ export class TabuleiroComponent implements OnInit {
     if (peca.cor === this.timeJogando && !this.jogoParado) {
       this.casaPecaSelecionada = this.colunaCasasAcao[coluna][linha];
       this.posicaoPecaSelecionada = new Posicao(coluna, linha);
-      peca.verMovimentosPossiveis(
-        this.posicaoPecaSelecionada,
-        peca.cor,
-        this.colunaCasasAcao
-      );
+
+      if (peca instanceof Peao)
+        peca.verMovimentosPossiveis(
+          this.posicaoPecaSelecionada,
+          peca.cor,
+          this.colunaCasasAcao,
+          this.posicaoEnPassant
+        );
+      else
+        peca.verMovimentosPossiveis(
+          this.posicaoPecaSelecionada,
+          peca.cor,
+          this.colunaCasasAcao
+        );
+
       if (peca.acoes) {
         this.apagarLocaisAnteriores();
         for (let acao of peca.acoes) {
@@ -122,19 +132,25 @@ export class TabuleiroComponent implements OnInit {
 
   moverPeca(casa: Casa, coluna: number, linha: number) {
     if (casa.cor === 'LimeGreen') {
-      if (casa.peca != undefined)
-        this.sendPecaComida(casa.peca);
+      if (casa.peca != undefined) this.sendPecaComida(casa.peca);
+
       casa.peca = this.casaPecaSelecionada?.peca;
-      this.colunaCasasAcao[this.posicaoPecaSelecionada!.coluna][
-        this.posicaoPecaSelecionada!.linha].peca = undefined;
+
+      let col = this.posicaoPecaSelecionada!.coluna;
+      let ca = this.posicaoPecaSelecionada!.linha;
+      this.colunaCasasAcao[col][ca].peca = undefined;
+
       this.apagarLocaisAnteriores();
       this.mudarTimeJogando();
+
+      //if (this.posicaoEnPassant != undefined) this.posicaoEnPassant = undefined;
+
       if (casa.peca instanceof Peao)
         this.verificarPeao(casa.peca, coluna, linha);
     }
   }
 
-  sendPecaComida(peca: Peca){
+  sendPecaComida(peca: Peca) {
     this.pecaComidaEmit.emit(peca);
   }
 
@@ -144,41 +160,52 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  mudarTimeJogando(){
+  mudarTimeJogando() {
     this.timeJogandoEmit.emit();
-    if (this.timeJogando === "branco")
-      this.timeJogando = "preto"
-    else
-     this.timeJogando = "branco"
+    if (this.timeJogando === 'branco') this.timeJogando = 'preto';
+    else this.timeJogando = 'branco';
   }
 
-  verificarPeao(peao: Peao, coluna: number, linha: number){
-    if (peao.iniciando == true)
+  verificarPeao(peao: Peao, coluna: number, linha: number) {
+    if (peao.iniciando == true) {
+      this.verificarEmPassant(peao, coluna, linha);
       peao.iniciando = false;
+    }
+
+    this.verificarPromocao(peao, coluna, linha);
+  }
+
+  verificarPromocao(peao: Peao, coluna: number, linha: number) {
     if (
-      ((peao.cor === "branco" && coluna == 0) 
-      || (peao.cor === "preto" && coluna == 7))
-      && peao.promocao == false
-    ){
+      ((peao.cor === 'branco' && coluna == 0) ||
+        (peao.cor === 'preto' && coluna == 7)) &&
+      peao.promocao == false
+    ) {
       peao.promocao = true;
-      console.log(peao)
       this.promoverPeao(coluna, linha);
     }
-      
   }
 
-  promoverPeao(coluna: number, linha: number){
+  promoverPeao(coluna: number, linha: number) {
     this.posicaoPromocao = new Posicao(coluna, linha);
     this.jogoParado = true;
   }
 
-  confirmarPecaPeaoPromovido($event: Peca){
-    if (this.posicaoPromocao){
-      this.colunaCasasAcao[this.posicaoPromocao.coluna][this.posicaoPromocao.linha]
-      .peca = $event
-      this.posicaoPromocao = undefined
+  confirmarPecaPeaoPromovido($event: Peca) {
+    if (this.posicaoPromocao) {
+      let col = this.posicaoPromocao.coluna;
+      let ca = this.posicaoPromocao.linha;
+      this.colunaCasasAcao[col][ca].peca = $event;
+      this.posicaoPromocao = undefined;
       this.jogoParado = false;
     }
-      
+  }
+
+  verificarEmPassant(peao: Peao, coluna: number, linha: number) {
+    this.posicaoEnPassant = undefined;
+    if (peao.cor == 'branco' && coluna == 4)
+      this.posicaoEnPassant = new Posicao(coluna + 1, linha);
+    else if (peao.cor == 'preto' && coluna == 3)
+      this.posicaoEnPassant = new Posicao(coluna - 1, linha);
   }
 }
