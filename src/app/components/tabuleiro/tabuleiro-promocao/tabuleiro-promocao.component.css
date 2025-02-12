@@ -13,22 +13,20 @@
 
 .time-branco{
     margin-top: -35px;
-    margin-left: 35px;
 }
+
 
 .time-preto{
     margin-top: -175px;
+}
+
+
+.left{
     margin-left: 35px;
 }
 
-.time-branco-right{
-    margin-top: -35px;
-    margin-left: 35px;
-}
-
-.time-preto-right{
-    margin-top: -175px;
-    margin-left: 35px;
+.right{
+    margin-left: -105px;
 }
 
 .opcoes-pecas{
@@ -41,4 +39,9 @@
 
 img{
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.15);
 }

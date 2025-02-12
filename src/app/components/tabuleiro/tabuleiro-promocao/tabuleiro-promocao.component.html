@@ -1,4 +1,7 @@
-<div class="widget-promocao" *ngIf="time != ''" [ngClass]="time === 'branco' ?  'time-branco' : 'time-preto'">
+<div class="widget-promocao" *ngIf="time != ''" 
+    [ngClass]="[
+        time === 'branco' ?  'time-branco' : 'time-preto', 
+        linha && linha >= 4 ?  'right' : 'left']">
     <div class="opcoes-pecas">
         <img [src]="rainha?.imagem" (click)="escolherPeca(rainha)" >
         <img [src]="cavalo?.imagem" (click)="escolherPeca(cavalo)">

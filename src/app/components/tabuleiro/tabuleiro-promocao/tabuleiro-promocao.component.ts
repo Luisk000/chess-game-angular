@@ -16,6 +16,7 @@ import { Peca } from '../../../models/peca.model';
 export class TabuleiroPromocaoComponent implements OnChanges{
 
   @Input() time = "";
+  @Input() linha: number | undefined = undefined;
   @Output() confirmarPeca = new EventEmitter<Peca>();
   rainha?: Rainha = undefined;
   cavalo?: Cavalo = undefined;
