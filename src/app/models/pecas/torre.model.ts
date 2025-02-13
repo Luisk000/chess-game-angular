@@ -4,6 +4,8 @@ import { Peca } from "../peca.model";
 import { Posicao } from "../posicao.model";
 
 export class Torre extends Peca{  
+
+    iniciando: boolean = true;
     
     constructor(cor: string, private pecaService: PecaService) {
         super(cor, "torre"); 

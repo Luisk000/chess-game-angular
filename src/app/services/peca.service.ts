@@ -29,14 +29,6 @@ export class PecaService {
     return acoes;
   }
 
-  verificarMovimentosPeaoMover(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
-    return this.peaoService.verificarMovimentosPeaoMover(acoesPossiveis, cor, tabuleiro);
-  }
-
-  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined): Posicao[] | []{
-    return this.peaoService.verificarMovimentosPeaoComer(acoesPossiveis, cor, tabuleiro, posicaoEnPassant);
-  }
-
   verificarMovimentosDiagonal(posicao: Posicao, cor: string, tabuleiro: Casa[][]): Posicao[] | []{
     let acoes: Posicao[] = [];
     let coluna = posicao.coluna - 1;
@@ -166,11 +158,19 @@ verificarMovimentosReto(posicao: Posicao, cor: string, tabuleiro: Casa[][]): Pos
     return acoes;
   }
 
-  verificarPecaNaCasa(acao: Posicao, tabuleiro: Casa[][]): string | undefined{
+  private verificarPecaNaCasa(acao: Posicao, tabuleiro: Casa[][]): string | undefined{
     var peca: Peca | undefined = tabuleiro[acao.coluna][acao.linha].peca;
     if (peca && peca.cor)
       return peca.cor;
     else
       return undefined;
+  }
+
+  verificarMovimentosPeaoMover(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
+    return this.peaoService.verificarMovimentosPeaoMover(acoesPossiveis, cor, tabuleiro);
+  }
+
+  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined): Posicao[] | []{
+    return this.peaoService.verificarMovimentosPeaoComer(acoesPossiveis, cor, tabuleiro, posicaoEnPassant);
   }
 }

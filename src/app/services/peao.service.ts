@@ -49,7 +49,7 @@ export class PeaoService {
       return acoes;
     }
 
-    verificarPecaNaCasa(acao: Posicao, tabuleiro: Casa[][]) {
+    private verificarPecaNaCasa(acao: Posicao, tabuleiro: Casa[][]) {
       var peca: Peca | undefined = tabuleiro[acao.coluna][acao.linha].peca;
           if (peca && peca.cor)
             return peca.cor;
@@ -57,7 +57,7 @@ export class PeaoService {
             return undefined;
     }
 
-    permitirEnPassant(posicaoEnPassant: Posicao, acao: Posicao): boolean{
+    private permitirEnPassant(posicaoEnPassant: Posicao, acao: Posicao): boolean{
       if (posicaoEnPassant.coluna == acao.coluna && 
         posicaoEnPassant.linha == acao.linha)
         return true;

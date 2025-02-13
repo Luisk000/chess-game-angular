@@ -3,6 +3,8 @@ import { Posicao } from "../posicao.model";
 import { Peca } from "../peca.model";
 import { Casa } from "../casa.model";
 export class Rei extends Peca{  
+
+    iniciando: boolean = true;
     
     constructor(cor: string, private pecaService: PecaService) {
         super(cor, "rei"); 
