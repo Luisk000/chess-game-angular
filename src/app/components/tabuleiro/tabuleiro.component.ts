@@ -135,7 +135,7 @@ export class TabuleiroComponent implements OnInit {
       if (casa.peca != undefined) this.sendPecaComida(casa.peca);
 
       casa.peca = this.casaPecaSelecionada?.peca;
-
+      
       let col = this.posicaoPecaSelecionada!.coluna;
       let ca = this.posicaoPecaSelecionada!.linha;
       this.colunaCasasAcao[col][ca].peca = undefined;
@@ -167,8 +167,14 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarPeao(peao: Peao, coluna: number, linha: number) {
+    if (this.posicaoEnPassant && 
+        coluna == this.posicaoEnPassant.coluna && 
+        linha == this.posicaoEnPassant.linha
+      )
+        this.realizarEnPassant(peao.cor, coluna, linha)
+      
     if (peao.iniciando == true) {
-      this.verificarEmPassant(peao, coluna, linha);
+      this.verificarEnPassant(peao, coluna, linha);
       peao.iniciando = false;
     }
 
@@ -201,7 +207,23 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  verificarEmPassant(peao: Peao, coluna: number, linha: number) {
+  realizarEnPassant(cor: string, coluna: number, linha: number){
+    let pecaComida: Peca | undefined;
+
+    if (cor == "branco"){
+      pecaComida = this.colunaCasasAcao[coluna + 1][linha].peca;
+      this.colunaCasasAcao[coluna + 1][linha].peca = undefined;
+    }     
+    else {
+      pecaComida = this.colunaCasasAcao[coluna - 1][linha].peca;
+      this.colunaCasasAcao[coluna - 1][linha].peca = undefined;
+    }
+      
+    if (pecaComida)
+      this.sendPecaComida(pecaComida);
+  }
+
+  verificarEnPassant(peao: Peao, coluna: number, linha: number) {
     this.posicaoEnPassant = undefined;
     if (peao.cor == 'branco' && coluna == 4)
       this.posicaoEnPassant = new Posicao(coluna + 1, linha);
