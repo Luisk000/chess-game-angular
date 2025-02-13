@@ -37,7 +37,7 @@ export class RoqueService {
       tabuleiro[7][4].peca instanceof Rei && 
       tabuleiro[7][4].peca.iniciando == true
     )
-      return true;
+      return true;       
       
     else if (time === "preto" && 
       tabuleiro[0][4].peca instanceof Rei && 
@@ -65,11 +65,9 @@ export class RoqueService {
   }
 
   private verificarRoqueGrandeTorre(time: string, tabuleiro: Casa[][]): boolean{
-    console.log("aqui")
     if (time === "branco"){
       if (tabuleiro[7][0].peca instanceof Torre &&
         tabuleiro[7][0].peca.iniciando == true){
-          console.log("aquil")
           return true;
         }
         

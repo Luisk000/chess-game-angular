@@ -27,8 +27,11 @@ export class TabuleiroComponent implements OnInit {
 
   casaPecaSelecionada: Casa | undefined;
   posicaoPecaSelecionada: Posicao | undefined;
+
   posicaoPromocao: Posicao | undefined;
   posicaoEnPassant: Posicao | undefined = undefined;
+  
+  posicaoRoque = "";
 
   timeJogando = 'branco';
   jogoParado = false;
@@ -72,11 +75,11 @@ export class TabuleiroComponent implements OnInit {
   }
 
   async prepararPecas() {
-/*     for (let i = 0; i <= 7; i++) {
+    for (let i = 0; i <= 7; i++) {
       this.colunaCasasAcao[1][i].peca = new Peao('preto', this.pecaService);
       this.colunaCasasAcao[6][i].peca = new Peao('branco', this.pecaService);
     }
- */
+
     this.colunaCasasAcao[0][0].peca = new Torre('preto', this.pecaService);
     this.colunaCasasAcao[0][7].peca = new Torre('preto', this.pecaService);
     this.colunaCasasAcao[7][0].peca = new Torre('branco', this.pecaService);
@@ -133,9 +136,16 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarAcaoesEspeciaisAntes(peca: Peca){
+    this.posicaoRoque = "";
     if (peca instanceof Torre || peca instanceof Rei){
-      console.log("roque pequeno: " + peca.roquePequeno)
-      console.log("roque grande: " + peca.roqueGrande)
+      if (peca.roquePequeno == true && peca.cor === "branco")
+        this.posicaoRoque = "branco-right";
+      else if (peca.roquePequeno == true && peca.cor === "preto")
+        this.posicaoRoque = "preto-right";
+      if (peca.roqueGrande == true && peca.cor === "branco")
+        this.posicaoRoque = "branco-left";
+      else if (peca.roqueGrande == true && peca.cor === "preto")
+        this.posicaoRoque = "preto-left";
     }
   }
 
@@ -164,7 +174,7 @@ export class TabuleiroComponent implements OnInit {
       (peca instanceof Torre || peca instanceof Rei) &&
       peca.iniciando == true
     )
-      peca.iniciando = false;
+      peca.iniciando = false;     
   }
 
   sendPecaComida(peca: Peca) {

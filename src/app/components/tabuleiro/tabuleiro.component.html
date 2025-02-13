@@ -27,9 +27,10 @@
             }"
             (click)="verificarMovimentos(casa.peca, col, ca)"
           />
-          <app-tabuleiro-promocao 
-            *ngIf="posicaoPromocao?.coluna == col 
-            && posicaoPromocao?.linha == ca"
+          <app-tabuleiro-promocao
+            *ngIf="
+              posicaoPromocao?.coluna == col && posicaoPromocao?.linha == ca
+            "
             [time]="casa.peca.cor"
             [linha]="ca"
             (confirmarPeca)="confirmarPecaPeaoPromovido($event)"
@@ -39,3 +40,28 @@
     </div>
   </div>
 </div>
+
+<app-tabuleiro-roque
+  *ngIf="posicaoRoque === 'branco-left'"
+  [marginTop]="-55"
+  [marginLeft]="10"
+  [width]="280"
+></app-tabuleiro-roque>
+<app-tabuleiro-roque
+  *ngIf="posicaoRoque === 'preto-left'"
+  [marginTop]="-547"
+  [marginLeft]="10"
+  [width]="280"
+></app-tabuleiro-roque>
+<app-tabuleiro-roque
+  *ngIf="posicaoRoque === 'branco-right'"
+  [marginTop]="-55"
+  [marginLeft]="360"
+  [width]="210"
+></app-tabuleiro-roque>
+<app-tabuleiro-roque
+  *ngIf="posicaoRoque == 'preto-right'"
+  [marginTop]="-547"
+  [marginLeft]="360"
+  [width]="210"
+></app-tabuleiro-roque>

@@ -1,0 +1,21 @@
+.widget-roque{
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    background-color: yellow;
+    cursor: pointer;
+    transition: filter 0.3s ease;
+}
+
+.widget-roque:hover {
+    filter: brightness(0.85);
+}
+
+p{
+    color:#1E1C16;
+    font-weight: 500;
+    font-size: 18px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
