@@ -143,11 +143,19 @@ export class TabuleiroComponent implements OnInit {
       this.apagarLocaisAnteriores();
       this.mudarTimeJogando();
 
-      //if (this.posicaoEnPassant != undefined) this.posicaoEnPassant = undefined;
-
-      if (casa.peca instanceof Peao)
-        this.verificarAcoesEspeciaisPeao(casa.peca, coluna, linha);
+      if (casa.peca)
+        this.veridicarAcoesEspeciais(casa.peca, coluna, linha);    
     }
+  }
+
+  veridicarAcoesEspeciais(peca: Peca, coluna: number, linha: number){
+    if (peca instanceof Peao)
+      this.verificarAcoesEspeciaisPeao(peca, coluna, linha);
+    else if (
+      (peca instanceof Torre || peca instanceof Rei) &&
+      peca.iniciando == true
+    )
+      peca.iniciando = false;
   }
 
   sendPecaComida(peca: Peca) {

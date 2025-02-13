@@ -32,7 +32,7 @@ export class RoqueService {
       return false;
   }
 
-  verificarRoqueRei(time: string, tabuleiro: Casa[][]): boolean{
+  private verificarRoqueRei(time: string, tabuleiro: Casa[][]): boolean{
     if (time === "branco" && 
       tabuleiro[7][4].peca instanceof Rei && 
       tabuleiro[7][4].peca.iniciando == true
@@ -49,7 +49,7 @@ export class RoqueService {
       return false;
   }
 
-  verificarRoquePequenoTorre(time: string, tabuleiro: Casa[][]): boolean{
+  private verificarRoquePequenoTorre(time: string, tabuleiro: Casa[][]): boolean{
     if (time === "branco"){
       if (tabuleiro[7][7].peca instanceof Torre &&
         tabuleiro[7][7].peca.iniciando == true)
@@ -63,7 +63,7 @@ export class RoqueService {
     return false;
   }
 
-  verificarRoqueGrandeTorre(time: string, tabuleiro: Casa[][]): boolean{
+  private verificarRoqueGrandeTorre(time: string, tabuleiro: Casa[][]): boolean{
     if (time === "branco"){
       if (tabuleiro[7][0].peca instanceof Torre &&
         tabuleiro[7][0].peca.iniciando == true)

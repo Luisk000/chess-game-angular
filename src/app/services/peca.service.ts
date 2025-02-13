@@ -3,13 +3,19 @@ import { Posicao } from '../models/posicao.model';
 import { Casa } from '../models/casa.model';
 import { Peca } from '../models/peca.model';
 import { PeaoService } from './peao.service';
+import { RoqueService } from './roque.service';
+import { XequeService } from './xeque.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PecaService {
 
-  constructor(private peaoService: PeaoService) { }
+  constructor(
+    private peaoService: PeaoService, 
+    private roqueService: RoqueService, 
+    private xequeService: XequeService
+  ) { }
 
   verificarMovimentos(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
     let acoes: Posicao[] = [];
@@ -172,5 +178,13 @@ verificarMovimentosReto(posicao: Posicao, cor: string, tabuleiro: Casa[][]): Pos
 
   verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined): Posicao[] | []{
     return this.peaoService.verificarMovimentosPeaoComer(acoesPossiveis, cor, tabuleiro, posicaoEnPassant);
+  }
+
+  verificarRoquePequeno(time: string, tabuleiro: Casa[][]): boolean{
+    return this.roqueService.verificarRoquePequeno(time, tabuleiro);
+  }
+
+  verificarRoqueGrande(time: string, tabuleiro: Casa[][]): boolean{
+    return this.roqueService.verificarRoqueGrande(time, tabuleiro);
   }
 }
