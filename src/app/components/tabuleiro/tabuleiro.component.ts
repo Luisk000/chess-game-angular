@@ -72,11 +72,11 @@ export class TabuleiroComponent implements OnInit {
   }
 
   async prepararPecas() {
-    for (let i = 0; i <= 7; i++) {
+/*     for (let i = 0; i <= 7; i++) {
       this.colunaCasasAcao[1][i].peca = new Peao('preto', this.pecaService);
       this.colunaCasasAcao[6][i].peca = new Peao('branco', this.pecaService);
     }
-
+ */
     this.colunaCasasAcao[0][0].peca = new Torre('preto', this.pecaService);
     this.colunaCasasAcao[0][7].peca = new Torre('preto', this.pecaService);
     this.colunaCasasAcao[7][0].peca = new Torre('branco', this.pecaService);
@@ -118,6 +118,8 @@ export class TabuleiroComponent implements OnInit {
           this.colunaCasasAcao
         );
 
+        this.verificarAcaoesEspeciaisAntes(peca);
+
       if (peca.acoes) {
         this.apagarLocaisAnteriores();
         for (let acao of peca.acoes) {
@@ -127,6 +129,13 @@ export class TabuleiroComponent implements OnInit {
           this.acoesPecaSelecionada.push(acaoPecaSelecionada);
         }
       }
+    }
+  }
+
+  verificarAcaoesEspeciaisAntes(peca: Peca){
+    if (peca instanceof Torre || peca instanceof Rei){
+      console.log("roque pequeno: " + peca.roquePequeno)
+      console.log("roque grande: " + peca.roqueGrande)
     }
   }
 
@@ -144,11 +153,11 @@ export class TabuleiroComponent implements OnInit {
       this.mudarTimeJogando();
 
       if (casa.peca)
-        this.veridicarAcoesEspeciais(casa.peca, coluna, linha);    
+        this.verificarAcoesEspeciaisDepois(casa.peca, coluna, linha);    
     }
   }
 
-  veridicarAcoesEspeciais(peca: Peca, coluna: number, linha: number){
+  verificarAcoesEspeciaisDepois(peca: Peca, coluna: number, linha: number){
     if (peca instanceof Peao)
       this.verificarAcoesEspeciaisPeao(peca, coluna, linha);
     else if (

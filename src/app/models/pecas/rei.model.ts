@@ -5,6 +5,8 @@ import { Casa } from "../casa.model";
 export class Rei extends Peca{  
 
     iniciando: boolean = true;
+    roquePequeno = false;
+    roqueGrande = false;
     
     constructor(cor: string, private pecaService: PecaService) {
         super(cor, "rei"); 
@@ -23,6 +25,14 @@ export class Rei extends Peca{
         ];
 
         this.acoes = this.pecaService.verificarMovimentos(acoesPossiveis, cor, tabuleiro);
+
+        if (this.iniciando == true && this.roquePequeno == false)
+            this.roquePequeno = this.pecaService.verificarRoquePequeno(cor, tabuleiro);
+        
+        else if (this.iniciando == true && this.roqueGrande == false)
+            this.roqueGrande = this.pecaService.verificarRoqueGrande(cor, tabuleiro);
+        
+            
     }
 
 }

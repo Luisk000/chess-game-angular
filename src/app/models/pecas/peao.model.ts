@@ -35,7 +35,6 @@ export class Peao extends Peca{
         let acoesMover = this.pecaService.verificarMovimentosPeaoMover(acoesMoverPossiveis, cor, tabuleiro);
         let acoesComer = this.pecaService.verificarMovimentosPeaoComer(acoesComerPossiveis, cor, tabuleiro, posicaoEnPassant);
 
-
         this.acoes = [];
         if (acoesMover)
             this.acoes.push(...acoesMover)
