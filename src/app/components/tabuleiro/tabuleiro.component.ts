@@ -75,10 +75,10 @@ export class TabuleiroComponent implements OnInit {
   }
 
   async prepararPecas() {
- /*    for (let i = 0; i <= 7; i++) {
+    for (let i = 0; i <= 7; i++) {
       this.colunaCasasAcao[1][i].peca = new Peao('preto', this.pecaService);
       this.colunaCasasAcao[6][i].peca = new Peao('branco', this.pecaService);
-    } */
+    }
 
     this.colunaCasasAcao[0][0].peca = new Torre('preto', this.pecaService);
     this.colunaCasasAcao[0][7].peca = new Torre('preto', this.pecaService);
@@ -167,8 +167,7 @@ export class TabuleiroComponent implements OnInit {
       let ca = this.posicaoPecaSelecionada!.linha;
       this.colunaCasasAcao[col][ca].peca = undefined;
 
-      this.apagarLocaisAnteriores();
-      this.mudarTimeJogando();
+      this.apagarLocaisAnteriores();     
 
       if (casa.peca)
         this.verificarAcoesEspeciaisDepois(casa.peca, coluna, linha);    
@@ -182,7 +181,10 @@ export class TabuleiroComponent implements OnInit {
       this.posicaoRoque = "";
       if (peca.iniciando == true)
         peca.iniciando = false;  
+      this.mudarTimeJogando();
     }
+    else
+      this.mudarTimeJogando();
   }
 
   sendPecaComida(peca: Peca) {
@@ -226,6 +228,8 @@ export class TabuleiroComponent implements OnInit {
       peao.promocao = true;
       this.promoverPeao(coluna, linha);
     }
+    else
+    this.mudarTimeJogando();
   }
 
   promoverPeao(coluna: number, linha: number) {
@@ -241,6 +245,7 @@ export class TabuleiroComponent implements OnInit {
       this.posicaoPromocao = undefined;
       this.jogoParado = false;
     }
+    this.mudarTimeJogando();
   }
 
   realizarEnPassant(cor: string, coluna: number, linha: number) {

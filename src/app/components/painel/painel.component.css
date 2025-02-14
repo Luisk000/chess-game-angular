@@ -47,7 +47,7 @@
     color: #1E1C1A;
 }
 
-.pecas-comidas{
+ .pecas-comidas{
     margin-top: auto;
     display: flex;
     justify-content: left;
@@ -63,13 +63,27 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 249px;
+    height: 190px;
     width: 100%;
     font-size: 25px;
     font-weight:bold;   
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    
+    /* border: 1px solid red; */
 }
+
+.title-rodada{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 600;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* border: 1px solid red; */
+}
+
 
 .title-xeque{
     color:#E63946;

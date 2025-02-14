@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Peca } from '../../models/peca.model';
 
 @Component({
@@ -8,18 +8,25 @@ import { Peca } from '../../models/peca.model';
   templateUrl: './painel.component.html',
   styleUrl: './painel.component.css'
 })
-export class PainelComponent implements OnInit {
+export class PainelComponent implements OnInit, OnChanges {
 
   title = "";
   @Input() time = ""
   @Input() jogando = false;
   @Input() pecasComidas: Peca[] = [];
+  @Input() rodada: number = 0;
 
   ngOnInit() {
     if (this.time == "branco")
       this.title = "JOGADOR 1";
     else
       this.title = "JOGADOR 2";
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['jogando'] && changes['jogando'].currentValue === true) {
+      this.rodada++;
+    }
   }
 
   
