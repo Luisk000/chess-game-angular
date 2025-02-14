@@ -16,12 +16,12 @@ export class Torre extends Peca{
     override verMovimentosPossiveis(posicao: Posicao, cor: string, tabuleiro: Casa[][]) {
         this.acoes = this.pecaService.verificarMovimentosReto(posicao, cor, tabuleiro)
 
-        if (this.iniciando == true && this.roquePequeno == false && posicao.linha == 7)
+        if (this.iniciando == true && posicao.linha == 7)
             this.roquePequeno = this.pecaService.verificarRoquePequeno(cor, tabuleiro);
         else
             this.roquePequeno = false
 
-        if (this.iniciando == true && this.roqueGrande == false && posicao.linha == 0)
+        if (this.iniciando == true && posicao.linha == 0)
             this.roqueGrande = this.pecaService.verificarRoqueGrande(cor, tabuleiro);
         else
             this.roqueGrande = false

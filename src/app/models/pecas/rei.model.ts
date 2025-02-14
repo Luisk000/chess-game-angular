@@ -26,15 +26,16 @@ export class Rei extends Peca{
 
         this.acoes = this.pecaService.verificarMovimentos(acoesPossiveis, cor, tabuleiro);
 
-        if (this.iniciando == true && this.roquePequeno == false)
+        if (this.iniciando == true)
             this.roquePequeno = this.pecaService.verificarRoquePequeno(cor, tabuleiro);
         else
             this.roquePequeno = false
         
-        if (this.iniciando == true && this.roqueGrande == false)
+        if (this.iniciando == true)
             this.roqueGrande = this.pecaService.verificarRoqueGrande(cor, tabuleiro);
         else
             this.roqueGrande = false
+
             
     }
 

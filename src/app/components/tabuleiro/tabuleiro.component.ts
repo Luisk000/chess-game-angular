@@ -75,10 +75,10 @@ export class TabuleiroComponent implements OnInit {
   }
 
   async prepararPecas() {
-    for (let i = 0; i <= 7; i++) {
+ /*    for (let i = 0; i <= 7; i++) {
       this.colunaCasasAcao[1][i].peca = new Peao('preto', this.pecaService);
       this.colunaCasasAcao[6][i].peca = new Peao('branco', this.pecaService);
-    }
+    } */
 
     this.colunaCasasAcao[0][0].peca = new Torre('preto', this.pecaService);
     this.colunaCasasAcao[0][7].peca = new Torre('preto', this.pecaService);
@@ -138,14 +138,22 @@ export class TabuleiroComponent implements OnInit {
   verificarAcaoesEspeciaisAntes(peca: Peca){
     this.posicaoRoque = "";
     if (peca instanceof Torre || peca instanceof Rei){
-      if (peca.roquePequeno == true && peca.cor === "branco")
-        this.posicaoRoque = "branco-right";
-      else if (peca.roquePequeno == true && peca.cor === "preto")
-        this.posicaoRoque = "preto-right";
-      if (peca.roqueGrande == true && peca.cor === "branco")
-        this.posicaoRoque = "branco-left";
-      else if (peca.roqueGrande == true && peca.cor === "preto")
-        this.posicaoRoque = "preto-left";
+      if (peca.cor == "branco"){
+        if (peca.roquePequeno == true && peca.roqueGrande == true)
+          this.posicaoRoque = "branco";
+        else if (peca.roquePequeno == true)
+          this.posicaoRoque = "branco-right";
+        else if (peca.roqueGrande == true)
+          this.posicaoRoque = "branco-left";
+      }
+      else{
+        if (peca.roquePequeno == true && peca.roqueGrande == true)
+          this.posicaoRoque = "preto";
+        else if (peca.roquePequeno == true)
+          this.posicaoRoque = "preto-right";
+        else if (peca.roqueGrande == true)
+          this.posicaoRoque = "preto-left";
+      }     
     }
   }
 
@@ -170,11 +178,11 @@ export class TabuleiroComponent implements OnInit {
   verificarAcoesEspeciaisDepois(peca: Peca, coluna: number, linha: number){
     if (peca instanceof Peao)
       this.verificarAcoesEspeciaisPeao(peca, coluna, linha);
-    else if (
-      (peca instanceof Torre || peca instanceof Rei) &&
-      peca.iniciando == true
-    )
-      peca.iniciando = false;     
+    else if (peca instanceof Torre || peca instanceof Rei){
+      this.posicaoRoque = "";
+      if (peca.iniciando == true)
+        peca.iniciando = false;  
+    }
   }
 
   sendPecaComida(peca: Peca) {
@@ -256,5 +264,35 @@ export class TabuleiroComponent implements OnInit {
       this.posicaoEnPassant = new Posicao(coluna + 1, linha);
     else if (peao.cor == 'preto' && coluna == 3)
       this.posicaoEnPassant = new Posicao(coluna - 1, linha);
+  }
+
+  realizarRoque(posicao: string){
+    if (posicao == "branco-right"){
+      this.colunaCasasAcao[7][7].peca = undefined;
+      this.colunaCasasAcao[7][4].peca = undefined;
+      this.colunaCasasAcao[7][6].peca = new Rei("branco", this.pecaService);
+      this.colunaCasasAcao[7][5].peca = new Torre("branco", this.pecaService);
+    }
+    else if (posicao == "preto-right"){
+      this.colunaCasasAcao[0][7].peca = undefined;
+      this.colunaCasasAcao[0][4].peca = undefined;
+      this.colunaCasasAcao[0][6].peca = new Rei("preto", this.pecaService);
+      this.colunaCasasAcao[0][5].peca = new Torre("preto", this.pecaService);
+    }
+    if (posicao == "branco-left"){
+      this.colunaCasasAcao[7][0].peca = undefined;
+      this.colunaCasasAcao[7][4].peca = undefined;
+      this.colunaCasasAcao[7][2].peca = new Rei("branco", this.pecaService);
+      this.colunaCasasAcao[7][3].peca = new Torre("branco", this.pecaService);
+    }
+    else if(posicao == "preto-left"){
+      this.colunaCasasAcao[0][0].peca = undefined;
+      this.colunaCasasAcao[0][4].peca = undefined;
+      this.colunaCasasAcao[0][2].peca = new Rei("preto", this.pecaService);
+      this.colunaCasasAcao[0][3].peca = new Torre("preto", this.pecaService);
+    }
+    this.posicaoRoque = "";
+    this.apagarLocaisAnteriores();
+    this.mudarTimeJogando();
   }
 }

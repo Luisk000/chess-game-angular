@@ -42,26 +42,30 @@
 </div>
 
 <app-tabuleiro-roque
-  *ngIf="posicaoRoque === 'branco-left'"
+  *ngIf="posicaoRoque === 'branco-left' || posicaoRoque === 'branco'"
   [marginTop]="-55"
-  [marginLeft]="10"
-  [width]="280"
+  [marginLeft]="110"
+  [width]="150"
+  (click)="realizarRoque('branco-left')"
 ></app-tabuleiro-roque>
 <app-tabuleiro-roque
-  *ngIf="posicaoRoque === 'preto-left'"
-  [marginTop]="-547"
-  [marginLeft]="10"
-  [width]="280"
+  *ngIf="posicaoRoque === 'preto-left' || posicaoRoque === 'preto'"
+  [marginTop]="-546"
+  [marginLeft]="110"
+  [width]="150"
+  (click)="realizarRoque('preto-left')"
 ></app-tabuleiro-roque>
 <app-tabuleiro-roque
-  *ngIf="posicaoRoque === 'branco-right'"
-  [marginTop]="-55"
-  [marginLeft]="360"
-  [width]="210"
+  *ngIf="posicaoRoque === 'branco-right' || posicaoRoque === 'branco'"
+  [marginTop]="-56"
+  [marginLeft]="390"
+  [width]="80"
+  (click)="realizarRoque('branco-right')"
 ></app-tabuleiro-roque>
 <app-tabuleiro-roque
-  *ngIf="posicaoRoque == 'preto-right'"
-  [marginTop]="-547"
-  [marginLeft]="360"
-  [width]="210"
+  *ngIf="posicaoRoque === 'preto-right' || posicaoRoque === 'preto'"
+  [marginTop]="-546"
+  [marginLeft]="390"
+  [width]="80"
+  (click)="realizarRoque('preto-right')"
 ></app-tabuleiro-roque>
