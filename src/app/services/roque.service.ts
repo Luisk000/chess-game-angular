@@ -118,52 +118,5 @@ export class RoqueService {
       return false;
   }
 
-  verificarPosicaoRoque(peca: Torre | Rei): string{
-      let posicaoRoque = "";
-      if (peca.cor == "branco"){
-        if (peca.roquePequeno == true && peca.roqueGrande == true)
-          posicaoRoque = "branco";
-        else if (peca.roquePequeno == true)
-          posicaoRoque = "branco-right";
-        else if (peca.roqueGrande == true)
-          posicaoRoque = "branco-left";
-      }
-      else{
-        if (peca.roquePequeno == true && peca.roqueGrande == true)
-          posicaoRoque = "preto";
-        else if (peca.roquePequeno == true)
-          posicaoRoque = "preto-right";
-        else if (peca.roqueGrande == true)
-          posicaoRoque = "preto-left";
-      }    
-      return posicaoRoque;
-  }
-  
-  realizarRoque(posicao: string, tabuleiro: Casa[][], pecaService: PecaService): Casa[][]{
-      if (posicao == "branco-right"){
-        tabuleiro[7][7].peca = undefined;
-        tabuleiro[7][4].peca = undefined;
-        tabuleiro[7][6].peca = new Rei("branco", pecaService);
-        tabuleiro[7][5].peca = new Torre("branco", pecaService);
-      }
-      else if (posicao == "preto-right"){
-        tabuleiro[0][7].peca = undefined;
-        tabuleiro[0][4].peca = undefined;
-        tabuleiro[0][6].peca = new Rei("preto", pecaService);
-        tabuleiro[0][5].peca = new Torre("preto", pecaService);
-      }
-      if (posicao == "branco-left"){
-        tabuleiro[7][0].peca = undefined;
-        tabuleiro[7][4].peca = undefined;
-        tabuleiro[7][2].peca = new Rei("branco", pecaService);
-        tabuleiro[7][3].peca = new Torre("branco", pecaService);
-      }
-      else if(posicao == "preto-left"){
-        tabuleiro[0][0].peca = undefined;
-        tabuleiro[0][4].peca = undefined;
-        tabuleiro[0][2].peca = new Rei("preto", pecaService);
-        tabuleiro[0][3].peca = new Torre("preto", pecaService);
-      }
-      return tabuleiro;
-  }
+
 }

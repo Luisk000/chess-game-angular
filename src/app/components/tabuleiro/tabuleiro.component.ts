@@ -1,16 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Casa } from '../../models/casa.model';
 import { Peca } from '../../models/peca.model';
-import { Cavalo } from '../../models/pecas/cavalo.model';
-import { Bispo } from '../../models/pecas/bispo.model';
 import { Peao } from '../../models/pecas/peao.model';
-import { Rainha } from '../../models/pecas/rainha.mode';
 import { Rei } from '../../models/pecas/rei.model';
 import { Torre } from '../../models/pecas/torre.model';
 import { PecaService } from '../../services/peca.service';
 import { Posicao } from '../../models/posicao.model';
-import { RoqueService } from '../../services/roque.service';
-import { PeaoService } from '../../services/peao.service';
+import { TabuleiroService } from '../../services/tabuleiro.service';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -23,8 +19,8 @@ export class TabuleiroComponent implements OnInit {
   @Output() pecaComidaEmit = new EventEmitter<Peca>();
   @Output() timeJogandoEmit = new EventEmitter();
 
-  colunaCasasAcao: Casa[][] = [];
-  colunaCasasTabuleiro: Casa[][] = [];
+  tabuleiroAcoes: Casa[][] = [];
+  tabuleiroBackground: Casa[][] = [];
   acoesPecaSelecionada: Casa[] = [];
 
   casaPecaSelecionada: Casa | undefined;
@@ -40,30 +36,34 @@ export class TabuleiroComponent implements OnInit {
   jogoParado = false;
 
   constructor(
-    private pecaService: PecaService, 
-    private roqueService: RoqueService, 
-    private peaoService: PeaoService
+    private pecaService: PecaService,
+    private tabuleiroService: TabuleiroService
   ) {}
 
   async ngOnInit() {
-    await this.definirTabuleiro();
-    await this.prepararPecas();
+    await this.prepararTabuleiro();
+    
   }
 
-  async definirTabuleiro() {
+  async prepararTabuleiro(){
+    await this.definirColunas();
+    let tabuleiroCopia = await JSON.parse(
+      JSON.stringify(this.tabuleiroBackground)
+    );
+    this.tabuleiroAcoes = await
+      this.tabuleiroService.prepararPecas(tabuleiroCopia, this.pecaService);
+  }
+
+  async definirColunas() {
     for (let i = 0; i <= 7; i++) {
       let coluna = 'par';
       if (i % 2 != 0) coluna = 'impar';
 
-      this.colunaCasasTabuleiro[i] = [];
+      this.tabuleiroBackground[i] = [];
       for (let j = 0; j <= 7; j++) {
-        this.colunaCasasTabuleiro[i].push(new Casa());
-      }
-
-      this.colunaCasasAcao = JSON.parse(
-        JSON.stringify(this.colunaCasasTabuleiro)
-      );
-      await this.definirCasas(this.colunaCasasTabuleiro[i], coluna);
+        this.tabuleiroBackground[i].push(new Casa());
+      }      
+      await this.definirCasas(this.tabuleiroBackground[i], coluna);
     }
   }
 
@@ -81,37 +81,9 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  async prepararPecas() {
-    for (let i = 0; i <= 7; i++) {
-      this.colunaCasasAcao[1][i].peca = new Peao('preto', this.pecaService);
-      this.colunaCasasAcao[6][i].peca = new Peao('branco', this.pecaService);
-    }
-
-    this.colunaCasasAcao[0][0].peca = new Torre('preto', this.pecaService);
-    this.colunaCasasAcao[0][7].peca = new Torre('preto', this.pecaService);
-    this.colunaCasasAcao[7][0].peca = new Torre('branco', this.pecaService);
-    this.colunaCasasAcao[7][7].peca = new Torre('branco', this.pecaService);
-
-    this.colunaCasasAcao[0][1].peca = new Cavalo('preto', this.pecaService);
-    this.colunaCasasAcao[0][6].peca = new Cavalo('preto', this.pecaService);
-    this.colunaCasasAcao[7][1].peca = new Cavalo('branco', this.pecaService);
-    this.colunaCasasAcao[7][6].peca = new Cavalo('branco', this.pecaService);
-
-    this.colunaCasasAcao[0][2].peca = new Bispo('preto', this.pecaService);
-    this.colunaCasasAcao[0][5].peca = new Bispo('preto', this.pecaService);
-    this.colunaCasasAcao[7][2].peca = new Bispo('branco', this.pecaService);
-    this.colunaCasasAcao[7][5].peca = new Bispo('branco', this.pecaService);
-
-    this.colunaCasasAcao[0][4].peca = new Rei('preto', this.pecaService);
-    this.colunaCasasAcao[7][4].peca = new Rei('branco', this.pecaService);
-
-    this.colunaCasasAcao[0][3].peca = new Rainha('preto', this.pecaService);
-    this.colunaCasasAcao[7][3].peca = new Rainha('branco', this.pecaService);
-  }
-
   verificarMovimentos(peca: Peca, coluna: number, linha: number) {
     if (peca.cor === this.timeJogando && !this.jogoParado) {
-      this.casaPecaSelecionada = this.colunaCasasAcao[coluna][linha];
+      this.casaPecaSelecionada = this.tabuleiroAcoes[coluna][linha];
       this.posicaoPecaSelecionada = new Posicao(coluna, linha);
 
       this.verificarEnPassantInicio(peca);
@@ -119,7 +91,7 @@ export class TabuleiroComponent implements OnInit {
       peca.verMovimentosPossiveis(
         this.posicaoPecaSelecionada,
         peca.cor,
-        this.colunaCasasAcao
+        this.tabuleiroAcoes
       );
 
       this.verificarRoqueInicio(peca)
@@ -134,7 +106,7 @@ export class TabuleiroComponent implements OnInit {
     this.apagarLocaisAnteriores();
     for (let acao of peca.acoes) {
       let acaoPecaSelecionada =
-        this.colunaCasasAcao[acao.coluna][acao.linha];
+        this.tabuleiroAcoes[acao.coluna][acao.linha];
       acaoPecaSelecionada.cor = 'LimeGreen';
       this.acoesPecaSelecionada.push(acaoPecaSelecionada);
     }
@@ -148,7 +120,7 @@ export class TabuleiroComponent implements OnInit {
 
       let col = this.posicaoPecaSelecionada!.coluna;
       let ca = this.posicaoPecaSelecionada!.linha;
-      this.colunaCasasAcao[col][ca].peca = undefined;
+      this.tabuleiroAcoes[col][ca].peca = undefined;
 
       this.apagarLocaisAnteriores();     
 
@@ -190,7 +162,7 @@ export class TabuleiroComponent implements OnInit {
 
   verificarRoqueInicio(peca: Peca){
     if (peca instanceof Torre || peca instanceof Rei)
-      this.posicaoRoque = this.roqueService.verificarPosicaoRoque(peca);
+      this.posicaoRoque = this.tabuleiroService.verificarPosicaoRoque(peca);
     else
       this.posicaoRoque = "";
   }
@@ -204,8 +176,8 @@ export class TabuleiroComponent implements OnInit {
   }
 
   realizarRoque(posicaoRoque: string){
-    this.colunaCasasAcao = 
-      this.roqueService.realizarRoque(posicaoRoque, this.colunaCasasAcao , this.pecaService)
+    this.tabuleiroAcoes = 
+      this.tabuleiroService.realizarRoque(posicaoRoque, this.tabuleiroAcoes , this.pecaService)
     this.posicaoRoque = "";
     this.apagarLocaisAnteriores();
     this.mudarTimeJogando();
@@ -214,7 +186,7 @@ export class TabuleiroComponent implements OnInit {
   verificarAcoesEspeciaisPeaoFinal(peca: Peca, coluna: number, linha: number) {
     if (peca instanceof Peao){
       if (peca.iniciando == true) {
-        this.posicaoEnPassant = this.peaoService.verificarEnPassant(peca, coluna, linha);
+        this.posicaoEnPassant = this.tabuleiroService.verificarEnPassant(peca, coluna, linha);
         this.timeEnPassant = peca.cor;
         peca.iniciando = false;
       }
@@ -224,7 +196,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   realizarPromocao(peao: Peao, coluna: number, linha: number) {
-    if (this.peaoService.verificarPromocao(peao, coluna)){
+    if (this.tabuleiroService.verificarPromocao(peao, coluna)){
       this.posicaoPromocao = new Posicao(coluna, linha);
       this.jogoParado = true;
     }
@@ -234,7 +206,7 @@ export class TabuleiroComponent implements OnInit {
     if (this.posicaoPromocao) {
       let col = this.posicaoPromocao.coluna;
       let ca = this.posicaoPromocao.linha;
-      this.colunaCasasAcao[col][ca].peca = $event;
+      this.tabuleiroAcoes[col][ca].peca = $event;
       this.posicaoPromocao = undefined;
       this.jogoParado = false;
     }
@@ -249,11 +221,11 @@ export class TabuleiroComponent implements OnInit {
       let pecaComida: Peca | undefined;
 
       if (cor == 'branco') {
-        pecaComida = this.colunaCasasAcao[coluna + 1][linha].peca;
-        this.colunaCasasAcao[coluna + 1][linha].peca = undefined;
+        pecaComida = this.tabuleiroAcoes[coluna + 1][linha].peca;
+        this.tabuleiroAcoes[coluna + 1][linha].peca = undefined;
       } else {
-        pecaComida = this.colunaCasasAcao[coluna - 1][linha].peca;
-        this.colunaCasasAcao[coluna - 1][linha].peca = undefined;
+        pecaComida = this.tabuleiroAcoes[coluna - 1][linha].peca;
+        this.tabuleiroAcoes[coluna - 1][linha].peca = undefined;
       }
   
       if (pecaComida) this.sendPecaComida(pecaComida);    
