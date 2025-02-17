@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Posicao } from '../models/posicao.model';
 import { Casa } from '../models/casa.model';
 import { Peca } from '../models/peca.model';
+import { Peao } from '../models/pecas/peao.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,9 @@ export class PeaoService {
         }
       }
       return acoes;
-    }
+  }
   
-    verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined): Posicao[] | []{
+  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined): Posicao[] | []{
       let acoes: Posicao[] = [];
       for (let acaoPossivel of acoesPossiveis){
         if (acaoPossivel.coluna >= 0 && acaoPossivel.coluna <= 7 
@@ -37,31 +38,52 @@ export class PeaoService {
             if (corPeca != undefined && corPeca != cor)
               acoes.push(acao);   
 
-            if (posicaoEnPassant && 
-              posicaoEnPassant && 
-              this.permitirEnPassant(posicaoEnPassant, acao)
-            )
+            if (posicaoEnPassant && this.permitirEnPassant(posicaoEnPassant, acao))
               acoes.push(posicaoEnPassant)  
         }
 
              
       }
       return acoes;
-    }
+  }
 
-    private verificarPecaNaCasa(acao: Posicao, tabuleiro: Casa[][]) {
+  private verificarPecaNaCasa(acao: Posicao, tabuleiro: Casa[][]) {
       var peca: Peca | undefined = tabuleiro[acao.coluna][acao.linha].peca;
           if (peca && peca.cor)
             return peca.cor;
           else
             return undefined;
-    }
+  }
 
-    private permitirEnPassant(posicaoEnPassant: Posicao, acao: Posicao): boolean{
+  private permitirEnPassant(posicaoEnPassant: Posicao, acao: Posicao): boolean{
       if (posicaoEnPassant.coluna == acao.coluna && 
         posicaoEnPassant.linha == acao.linha)
         return true;
       else
         return false;
-    }
+  }
+
+  verificarPromocao(peao: Peao, coluna: number): boolean{
+    if (
+        (
+          (peao.cor === 'branco' && coluna == 0) ||
+          (peao.cor === 'preto' && coluna == 7)
+        ) 
+        && peao.promocao == false
+    ) 
+      peao.promocao = true;
+
+    return peao.promocao; 
+  }
+
+  verificarEnPassant(peao: Peao, coluna: number, linha: number): Posicao | undefined {
+    let posicaoEnPassant = undefined;
+  
+    if (peao.cor == 'branco' && coluna == 4)
+      posicaoEnPassant = new Posicao(coluna + 1, linha);
+    else if (peao.cor == 'preto' && coluna == 3)
+      posicaoEnPassant = new Posicao(coluna - 1, linha);
+
+    return posicaoEnPassant;
+  }
 }

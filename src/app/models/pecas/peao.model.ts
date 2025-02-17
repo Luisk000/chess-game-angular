@@ -6,12 +6,13 @@ export class Peao extends Peca{
     
     iniciando: boolean = true;
     promocao: boolean = false;
+    posicaoEnPassant: Posicao | undefined;
     
     constructor(cor: string, private pecaService: PecaService) {
         super(cor, "peao"); 
     }
     
-    override verMovimentosPossiveis(posicao: Posicao, cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined = undefined) {   
+    override verMovimentosPossiveis(posicao: Posicao, cor: string, tabuleiro: Casa[][]) {   
         let acoesMoverPossiveis: Posicao[] = [];
         let acoesComerPossiveis: Posicao[] = [];
         
@@ -33,7 +34,8 @@ export class Peao extends Peca{
         }   
         
         let acoesMover = this.pecaService.verificarMovimentosPeaoMover(acoesMoverPossiveis, cor, tabuleiro);
-        let acoesComer = this.pecaService.verificarMovimentosPeaoComer(acoesComerPossiveis, cor, tabuleiro, posicaoEnPassant);
+        let acoesComer = this.pecaService.verificarMovimentosPeaoComer(acoesComerPossiveis, cor, tabuleiro, this.posicaoEnPassant);
+        this.posicaoEnPassant = undefined;
 
         this.acoes = [];
         if (acoesMover)

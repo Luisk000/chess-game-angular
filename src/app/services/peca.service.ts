@@ -102,9 +102,9 @@ export class PecaService {
     }
 
     return acoes;
-}
+  }
 
-verificarMovimentosReto(posicao: Posicao, cor: string, tabuleiro: Casa[][]): Posicao[] | [] {
+  verificarMovimentosReto(posicao: Posicao, cor: string, tabuleiro: Casa[][]): Posicao[] | [] {
     let acoes: Posicao[] = [];
     let coluna = posicao.coluna - 1;
     while (coluna >= 0){
