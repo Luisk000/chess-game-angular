@@ -32,7 +32,7 @@ export class TabuleiroComponent implements OnInit {
 
   posicaoPromocao: Posicao | undefined;
   posicaoEnPassant: Posicao | undefined = undefined;
-  timeEnPassant: string = "";
+  timeEnPassant = "";
   
   posicaoRoque = "";
 
@@ -46,11 +46,11 @@ export class TabuleiroComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    await this.definirArray();
+    await this.definirTabuleiro();
     await this.prepararPecas();
   }
 
-  async definirArray() {
+  async definirTabuleiro() {
     for (let i = 0; i <= 7; i++) {
       let coluna = 'par';
       if (i % 2 != 0) coluna = 'impar';
