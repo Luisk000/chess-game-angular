@@ -13,8 +13,7 @@ export class PecaService {
 
   constructor(
     private peaoService: PeaoService, 
-    private roqueService: RoqueService, 
-    private xequeService: XequeService
+    private roqueService: RoqueService
   ) { }
 
   verificarMovimentos(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
