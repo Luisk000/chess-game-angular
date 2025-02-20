@@ -7,6 +7,7 @@ import { Torre } from '../../models/pecas/torre.model';
 import { PecaService } from '../../services/peca.service';
 import { Posicao } from '../../models/posicao.model';
 import { TabuleiroService } from '../../services/tabuleiro.service';
+import { XequeService } from '../../services/xeque.service';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -35,9 +36,13 @@ export class TabuleiroComponent implements OnInit {
   timeJogando = 'branco';
   jogoParado = false;
 
+  posicaoReiTimeBranco: Posicao | undefined;
+  posicaoReiTimePreto: Posicao | undefined;
+
   constructor(
     private pecaService: PecaService,
-    private tabuleiroService: TabuleiroService
+    private tabuleiroService: TabuleiroService,
+    private xequeService: XequeService
   ) {}
 
   async ngOnInit() {
@@ -52,6 +57,9 @@ export class TabuleiroComponent implements OnInit {
     );
     this.tabuleiroAcoes = await
       this.tabuleiroService.prepararPecas(tabuleiroCopia, this.pecaService);
+
+    this.posicaoReiTimeBranco = new Posicao(7, 4);
+    this.posicaoReiTimePreto = new Posicao(0, 4);
   }
 
   async definirColunas() {
@@ -87,6 +95,7 @@ export class TabuleiroComponent implements OnInit {
       this.posicaoPecaSelecionada = new Posicao(coluna, linha);
 
       this.verificarEnPassantInicio(peca);
+      this.verificarXequeInicio(peca, this.posicaoPecaSelecionada);
 
       peca.verMovimentosPossiveis(
         this.posicaoPecaSelecionada,
@@ -157,6 +166,29 @@ export class TabuleiroComponent implements OnInit {
         peca.posicaoEnPassant = this.posicaoEnPassant;
       else
         peca.posicaoEnPassant = undefined;     
+    }
+  }
+
+  verificarXequeInicio(peca: Peca, posicao: Posicao){      
+    if (peca instanceof Rei){
+      if (peca.cor == "branco")
+        this.posicaoReiTimeBranco = posicao;
+      else
+        this.posicaoReiTimePreto = posicao;
+    }
+
+    let posicaoRei: Posicao | undefined;
+    if (peca.cor == "branco")
+      posicaoRei = this.posicaoReiTimeBranco; 
+    else
+      posicaoRei = this.posicaoReiTimePreto;
+
+    if (posicaoRei){
+      let xeques: Posicao[] = this.xequeService.verificarXeque(
+        peca.cor, posicaoRei, this.tabuleiroAcoes)
+
+      for (let xeque of xeques)
+        this.tabuleiroAcoes[xeque.coluna][xeque.linha].cor = "red"
     }
   }
 
