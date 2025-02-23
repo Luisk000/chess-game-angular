@@ -95,7 +95,7 @@ export class TabuleiroComponent implements OnInit {
       this.posicaoPecaSelecionada = new Posicao(coluna, linha);
 
       this.verificarEnPassantInicio(peca);
-      this.verificarXequeInicio(peca, this.posicaoPecaSelecionada);
+      this.verificarXeque(peca, this.posicaoPecaSelecionada);
 
       peca.verMovimentosPossiveis(
         this.posicaoPecaSelecionada,
@@ -169,16 +169,16 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  verificarXequeInicio(peca: Peca, posicao: Posicao){      
+  verificarXeque(peca: Peca, posicao: Posicao){      
     if (peca instanceof Rei){
-      if (peca.cor == "branco")
+      if (peca.cor === "branco")
         this.posicaoReiTimeBranco = posicao;
       else
         this.posicaoReiTimePreto = posicao;
     }
 
     let posicaoRei: Posicao | undefined;
-    if (peca.cor == "branco")
+    if (peca.cor === "branco")
       posicaoRei = this.posicaoReiTimeBranco; 
     else
       posicaoRei = this.posicaoReiTimePreto;

@@ -39,6 +39,7 @@ export class XequeService {
       ...xequesRei, 
       ...xequesPeao
     );
+
     
     return xeques;
   }
@@ -47,12 +48,16 @@ export class XequeService {
     let movimentosDiagonais: Posicao[] = this.pecaService
       .verificarMovimentosDiagonal(posicao, cor, tabuleiro);
 
+      console.log(movimentosDiagonais)
+
     let xeques: Posicao[] = [];
     if (movimentosDiagonais)
       for (let movimento of movimentosDiagonais){
         let pecaTabuleiro = tabuleiro[movimento.coluna][movimento.linha].peca;
         if (pecaTabuleiro instanceof Rainha || pecaTabuleiro instanceof Bispo)
           xeques.push(movimento)
+        console.log(movimento)
+        console.log(tabuleiro)
       }
     return xeques;
       
