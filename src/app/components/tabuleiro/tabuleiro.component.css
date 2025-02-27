@@ -60,6 +60,10 @@
     transition: filter 0.3s ease;
 }
 
+.xeque{
+    background-color: red;
+}
+
 .acao-possivel:hover {
     filter: brightness(0.85);
 }

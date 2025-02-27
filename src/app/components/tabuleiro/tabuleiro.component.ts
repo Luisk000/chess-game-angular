@@ -107,9 +107,10 @@ export class TabuleiroComponent implements OnInit {
         .peca = undefined;
 
       this.apagarLocaisAnteriores();     
+      this.mudarTimeJogando();   
+
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
       this.verificarRoqueFinal(casa.peca!);
-      this.mudarTimeJogando();
     }
   }
 
@@ -123,6 +124,13 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
+  apagarLocaisXeque() {
+    for (let local of this.acoesPossiveis) {
+      if (local.cor == 'red')
+        local.cor = '';
+    }
+  }
+
   mudarTimeJogando() {
     this.timeJogandoEmit.emit();
     if (this.timeJogando === 'branco') this.timeJogando = 'preto';
@@ -131,16 +139,17 @@ export class TabuleiroComponent implements OnInit {
 
   //#region Xeque 
 
-  verificarXequeInicio(peca: Peca, posicao: Posicao){      
+  verificarXequeInicio(peca: Peca, posicao: Posicao){  
+    this.apagarLocaisXeque();   
     if (peca instanceof Rei){
-      if (peca.cor == "branco")
+      if (peca.cor === "branco")
         this.posicaoReiTimeBranco = posicao;
       else
         this.posicaoReiTimePreto = posicao;
     }
 
     let posicaoRei: Posicao | undefined;
-    if (peca.cor == "branco")
+    if (this.timeJogando === "branco")
       posicaoRei = this.posicaoReiTimeBranco; 
     else
       posicaoRei = this.posicaoReiTimePreto;
@@ -149,8 +158,11 @@ export class TabuleiroComponent implements OnInit {
       let xeques: Posicao[] = this.xequeService.verificarXeque(
         peca.cor, posicaoRei, this.tabuleiroJogo)
 
-      for (let xeque of xeques)
-        this.tabuleiroJogo[xeque.coluna][xeque.linha].cor = "red"
+        for (let xeque of xeques){
+          let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
+          casaXeque.cor = "red";
+          this.acoesPossiveis.push(casaXeque);
+        }
     }
   }
 

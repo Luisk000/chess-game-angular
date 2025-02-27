@@ -14,7 +14,8 @@
         class="casa"
         *ngFor="let casa of coluna; let ca = index"
         [ngClass]="{
-          'acao-possivel': casa.cor === 'LimeGreen' && !jogoParado
+          'acao-possivel': casa.cor === 'LimeGreen' && !jogoParado,
+          'xeque': casa.cor === 'red' && !jogoParado,
         }"
         (click)="moverPeca(casa, col, ca)"
       >
