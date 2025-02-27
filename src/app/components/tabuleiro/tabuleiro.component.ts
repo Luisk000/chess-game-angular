@@ -67,8 +67,7 @@ export class TabuleiroComponent implements OnInit {
       this.casaSelecionada = this.tabuleiroJogo[coluna][linha];
       this.posicaoSelecionada = new Posicao(coluna, linha);
 
-      this.verificarEnPassantInicio(peca);
-      this.verificarXequeInicio(peca, this.posicaoSelecionada);
+      this.verificarEnPassantInicio(peca);    
 
       peca.verMovimentosPossiveis(
         this.posicaoSelecionada,
@@ -77,7 +76,7 @@ export class TabuleiroComponent implements OnInit {
       );
 
       this.verificarRoqueInicio(peca)
-      this.mostrarAcoesPossiveis(peca);        
+      this.mostrarAcoesPossiveis(peca);             
     }
   }
   
@@ -111,6 +110,7 @@ export class TabuleiroComponent implements OnInit {
 
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
       this.verificarRoqueFinal(casa.peca!);
+      this.verificarXeque(casa.peca!, new Posicao(coluna, linha));
     }
   }
 
@@ -124,13 +124,6 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  apagarLocaisXeque() {
-    for (let local of this.acoesPossiveis) {
-      if (local.cor == 'red')
-        local.cor = '';
-    }
-  }
-
   mudarTimeJogando() {
     this.timeJogandoEmit.emit();
     if (this.timeJogando === 'branco') this.timeJogando = 'preto';
@@ -139,8 +132,7 @@ export class TabuleiroComponent implements OnInit {
 
   //#region Xeque 
 
-  verificarXequeInicio(peca: Peca, posicao: Posicao){  
-    this.apagarLocaisXeque();   
+  verificarXeque(peca: Peca, posicao: Posicao){  
     if (peca instanceof Rei){
       if (peca.cor === "branco")
         this.posicaoReiTimeBranco = posicao;
@@ -154,16 +146,14 @@ export class TabuleiroComponent implements OnInit {
     else
       posicaoRei = this.posicaoReiTimePreto;
 
-    if (posicaoRei){
-      let xeques: Posicao[] = this.xequeService.verificarXeque(
-        peca.cor, posicaoRei, this.tabuleiroJogo)
+    let xeques: Posicao[] = this.xequeService.verificarXeque(
+      this.timeJogando, posicaoRei!, this.tabuleiroJogo)
 
-        for (let xeque of xeques){
-          let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
-          casaXeque.cor = "red";
-          this.acoesPossiveis.push(casaXeque);
-        }
-    }
+    for (let xeque of xeques){
+      let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
+      casaXeque.cor = "red";
+      this.acoesPossiveis.push(casaXeque);
+    } 
   }
 
   //#endregion

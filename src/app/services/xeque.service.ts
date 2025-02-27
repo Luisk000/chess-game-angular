@@ -20,7 +20,6 @@ export class XequeService {
   }
 
   verificarXeque(cor: string, posicao: Posicao, tabuleiro: Casa[][]) {
-    console.clear();
     let xequesRainhaBispo: Posicao[] = 
       this.verificarXequeRainhaBispo(posicao, tabuleiro, cor);
     let xequesRainhaTorre: Posicao[] = 
