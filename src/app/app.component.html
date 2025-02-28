@@ -1,16 +1,20 @@
 <div class="background">
-    <app-painel 
-        time="branco" 
-        [jogando]="jogador1Jogando"
-        [pecasComidas]="pecasComidasJogador1"
-    ></app-painel>
-    <app-tabuleiro 
-        (pecaComidaEmit)="adicionarPecaComida($event)"
-        (timeJogandoEmit)="mudarTimeJogando()"
-    ></app-tabuleiro>
-    <app-painel 
-        time="preto" 
-        [jogando]="jogador2Jogando"
-        [pecasComidas]="pecasComidasJogador2"
-    ></app-painel>
+  <app-painel
+    time="branco"
+    [jogando]="jogador1Jogando"
+    [pecasComidas]="pecasComidasJogador1"
+    [xeque]="xequeJogador1"
+  ></app-painel>
+  <app-tabuleiro
+    (pecaComidaEmit)="adicionarPecaComida($event)"
+    (timeJogandoEmit)="mudarTimeJogando()"
+    (xequeEmit)="mostrarXeque()"
+  ></app-tabuleiro>
+  <app-painel
+    time="preto"
+    [jogando]="jogador2Jogando"
+    [pecasComidas]="pecasComidasJogador2"
+    [xeque]="xequeJogador2"
+  ></app-painel>
+  <div class="xeque" *ngIf="popUpXeque" @fade>XEQUE!</div>
 </div>

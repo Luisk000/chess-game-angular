@@ -15,6 +15,7 @@ export class PainelComponent implements OnInit, OnChanges {
   @Input() jogando = false;
   @Input() pecasComidas: Peca[] = [];
   @Input() rodada: number = 0;
+  @Input() xeque = false;
 
   ngOnInit() {
     if (this.time == "branco")

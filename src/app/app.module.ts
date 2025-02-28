@@ -7,6 +7,7 @@ import { TabuleiroComponent } from './components/tabuleiro/tabuleiro.component';
 import { PainelComponent } from './components/painel/painel.component';
 import { TabuleiroPromocaoComponent } from './components/tabuleiro/tabuleiro-promocao/tabuleiro-promocao.component';
 import { TabuleiroRoqueComponent } from './components/tabuleiro/tabuleiro-roque/tabuleiro-roque.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { TabuleiroRoqueComponent } from './components/tabuleiro/tabuleiro-roque/
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule
   ],
   providers: [],

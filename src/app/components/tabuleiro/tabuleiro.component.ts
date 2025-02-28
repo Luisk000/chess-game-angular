@@ -20,10 +20,12 @@ import { PreparacaoService } from '../../services/preparacao.service';
 export class TabuleiroComponent implements OnInit {
   @Output() pecaComidaEmit = new EventEmitter<Peca>();
   @Output() timeJogandoEmit = new EventEmitter();
+  @Output() xequeEmit = new EventEmitter();
 
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
   acoesPossiveis: Casa[] = [];
+  casasXeque: Casa[] = [];
 
   casaSelecionada: Casa | undefined;
   posicaoSelecionada: Posicao | undefined;
@@ -87,8 +89,8 @@ export class TabuleiroComponent implements OnInit {
       let acaoPecaSelecionada =
         this.tabuleiroJogo[acao.coluna][acao.linha];
 
-      acaoPecaSelecionada.cor = 'LimeGreen';
-      this.acoesPossiveis.push(acaoPecaSelecionada);
+        acaoPecaSelecionada.cor = 'LimeGreen';
+        this.acoesPossiveis.push(acaoPecaSelecionada);  
     }
   }
 
@@ -110,7 +112,7 @@ export class TabuleiroComponent implements OnInit {
 
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
       this.verificarRoqueFinal(casa.peca!);
-      this.verificarXeque(casa.peca!, new Posicao(coluna, linha));
+      this.verificarXeque(casa.peca!, new Posicao(coluna, linha));     
     }
   }
 
@@ -121,7 +123,9 @@ export class TabuleiroComponent implements OnInit {
   apagarLocaisAnteriores() {
     for (let casa of this.acoesPossiveis) {
       casa.cor = '';
+      this.manterXeques(casa);
     }
+    this.acoesPossiveis = [];
   }
 
   mudarTimeJogando() {
@@ -133,6 +137,7 @@ export class TabuleiroComponent implements OnInit {
   //#region Xeque 
 
   verificarXeque(peca: Peca, posicao: Posicao){  
+    this.apagarLocaisXeque();
     if (peca instanceof Rei){
       if (peca.cor === "branco")
         this.posicaoReiTimeBranco = posicao;
@@ -149,11 +154,27 @@ export class TabuleiroComponent implements OnInit {
     let xeques: Posicao[] = this.xequeService.verificarXeque(
       this.timeJogando, posicaoRei!, this.tabuleiroJogo)
 
-    for (let xeque of xeques){
-      let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
-      casaXeque.cor = "red";
-      this.acoesPossiveis.push(casaXeque);
-    } 
+    if (xeques.length > 0){
+      this.xequeEmit.emit();
+      for (let xeque of xeques){
+        let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
+        casaXeque.cor = "red";
+        this.casasXeque.push(casaXeque);
+      } 
+    }
+   
+  }
+
+  apagarLocaisXeque() {
+    for (let casa of this.casasXeque) 
+        casa.cor = '';
+    
+    this.casasXeque = [];
+  }
+
+  manterXeques(casa: Casa){
+    if (this.casasXeque.find(c => c == casa))
+      casa.cor = 'red';
   }
 
   //#endregion
@@ -181,6 +202,22 @@ export class TabuleiroComponent implements OnInit {
     this.posicaoRoque = "";
     this.apagarLocaisAnteriores();
     this.mudarTimeJogando();
+    this.setPosicaoReiRoque(posicaoRoque);
+  }
+
+  setPosicaoReiRoque(posicao: string){
+    if (posicao == "branco-right")
+      this.posicaoReiTimeBranco = new Posicao(7, 6);
+    
+    else if (posicao == "preto-right")
+      this.posicaoReiTimeBranco = new Posicao(0, 6);
+
+    if (posicao == "branco-left")
+      this.posicaoReiTimeBranco = new Posicao(7, 2);
+
+    else if(posicao == "preto-left")
+      this.posicaoReiTimeBranco = new Posicao(0, 2);
+   
   }
 
   //#endregion
