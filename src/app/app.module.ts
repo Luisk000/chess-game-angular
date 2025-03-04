@@ -8,6 +8,7 @@ import { PainelComponent } from './components/painel/painel.component';
 import { TabuleiroPromocaoComponent } from './components/tabuleiro/tabuleiro-promocao/tabuleiro-promocao.component';
 import { TabuleiroRoqueComponent } from './components/tabuleiro/tabuleiro-roque/tabuleiro-roque.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CdkDropList, 
+    CdkDrag
   ],
   providers: [],
   bootstrap: [AppComponent]

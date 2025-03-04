@@ -18,15 +18,27 @@
           'xeque': casa.cor === 'red' && !jogoParado,
         }"
         (click)="moverPeca(casa, col, ca)"
+
+        cdkDropList
+        [cdkDropListData]="casa"
+        [cdkDropListConnectedTo]="getIds()"
+        (cdkDropListDropped)="drop($event, col, ca)"         
+        [cdkDropListSortingDisabled]="true"     
+        [id]="'posicao' + col + ca"
       >
         <span *ngIf="casa.peca">
           <img
             src="{{ casa.peca.imagem }}"
-            class="imagem-peca"
+            class="imagem-peca"          
             [ngClass]="{
-              'peca-jogando': casa.peca.cor === timeJogando && !jogoParado
+              'peca-jogando': casa.peca.cor === timeJogando && !jogoParado && !casaDragging
             }"
-            (click)="verificarMovimentos(casa.peca, col, ca)"
+            (mousedown)="draggingStart(casa.peca, col, ca)" 
+            (mouseup)="draggingEnd()"
+            (cdkDragEntered)="enter($event)"
+            (cdkDragExited)="exit()"
+            [class.hidden]="casaDragging == casa && casa.cor == 'LimeGreen'" 
+            cdkDrag      
           />
           <app-tabuleiro-promocao
             *ngIf="
@@ -35,6 +47,7 @@
             [time]="casa.peca.cor"
             [linha]="ca"
             (confirmarPeca)="confirmarPecaPeaoPromovido($event)"
+            
           ></app-tabuleiro-promocao>
         </span>
       </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { Casa } from '../../models/casa.model';
 import { Peca } from '../../models/peca.model';
 import { Peao } from '../../models/pecas/peao.model';
@@ -9,6 +9,12 @@ import { Posicao } from '../../models/posicao.model';
 import { TabuleiroService } from '../../services/tabuleiro.service';
 import { XequeService } from '../../services/xeque.service';
 import { PreparacaoService } from '../../services/preparacao.service';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem
+} from '@angular/cdk/drag-drop';
+import { Rainha } from '../../models/pecas/rainha.mode';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -285,4 +291,41 @@ export class TabuleiroComponent implements OnInit {
   }
   //#endregion
 
+  casaDragging: Casa | undefined;
+  segurando = false;
+
+  getIds() {
+    return this.tabuleiroJogo.map((casa, col) => 
+      this.tabuleiroJogo[col].map((casa, ca) => 
+        "posicao" + col + ca)).flat();
+  }
+
+  drop(event: any, coluna: number, linha: number) {
+    this.casaDragging = undefined;
+    this.moverPeca(event.container.data, coluna, linha)
+  }
+
+  enter(event: any){
+    this.casaDragging = event.container.data;
+  }
+
+  exit(){
+    this.casaDragging = undefined
+  }
+
+  draggingStart(peca: Peca, col: number, ca: number){
+    this.segurando = false;
+    this.verificarMovimentos(peca, col, ca)
+    setTimeout(() => {
+      this.segurando = true;
+    }, 300)
+  }
+
+  //@HostListener('document:mouseup', ['$event'])
+  @HostListener('document:mouseup')
+  draggingEnd(){
+    if (this.segurando)
+      this.apagarLocaisAnteriores();
+  }
+  
 }

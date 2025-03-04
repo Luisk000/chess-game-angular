@@ -65,5 +65,18 @@
 }
 
 .acao-possivel:hover {
-    filter: brightness(0.85);
+    filter: brightness(0.75);
+}
+
+.cdk-drag-placeholder {
+    display: none;       
+  }
+
+.cdk-drag-preview{
+    transition: none !important;
+    transition: transform 0.05s linear;
+}
+
+.hidden{
+    opacity: 0.5;
 }
