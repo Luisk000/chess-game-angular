@@ -101,6 +101,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   moverPeca(casa: Casa, coluna: number, linha: number) {
+    console.log(casa.cor)
     if (casa.cor === 'LimeGreen') {
       
       if (casa.peca != undefined) 
@@ -188,7 +189,7 @@ export class TabuleiroComponent implements OnInit {
   //#region Roque
 
   verificarRoqueInicio(peca: Peca){
-    if (peca instanceof Torre || peca instanceof Rei)
+    if ((peca instanceof Torre || peca instanceof Rei) && this.casasXeque.length == 0)
       this.posicaoRoque = this.tabuleiroService.verificarPosicaoRoque(peca);
     else
       this.posicaoRoque = "";
@@ -293,6 +294,7 @@ export class TabuleiroComponent implements OnInit {
 
   casaDragging: Casa | undefined;
   segurando = false;
+  draggingTimeout: any;
 
   getIds() {
     return this.tabuleiroJogo.map((casa, col) => 
@@ -316,16 +318,18 @@ export class TabuleiroComponent implements OnInit {
   draggingStart(peca: Peca, col: number, ca: number){
     this.segurando = false;
     this.verificarMovimentos(peca, col, ca)
-    setTimeout(() => {
+    this.draggingTimeout = setTimeout(() => {
       this.segurando = true;
-    }, 300)
+    }, 350)
   }
 
-  //@HostListener('document:mouseup', ['$event'])
   @HostListener('document:mouseup')
   draggingEnd(){
-    if (this.segurando)
+    clearTimeout(this.draggingTimeout);
+    if (this.segurando){      
       this.apagarLocaisAnteriores();
+    }
+
   }
   
 }

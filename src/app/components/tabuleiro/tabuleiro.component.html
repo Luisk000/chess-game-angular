@@ -38,7 +38,8 @@
             (cdkDragEntered)="enter($event)"
             (cdkDragExited)="exit()"
             [class.hidden]="casaDragging == casa && casa.cor == 'LimeGreen'" 
-            cdkDrag      
+            cdkDrag  
+    
           />
           <app-tabuleiro-promocao
             *ngIf="
