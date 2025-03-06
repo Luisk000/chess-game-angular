@@ -15,6 +15,7 @@ import {
   transferArrayItem
 } from '@angular/cdk/drag-drop';
 import { Rainha } from '../../models/pecas/rainha.mode';
+//import { move } from '../../animations';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -22,6 +23,7 @@ import { Rainha } from '../../models/pecas/rainha.mode';
 
   templateUrl: './tabuleiro.component.html',
   styleUrl: './tabuleiro.component.css',
+  /* animations: [move] */
 })
 export class TabuleiroComponent implements OnInit {
   @Output() pecaComidaEmit = new EventEmitter<Peca>();
@@ -47,7 +49,6 @@ export class TabuleiroComponent implements OnInit {
   timeEnPassant = "";
   
   posicaoRoque = "";
-
   constructor(
     private pecaService: PecaService,
     private tabuleiroService: TabuleiroService,
@@ -332,4 +333,27 @@ export class TabuleiroComponent implements OnInit {
 
   }
   
+/*   getXMovement(linha: number){
+    let valor = 0;
+    if (this.posicaoSelecionada)
+      valor = this.posicaoSelecionada.linha - linha;
+    return valor;
+  }
+
+  getYMovement(coluna: number){
+    let valor = 0;
+    if (this.posicaoSelecionada)
+      valor = this.posicaoSelecionada.coluna - coluna
+    return valor;
+  }
+
+  verifyActive(){
+    return 'active'
+  }
+
+  getAnimation(coluna: number, linha: number){
+    return {value: this.verifyActive(), params: {X: this.getXMovement(linha)*70, Y: this.getYMovement(coluna)*70}}
+  } */
+
 }
+

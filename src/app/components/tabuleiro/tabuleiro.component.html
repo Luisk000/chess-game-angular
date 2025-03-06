@@ -26,13 +26,15 @@
         [cdkDropListSortingDisabled]="true"     
         [id]="'posicao' + col + ca"
       >
-        <span *ngIf="casa.peca">
+        <!-- <span *ngIf="casa.peca"  [@move]="getAnimation(col, ca)" > -->
+        <span *ngIf="casa.peca" >
           <img
             src="{{ casa.peca.imagem }}"
             class="imagem-peca"          
             [ngClass]="{
               'peca-jogando': casa.peca.cor === timeJogando && !jogoParado && !casaDragging
             }"
+
             (mousedown)="draggingStart(casa.peca, col, ca)" 
             (mouseup)="draggingEnd()"
             (cdkDragEntered)="enter($event)"
