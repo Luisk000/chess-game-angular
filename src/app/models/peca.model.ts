@@ -7,6 +7,7 @@ export abstract class Peca {
     imagem : string;
     vivo = true;
     acoes: Posicao[] = [];
+    animationState = 'void';
 
     constructor(cor: string, nome:string){
         this.cor = cor;

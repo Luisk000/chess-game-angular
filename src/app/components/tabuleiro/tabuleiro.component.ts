@@ -15,7 +15,7 @@ import {
   transferArrayItem
 } from '@angular/cdk/drag-drop';
 import { Rainha } from '../../models/pecas/rainha.mode';
-//import { move } from '../../animations';
+import { move } from '../../animations';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -23,7 +23,7 @@ import { Rainha } from '../../models/pecas/rainha.mode';
 
   templateUrl: './tabuleiro.component.html',
   styleUrl: './tabuleiro.component.css',
-  /* animations: [move] */
+  animations: [move] 
 })
 export class TabuleiroComponent implements OnInit {
   @Output() pecaComidaEmit = new EventEmitter<Peca>();
@@ -49,6 +49,7 @@ export class TabuleiroComponent implements OnInit {
   timeEnPassant = "";
   
   posicaoRoque = "";
+
   constructor(
     private pecaService: PecaService,
     private tabuleiroService: TabuleiroService,
@@ -72,6 +73,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarMovimentos(peca: Peca, coluna: number, linha: number) {
+    peca.animationState = 'void'; 
     if (peca.cor === this.timeJogando && !this.jogoParado) {
       this.casaSelecionada = this.tabuleiroJogo[coluna][linha];
       this.posicaoSelecionada = new Posicao(coluna, linha);
@@ -104,11 +106,12 @@ export class TabuleiroComponent implements OnInit {
   moverPeca(casa: Casa, coluna: number, linha: number) {
     console.log(casa.cor)
     if (casa.cor === 'LimeGreen') {
-      
+
       if (casa.peca != undefined) 
         this.sendPecaComida(casa.peca);
 
       casa.peca = this.casaSelecionada?.peca;
+      casa.peca!.animationState = 'moved';
 
       this.tabuleiroJogo
         [this.posicaoSelecionada!.coluna]
@@ -120,7 +123,7 @@ export class TabuleiroComponent implements OnInit {
 
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
       this.verificarRoqueFinal(casa.peca!);
-      this.verificarXeque(casa.peca!, new Posicao(coluna, linha));     
+      this.verificarXeque(casa.peca!, new Posicao(coluna, linha));    
     }
   }
 
@@ -333,7 +336,7 @@ export class TabuleiroComponent implements OnInit {
 
   }
   
-/*   getXMovement(linha: number){
+  getXMovement(linha: number){
     let valor = 0;
     if (this.posicaoSelecionada)
       valor = this.posicaoSelecionada.linha - linha;
@@ -347,13 +350,18 @@ export class TabuleiroComponent implements OnInit {
     return valor;
   }
 
-  verifyActive(){
-    return 'active'
-  }
 
-  getAnimation(coluna: number, linha: number){
-    return {value: this.verifyActive(), params: {X: this.getXMovement(linha)*70, Y: this.getYMovement(coluna)*70}}
-  } */
+  getAnimation(peca: Peca, coluna: number, linha: number){
+    return {
+      value: peca.animationState, 
+      params: {
+        X: this.getXMovement(linha)*70, 
+        Y: this.getYMovement(coluna)*70
+      }
+    }
+
+    
+  }
 
 }
 

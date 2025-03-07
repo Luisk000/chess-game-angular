@@ -11,14 +11,23 @@ export const fade = trigger('fade', [
   transition(':enter, :leave', [animate(150)]),
 ]);
 
-/* export const move = trigger('move', [
+export const move = trigger('move', [
   state(
-    'active',
+    'void',
     style({
-      transform: `translateX({{X}}px) translateY({{Y}}px)`,
+      transform: `translateX(0px) translateY(0px)`,
     }),
     { params: { X: 0, Y: 0 } }
   ),
-  transition(':enter', [animate('300ms')]),
+  state(
+    'moved',
+    style({
+      transform: `translateX(0px) translateY(0px)`,
+    }),
+    { params: { X: 0, Y: 0 } }
+  ),
+  transition('void => moved', [
+    style({ transform: `translateX({{X}}px) translateY({{Y}}px)` }),
+    animate('300ms', style({ transform: `translateX(0px) translateY(0px)` })),
+  ]),
 ]);
- */
