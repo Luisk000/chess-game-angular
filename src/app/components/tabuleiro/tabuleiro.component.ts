@@ -324,7 +324,7 @@ export class TabuleiroComponent implements OnInit {
     this.verificarMovimentos(peca, col, ca)
     this.draggingTimeout = setTimeout(() => {
       this.segurando = true;
-    }, 350)
+    }, 300)
   }
 
   @HostListener('document:mouseup')
@@ -352,14 +352,16 @@ export class TabuleiroComponent implements OnInit {
 
 
   getAnimation(peca: Peca, coluna: number, linha: number){
-    return {
-      value: peca.animationState, 
-      params: {
-        X: this.getXMovement(linha)*70, 
-        Y: this.getYMovement(coluna)*70
+    if (!this.segurando)
+      return {
+        value: peca.animationState, 
+        params: {
+          X: this.getXMovement(linha)*70, 
+          Y: this.getYMovement(coluna)*70
+        }
       }
-    }
-
+    else
+      return '';
     
   }
 
