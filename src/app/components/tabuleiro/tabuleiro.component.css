@@ -31,14 +31,13 @@
 .casa{
     height: 70px;
     width: 70px;
+    text-align: center;
 }
 
+.casa span img{
+    margin-top: 3px;
+} 
 
-.peca, .casa{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .imagem-peca{
     width: 60px; 

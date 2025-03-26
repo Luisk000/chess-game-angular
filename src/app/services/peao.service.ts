@@ -47,6 +47,30 @@ export class PeaoService {
       return acoes;
   }
 
+  verificarPromocao(peao: Peao, coluna: number): boolean{
+    if (
+        (
+          (peao.cor === 'branco' && coluna == 0) ||
+          (peao.cor === 'preto' && coluna == 7)
+        ) 
+        && peao.promocao == false
+    ) 
+      peao.promocao = true;
+
+    return peao.promocao; 
+  }
+  
+  verificarEnPassant(peao: Peao, coluna: number, linha: number): Posicao | undefined {
+    let posicaoEnPassant = undefined;
+  
+    if (peao.cor == 'branco' && coluna == 4)
+      posicaoEnPassant = new Posicao(coluna + 1, linha);
+    else if (peao.cor == 'preto' && coluna == 3)
+      posicaoEnPassant = new Posicao(coluna - 1, linha);
+
+    return posicaoEnPassant;
+  }
+
   private verificarPecaNaCasa(acao: Posicao, tabuleiro: Casa[][]) {
       var peca: Peca | undefined = tabuleiro[acao.coluna][acao.linha].peca;
           if (peca && peca.cor)

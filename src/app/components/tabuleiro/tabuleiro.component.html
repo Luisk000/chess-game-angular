@@ -27,7 +27,7 @@
         [cdkDropListSortingDisabled]="true"     
         (cdkDropListDropped)="drop($event, col, ca)"     
       >
-        <span *ngIf="casa.peca" [@move]="getAnimation(casa.peca, col, ca)" >
+        <span *ngIf="casa.peca" [@move]="getAnimation(casa.peca, col, ca)">
           <img
             src="{{ casa.peca.imagem }}"
 
@@ -36,7 +36,8 @@
               'peca-jogando': casa.peca.cor === timeJogando && !jogoParado && !casaDragging
             }"
             [class.hidden]="casaDragging == casa && casa.cor == 'LimeGreen'"                  
-
+            [cdkDragDisabled]="casa.peca.cor != timeJogando || jogoParado"
+            
             cdkDrag      
             (cdkDragStarted)="startMovement()"
             (cdkDragEntered)="enterCasa($event)"
@@ -50,7 +51,7 @@
             [time]="casa.peca.cor"
             [linha]="ca"
             (confirmarPeca)="confirmarPecaPeaoPromovido($event)"
-            
+
           ></app-tabuleiro-promocao>
         </span>
       </div>

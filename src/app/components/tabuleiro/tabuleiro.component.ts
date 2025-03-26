@@ -6,11 +6,11 @@ import { Rei } from '../../models/pecas/rei.model';
 import { Torre } from '../../models/pecas/torre.model';
 import { PecaService } from '../../services/peca.service';
 import { Posicao } from '../../models/posicao.model';
-import { TabuleiroService } from '../../services/tabuleiro.service';
 import { XequeService } from '../../services/xeque.service';
 import { PreparacaoService } from '../../services/preparacao.service';
 import { move } from '../../animations';
-import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
+import { RoqueService } from '../../services/roque.service';
+import { PeaoService } from '../../services/peao.service';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -50,8 +50,9 @@ export class TabuleiroComponent implements OnInit {
 
   constructor(
     private pecaService: PecaService,
-    private tabuleiroService: TabuleiroService,
     private xequeService: XequeService,
+    private roqueService: RoqueService,
+    private peaoService: PeaoService,
     private preparacaoService: PreparacaoService
   ) {}
 
@@ -192,7 +193,7 @@ export class TabuleiroComponent implements OnInit {
 
   verificarRoqueInicio(peca: Peca){
     if ((peca instanceof Torre || peca instanceof Rei) && this.casasXeque.length == 0)
-      this.posicaoRoque = this.tabuleiroService.verificarPosicaoRoque(peca);
+      this.posicaoRoque = this.roqueService.verificarPosicaoRoque(peca);
     else
       this.posicaoRoque = "";
   }
@@ -207,7 +208,7 @@ export class TabuleiroComponent implements OnInit {
 
   realizarRoque(posicaoRoque: string){
     this.tabuleiroJogo = 
-      this.tabuleiroService.realizarRoque(posicaoRoque, this.tabuleiroJogo , this.pecaService)
+      this.roqueService.realizarRoque(posicaoRoque, this.tabuleiroJogo , this.pecaService)
     this.posicaoRoque = "";
     this.apagarLocaisAnteriores();
     this.mudarTimeJogando();
@@ -236,7 +237,7 @@ export class TabuleiroComponent implements OnInit {
   verificarAcoesEspeciaisPeaoFinal(peca: Peca, coluna: number, linha: number) {
     if (peca instanceof Peao){
       if (peca.iniciando == true) {
-        this.posicaoEnPassant = this.tabuleiroService.verificarEnPassant(peca, coluna, linha);
+        this.posicaoEnPassant = this.peaoService.verificarEnPassant(peca, coluna, linha);
         this.timeEnPassant = peca.cor;
         peca.iniciando = false;
       }
@@ -246,7 +247,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   realizarPromocao(peao: Peao, coluna: number, linha: number) {
-    if (this.tabuleiroService.verificarPromocao(peao, coluna)){
+    if (this.peaoService.verificarPromocao(peao, coluna)){
       this.posicaoPromocao = new Posicao(coluna, linha);
       this.jogoParado = true;
     }
