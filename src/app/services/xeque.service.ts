@@ -139,7 +139,7 @@ export class XequeService {
       ];
     
     let movimentosPeao: Posicao[] = this.pecaService
-      .verificarMovimentosPeaoComer(acoesPossiveisPeao, cor, tabuleiro, undefined);
+      .verificarMovimentosPeaoComer(acoesPossiveisPeao, cor, tabuleiro);
       
     let xeques: Posicao[] = [];
     if (movimentosPeao)   

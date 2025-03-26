@@ -85,7 +85,6 @@ export class TabuleiroComponent implements OnInit {
       coluna.map((casa, casaIndex) => {
         if (casa.peca && casa.peca.cor == this.timeJogando) {
           this.verificarEnPassantInicio(casa.peca);
-
           casa.peca.verMovimentosPossiveis(
             new Posicao(colunaIndex, casaIndex),
             casa.peca.cor,
@@ -128,9 +127,8 @@ export class TabuleiroComponent implements OnInit {
       ].peca = undefined;
 
       this.apagarLocaisAnteriores();
-      this.mudarTimeJogando();
-
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
+      this.mudarTimeJogando();
       this.verificarRoqueFinal(casa.peca!);
       this.verificarXeque(casa.peca!, new Posicao(coluna, linha));
     }
@@ -275,10 +273,13 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarEnPassantInicio(peca: Peca) {
-    if (peca instanceof Peao) {
-      if (this.timeEnPassant != peca.cor && !peca.posicaoEnPassant)
+    if (peca instanceof Peao){
+      if (this.timeEnPassant != peca.cor && 
+        !peca.posicaoEnPassant
+      )
         peca.posicaoEnPassant = this.posicaoEnPassant;
-      else peca.posicaoEnPassant = undefined;
+      else
+        peca.posicaoEnPassant = undefined;     
     }
   }
 
@@ -357,7 +358,6 @@ export class TabuleiroComponent implements OnInit {
   }
 
   getAnimation(peca: Peca, coluna: number, linha: number) {
-    console.log(peca.animationState)
     if (!this.dragging)
       return {
         value: peca.animationState,

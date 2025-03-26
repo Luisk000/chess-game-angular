@@ -27,7 +27,7 @@ export class PeaoService {
       return acoes;
   }
   
-  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], posicaoEnPassant: Posicao | undefined): Posicao[] | []{
+  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], acaoEnPassant?: Posicao | undefined): Posicao[] | []{
       let acoes: Posicao[] = [];
       for (let acaoPossivel of acoesPossiveis){
         if (acaoPossivel.coluna >= 0 && acaoPossivel.coluna <= 7 
@@ -35,16 +35,26 @@ export class PeaoService {
 
             var acao = new Posicao(acaoPossivel.coluna, acaoPossivel.linha);
             var corPeca = this.verificarPecaNaCasa(acao, tabuleiro)
+
             if (corPeca != undefined && corPeca != cor)
-              acoes.push(acao);   
-
-            if (posicaoEnPassant && this.permitirEnPassant(posicaoEnPassant, acao))
-              acoes.push(posicaoEnPassant)  
+              acoes.push(acao);    
+            else if (acaoEnPassant){
+              var enPassant = this.permitirEnPassant(acaoEnPassant, acao)
+              if (enPassant)
+                acoes.push(acaoEnPassant)
+            }
+           
         }
-
-             
       }
       return acoes;
+  }
+
+  verificarMovimentosEnPassant(peca: Peao){
+    console.log(peca)
+    for (let acao of peca.acoes){
+      if (this.permitirEnPassant(peca.posicaoEnPassant!, acao))
+        peca.acoes.push(peca.posicaoEnPassant!)  
+    }
   }
 
   verificarPromocao(peao: Peao, coluna: number): boolean{
@@ -68,6 +78,7 @@ export class PeaoService {
     else if (peao.cor == 'preto' && coluna == 3)
       posicaoEnPassant = new Posicao(coluna - 1, linha);
 
+    console.log(posicaoEnPassant)
     return posicaoEnPassant;
   }
 
