@@ -83,14 +83,13 @@ export class TabuleiroComponent implements OnInit {
   verificarMovimentos() {
     this.tabuleiroJogo.map((coluna, colunaIndex) => {
       coluna.map((casa, casaIndex) => {
-        if (casa.peca && casa.peca.cor == this.timeJogando) {                 
+        if (casa.peca) {                 
           this.verificarEnPassantInicio(casa.peca);
           casa.peca.verMovimentosPossiveis(
             new Posicao(colunaIndex, casaIndex),
             casa.peca.cor,
             this.tabuleiroJogo
           );
-
         }
         
       });
@@ -130,8 +129,8 @@ export class TabuleiroComponent implements OnInit {
 
       this.apagarLocaisAnteriores();
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
-      this.mudarTimeJogando();
       this.verificarRoqueFinal(casa.peca!);
+      this.mudarTimeJogando();
       this.verificarXeque(casa.peca!, new Posicao(coluna, linha));
     }
   }

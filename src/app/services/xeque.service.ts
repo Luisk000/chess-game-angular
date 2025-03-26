@@ -16,25 +16,18 @@ export class XequeService {
   constructor(private pecaService: PecaService) {}
 
   verificarXeque(cor: string, posicao: Posicao, tabuleiro: Casa[][]) {
-    let xequesRainhaBispo: Posicao[] = 
-      this.verificarXequeRainhaBispo(posicao, tabuleiro, cor);
-    let xequesRainhaTorre: Posicao[] = 
-      this.verificarXequeRainhaTorre(posicao, tabuleiro, cor);
-    let xequesCavalo: Posicao[] = 
-      this.verificarXequeCavalo(posicao, tabuleiro, cor);
-    let xequesRei: Posicao[] = 
-      this.verificarXequeRei(posicao, tabuleiro, cor);
-    let xequesPeao: Posicao[] = 
-      this.verificarXequePeao(posicao, tabuleiro, cor);
-
     let xeques: Posicao[] = [];
-    xeques.push(
-      ...xequesRainhaBispo, 
-      ...xequesRainhaTorre, 
-      ...xequesCavalo, 
-      ...xequesRei, 
-      ...xequesPeao
-    );
+    tabuleiro.map((coluna) => {
+      coluna.map((casa) => {
+        if (casa.peca && casa.peca.cor != cor){
+          let xeque = casa.peca.acoes.filter(a => a.coluna == posicao.coluna && a.linha == posicao.linha);
+          if (xeque.length > 0)
+            xeques.push(xeque[0])
+        }
+        
+      });
+    });
+
     return xeques;
   }
 
