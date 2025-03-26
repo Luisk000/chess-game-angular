@@ -5,9 +5,6 @@ import { Torre } from '../models/pecas/torre.model';
 import { Rei } from '../models/pecas/rei.model';
 import { Casa } from '../models/casa.model';
 import { PecaService } from './peca.service';
-import { Cavalo } from '../models/pecas/cavalo.model';
-import { Bispo } from '../models/pecas/bispo.model';
-import { Rainha } from '../models/pecas/rainha.mode';
 
 @Injectable({
   providedIn: 'root'

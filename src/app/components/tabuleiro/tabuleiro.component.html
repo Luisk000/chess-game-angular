@@ -11,37 +11,37 @@
   <div class="casas-acao">
     <div class="coluna" *ngFor="let coluna of tabuleiroJogo; let col = index">
       <div
-        class="casa"
         *ngFor="let casa of coluna; let ca = index"
+        (click)="moverPeca(casa, col, ca)"
+
+        class="casa"  
         [ngClass]="{
           'acao-possivel': casa.cor === 'LimeGreen' && !jogoParado,
           'xeque': casa.cor === 'red' && !jogoParado,
         }"
-        (click)="moverPeca(casa, col, ca)"
 
         cdkDropList
-        [cdkDropListData]="casa"
-        [cdkDropListConnectedTo]="getIds()"
-        (cdkDropListDropped)="drop($event, col, ca)"         
-        [cdkDropListSortingDisabled]="true"     
         [id]="'posicao' + col + ca"
+        [cdkDropListData]="casa"
+        [cdkDropListConnectedTo]="getIds()"    
+        [cdkDropListSortingDisabled]="true"     
+        (cdkDropListDropped)="drop($event, col, ca)"     
       >
-        <span *ngIf="casa.peca"  [@move]="getAnimation(casa.peca, col, ca)" >
-        <!-- <span *ngIf="casa.peca" > -->
+        <span *ngIf="casa.peca" [@move]="getAnimation(casa.peca, col, ca)" >
           <img
             src="{{ casa.peca.imagem }}"
-            class="imagem-peca"          
+
+            class="imagem-peca"  
             [ngClass]="{
               'peca-jogando': casa.peca.cor === timeJogando && !jogoParado && !casaDragging
             }"
+            [class.hidden]="casaDragging == casa && casa.cor == 'LimeGreen'"                  
 
-            (mousedown)="draggingStart(casa.peca, col, ca)" 
-            (mouseup)="draggingEnd()"
-            (cdkDragEntered)="enter($event)"
-            (cdkDragExited)="exit()"
-            [class.hidden]="casaDragging == casa && casa.cor == 'LimeGreen'" 
-            cdkDrag  
-    
+            cdkDrag      
+            (cdkDragStarted)="startMovement()"
+            (cdkDragEntered)="enterCasa($event)"
+            (cdkDragExited)="exitCasa()"
+            (mousedown)="verificarMovimentos(casa.peca, col, ca)" 
           />
           <app-tabuleiro-promocao
             *ngIf="

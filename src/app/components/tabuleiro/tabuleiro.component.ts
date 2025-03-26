@@ -9,13 +9,8 @@ import { Posicao } from '../../models/posicao.model';
 import { TabuleiroService } from '../../services/tabuleiro.service';
 import { XequeService } from '../../services/xeque.service';
 import { PreparacaoService } from '../../services/preparacao.service';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem
-} from '@angular/cdk/drag-drop';
-import { Rainha } from '../../models/pecas/rainha.mode';
 import { move } from '../../animations';
+import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -49,6 +44,9 @@ export class TabuleiroComponent implements OnInit {
   timeEnPassant = "";
   
   posicaoRoque = "";
+
+  casaDragging: Casa | undefined;
+  dragging = false;
 
   constructor(
     private pecaService: PecaService,
@@ -296,9 +294,7 @@ export class TabuleiroComponent implements OnInit {
   }
   //#endregion
 
-  casaDragging: Casa | undefined;
-  segurando = false;
-  draggingTimeout: any;
+  //#region Dragging
 
   getIds() {
     return this.tabuleiroJogo.map((casa, col) => 
@@ -311,30 +307,30 @@ export class TabuleiroComponent implements OnInit {
     this.moverPeca(event.container.data, coluna, linha)
   }
 
-  enter(event: any){
+  enterCasa(event: any){
     this.casaDragging = event.container.data;
   }
 
-  exit(){
+  exitCasa(){
     this.casaDragging = undefined
   }
 
-  draggingStart(peca: Peca, col: number, ca: number){
-    this.segurando = false;
-    this.verificarMovimentos(peca, col, ca)
-    this.draggingTimeout = setTimeout(() => {
-      this.segurando = true;
-    }, 300)
+  startMovement(){
+    this.dragging = true;
   }
 
   @HostListener('document:mouseup')
   draggingEnd(){
-    clearTimeout(this.draggingTimeout);
-    if (this.segurando){      
+    if (this.dragging){      
       this.apagarLocaisAnteriores();
     }
+    this.dragging = false;
 
   }
+
+  //#endregion
+
+  //#region Animation
   
   getXMovement(linha: number){
     let valor = 0;
@@ -350,9 +346,8 @@ export class TabuleiroComponent implements OnInit {
     return valor;
   }
 
-
   getAnimation(peca: Peca, coluna: number, linha: number){
-    if (!this.segurando)
+    if (!this.dragging)
       return {
         value: peca.animationState, 
         params: {
@@ -362,8 +357,9 @@ export class TabuleiroComponent implements OnInit {
       }
     else
       return '';
-    
   }
+
+  //#endregion
 
 }
 
