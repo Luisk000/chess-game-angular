@@ -25,7 +25,7 @@
         [cdkDropListData]="casa"
         [cdkDropListConnectedTo]="getIds()"    
         [cdkDropListSortingDisabled]="true"     
-        (cdkDropListDropped)="drop($event, col, ca)"     
+        (cdkDropListDropped)="drop($event, col, ca)"   
       >
         <span *ngIf="casa.peca" [@move]="getAnimation(casa.peca, col, ca)">
           <img
@@ -44,16 +44,16 @@
             (cdkDragExited)="exitCasa()"
             (mousedown)="mostrarAcoesPossiveis(casa.peca, col, ca)" 
           />
-          <app-tabuleiro-promocao
+          
+        </span>
+        <app-tabuleiro-promocao
             *ngIf="
-              posicaoPromocao?.coluna == col && posicaoPromocao?.linha == ca
+              posicaoPromocao?.coluna == col && posicaoPromocao?.linha == ca && casa.peca
             "
             [time]="casa.peca.cor"
             [linha]="ca"
             (confirmarPeca)="confirmarPecaPeaoPromovido($event)"
-
           ></app-tabuleiro-promocao>
-        </span>
       </div>
     </div>
   </div>
