@@ -50,7 +50,6 @@ export class PeaoService {
   }
 
   verificarMovimentosEnPassant(peca: Peao){
-    console.log(peca)
     for (let acao of peca.acoes){
       if (this.permitirEnPassant(peca.posicaoEnPassant!, acao))
         peca.acoes.push(peca.posicaoEnPassant!)  
@@ -78,7 +77,6 @@ export class PeaoService {
     else if (peao.cor == 'preto' && coluna == 3)
       posicaoEnPassant = new Posicao(coluna - 1, linha);
 
-    console.log(posicaoEnPassant)
     return posicaoEnPassant;
   }
 

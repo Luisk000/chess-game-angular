@@ -83,7 +83,7 @@ export class TabuleiroComponent implements OnInit {
   verificarMovimentos() {
     this.tabuleiroJogo.map((coluna, colunaIndex) => {
       coluna.map((casa, casaIndex) => {
-        if (casa.peca && casa.peca.cor == this.timeJogando) {
+        if (casa.peca && casa.peca.cor == this.timeJogando) {                 
           this.verificarEnPassantInicio(casa.peca);
           casa.peca.verMovimentosPossiveis(
             new Posicao(colunaIndex, casaIndex),
@@ -99,7 +99,8 @@ export class TabuleiroComponent implements OnInit {
 
   mostrarAcoesPossiveis(peca: Peca, coluna: number, linha: number) {
     if (peca.cor == this.timeJogando && !this.jogoParado){
-      peca.animationState = 'void'; 
+
+      this.resetAnimationState();
       this.casaSelecionada = this.tabuleiroJogo[coluna][linha];
       this.posicaoSelecionada = new Posicao(coluna, linha);
 
@@ -119,8 +120,9 @@ export class TabuleiroComponent implements OnInit {
     if (casa.cor === 'LimeGreen') {
       if (casa.peca != undefined) this.sendPecaComida(casa.peca);
 
-      casa.peca = this.casaSelecionada?.peca;
-      casa.peca!.animationState = 'moved';
+
+      this.casaSelecionada!.peca!.animationState = 'moved'
+      casa.peca = this.casaSelecionada!.peca;
 
       this.tabuleiroJogo[this.posicaoSelecionada!.coluna][
         this.posicaoSelecionada!.linha
@@ -144,6 +146,16 @@ export class TabuleiroComponent implements OnInit {
       this.manterXeques(casa);
     }
     this.acoesPossiveis = [];
+  }
+
+  resetAnimationState(){
+    this.tabuleiroJogo.map((coluna) => {
+      coluna.map((casa) => {
+        if (casa.peca)
+          casa.peca.animationState = 'void'
+        
+      });
+    });
   }
 
   mudarTimeJogando() {

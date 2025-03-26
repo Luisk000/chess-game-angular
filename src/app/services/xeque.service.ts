@@ -15,10 +15,6 @@ import { Bispo } from '../models/pecas/bispo.model';
 export class XequeService {
   constructor(private pecaService: PecaService) {}
 
-  verificarXequeMate(acoes: Posicao[]) {
-    
-  }
-
   verificarXeque(cor: string, posicao: Posicao, tabuleiro: Casa[][]) {
     let xequesRainhaBispo: Posicao[] = 
       this.verificarXequeRainhaBispo(posicao, tabuleiro, cor);
