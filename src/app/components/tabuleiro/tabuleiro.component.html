@@ -42,7 +42,7 @@
             (cdkDragStarted)="startMovement()"
             (cdkDragEntered)="enterCasa($event)"
             (cdkDragExited)="exitCasa()"
-            (mousedown)="verificarMovimentos(casa.peca, col, ca)" 
+            (mousedown)="mostrarAcoesPossiveis(casa.peca, col, ca)" 
           />
           <app-tabuleiro-promocao
             *ngIf="
