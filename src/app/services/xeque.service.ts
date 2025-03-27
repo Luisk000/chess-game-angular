@@ -3,6 +3,7 @@ import { Casa } from '../models/casa.model';
 import { Posicao } from '../models/posicao.model';
 import { Peca } from '../models/peca.model';
 import { Rei } from '../models/pecas/rei.model';
+import { Bispo } from '../models/pecas/bispo.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +14,14 @@ export class XequeService {
   verificarXeque(cor: string, posicaoRei: Posicao, tabuleiro: Casa[][]): Posicao | undefined{
     let xeques: Posicao[] = [];
 
-    for (let coluna of tabuleiro){
-      for (let casa of coluna){
+
+    for (let colIndex = 0; colIndex <= 7; colIndex++) {
+      for (let caIndex = 0; caIndex <= 7; caIndex++){
+        var casa = tabuleiro[colIndex][caIndex];
         if (casa.peca && casa.peca.cor != cor){
           let xeque = this.findPosicao(posicaoRei, casa.peca.acoes)
           if (xeque != undefined)
-            xeques.push(xeque)
+            xeques.push(new Posicao(colIndex, caIndex))
         }
       }
     }
@@ -31,15 +34,11 @@ export class XequeService {
       return undefined
     else {
       var xequeMate = this.verificarEscaparXeque(xeques[0], posicaoRei, cor, tabuleiro);
-      //encerrar o jogo se xeque-mate for true
       console.log(xequeMate)
+      //encerrar o jogo se xeque-mate for true
+
       return xeques[0];
     }
-
-
-
-    
-
     
   }
 
@@ -49,7 +48,7 @@ export class XequeService {
     tabuleiroHipotetico[posicaoAntiga.coluna][posicaoAntiga.linha].peca = undefined;
     tabuleiroHipotetico[posicaoNova.coluna][posicaoNova.linha].peca = pecaNova;
 
-    if (this.verificarXequeProximoTurno(pecaNova.cor, posicaoRei, tabuleiro) == true)
+    if (this.verificarXequeProximoTurno(pecaNova.cor, posicaoRei, tabuleiroHipotetico) == true)
       return false
     else
       return true;
@@ -57,17 +56,20 @@ export class XequeService {
 
   private verificarXequeProximoTurno(cor: string, posicaoRei: Posicao, tabuleiro: Casa[][]){
     let haXeque = false;
-    tabuleiro.map((coluna) => {
-      coluna.map((casa) => {
+    console.log(cor)
+    console.log(tabuleiro)
+    console.log(posicaoRei)
+    for (let coluna of tabuleiro){
+      for (let casa of coluna){
         if (casa.peca && casa.peca.cor != cor){
           let xeque = this.findPosicao(posicaoRei, casa.peca.acoes)
+
           if (xeque != undefined)
             haXeque = true;
         }
-        
-      });
-    });
-
+      }
+    }
+    
     return haXeque;
   }
 
@@ -78,7 +80,6 @@ export class XequeService {
 
     for (let colIndex = 0; colIndex <= 7; colIndex++) {
       for (let caIndex = 0; caIndex <= 7; caIndex++){
-
         var casa = tabuleiro[colIndex][caIndex]
         if (casa.peca && casa.peca.cor === cor){
           var acoesPeca: Posicao[] = [];
@@ -116,9 +117,13 @@ export class XequeService {
     if (movimentoComer == undefined)
       return undefined;
     else {
+      let novaPosicao = new Posicao(movimentoComer.coluna, movimentoComer.linha)
+      if (peca instanceof Rei)
+        posicaoRei = novaPosicao
+
       var podeEscapar: boolean = this.verificarSegurancaAposMovimento(
         new Posicao(posicaoPeca.coluna, posicaoPeca.linha),
-        new Posicao(movimentoComer.coluna, movimentoComer.linha),
+        novaPosicao,
         peca,
         posicaoRei,
         tabuleiro
@@ -160,7 +165,6 @@ export class XequeService {
 
   private escaparXequeMovendoRei(posicaoRei: Posicao, rei: Peca, tabuleiro: Casa[][]): Posicao[]{
     let acoesRei: Posicao[] = [];
-
     for (let acao of rei.acoes){
       var podeEscapar = this.verificarSegurancaAposMovimento(
         posicaoRei,
