@@ -93,8 +93,8 @@ export class TabuleiroComponent implements OnInit {
             this.tabuleiroJogo
           );
 
-          /* if (this.primeiroTurno == false)
-            this.verificarSegurancaAposMovimentos(casa.peca, colunaIndex, casaIndex)  */     
+          if (this.primeiroTurno == false)
+            this.verificarSegurancaAposMovimentos(casa.peca, colunaIndex, casaIndex)     
         }
         
       });
