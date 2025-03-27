@@ -41,6 +41,7 @@ export class TabuleiroComponent implements OnInit {
 
   timeJogando = 'branco';
   jogoParado = false;
+  primeiroTurno = true;
 
   posicaoReiTimeBranco: Posicao | undefined;
   posicaoReiTimePreto: Posicao | undefined;
@@ -65,6 +66,7 @@ export class TabuleiroComponent implements OnInit {
   async ngOnInit() {
     await this.prepararTabuleiro();
     this.verificarMovimentos();
+    this.primeiroTurno = false;
   }
 
   async prepararTabuleiro() {
@@ -90,10 +92,28 @@ export class TabuleiroComponent implements OnInit {
             casa.peca.cor,
             this.tabuleiroJogo
           );
+
+          /* if (this.primeiroTurno == false)
+            this.verificarSegurancaAposMovimentos(casa.peca, colunaIndex, casaIndex)  */     
         }
         
       });
     });
+  }
+
+  verificarSegurancaAposMovimentos(peca: Peca, coluna: number, linha: number){
+    var posicaoRei: Posicao;
+    if (peca.cor === 'branco')
+      posicaoRei = this.posicaoReiTimeBranco!
+    else
+      posicaoRei = this.posicaoReiTimePreto!
+
+    this.xequeService.verificarSegurancaAposMovimentos(
+      new Posicao(coluna, linha),
+      peca,
+      posicaoRei,
+      this.tabuleiroJogo
+    )
   }
 
   mostrarAcoesPossiveis(peca: Peca, coluna: number, linha: number) {
@@ -167,7 +187,7 @@ export class TabuleiroComponent implements OnInit {
   //#region Xeque
 
   verificarXeque(peca: Peca, posicao: Posicao) {
-    this.apagarLocaisXeque();
+    this.apagarLocalXeque();
     if (peca instanceof Rei) {
       if (peca.cor === 'branco') this.posicaoReiTimeBranco = posicao;
       else this.posicaoReiTimePreto = posicao;
@@ -191,7 +211,7 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  apagarLocaisXeque() {
+  apagarLocalXeque() {
     if (this.casaXeque){
       this.casaXeque.cor = '';
       this.casaXeque = undefined;
