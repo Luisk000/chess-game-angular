@@ -34,7 +34,7 @@ export class TabuleiroComponent implements OnInit {
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
   acoesPossiveis: Casa[] = [];
-  casasXeque: Casa[] = [];
+  casaXeque: Casa | undefined;
 
   casaSelecionada: Casa | undefined;
   posicaoSelecionada: Posicao | undefined;
@@ -177,30 +177,30 @@ export class TabuleiroComponent implements OnInit {
     if (this.timeJogando === 'branco') posicaoRei = this.posicaoReiTimeBranco;
     else posicaoRei = this.posicaoReiTimePreto;
 
-    let xeques: Posicao[] = this.xequeService.verificarXeque(
+    let xeque: Posicao | undefined = this.xequeService.verificarXeque(
       this.timeJogando,
       posicaoRei!,
       this.tabuleiroJogo
     );
 
-    if (xeques.length > 0) {
+    if (xeque != undefined) {
       this.xequeEmit.emit();
-      for (let xeque of xeques) {
-        let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
-        casaXeque.cor = 'red';
-        this.casasXeque.push(casaXeque);
-      }
+      let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
+      casaXeque.cor = 'red';
+      this.casaXeque = casaXeque;
     }
   }
 
   apagarLocaisXeque() {
-    for (let casa of this.casasXeque) casa.cor = '';
-
-    this.casasXeque = [];
+    if (this.casaXeque){
+      this.casaXeque.cor = '';
+      this.casaXeque = undefined;
+    }
   }
 
   manterXeques(casa: Casa) {
-    if (this.casasXeque.find((c) => c == casa)) casa.cor = 'red';
+    if (this.casaXeque == casa)
+      casa.cor = 'red';
   }
 
   //#endregion
@@ -210,7 +210,7 @@ export class TabuleiroComponent implements OnInit {
   verificarRoqueInicio(peca: Peca) {
     if (
       (peca instanceof Torre || peca instanceof Rei) &&
-      this.casasXeque.length == 0
+      this.casaXeque == undefined
     )
       this.posicaoRoque = this.roqueService.verificarPosicaoRoque(peca);
     else this.posicaoRoque = '';
