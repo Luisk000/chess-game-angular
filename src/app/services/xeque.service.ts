@@ -16,6 +16,8 @@ import { PecaService } from './peca.service';
 export class XequeService {
   constructor(private pecaService: PecaService) {}
 
+  xequeMate = false;
+
   verificarXeque(
     cor: string,
     posicaoRei: Posicao,
@@ -37,7 +39,8 @@ export class XequeService {
       console.log('?????????????');
     }
 
-    if (xeques.length == 0) return undefined;
+    if (xeques.length == 0) 
+      return undefined;
     else {
       var xequeMate = this.verificarEscaparXeque(
         xeques[0],
@@ -45,11 +48,15 @@ export class XequeService {
         cor,
         tabuleiro
       );
-      console.log(xequeMate);
-      //encerrar o jogo se xeque-mate for true
+      this.xequeMate = xequeMate;
 
       return xeques[0];
     }
+  }
+
+  isXequeMate(): boolean{
+    console.log(this.xequeMate)
+    return this.xequeMate;
   }
 
   verificarSegurancaAposMovimentos(
@@ -119,7 +126,8 @@ export class XequeService {
 
           let xeque = this.findPosicao(posicaoRei, casa.peca.acoes);
 
-          if (xeque != undefined) haXeque = true;
+          if (xeque != undefined) 
+            haXeque = true;
         }
       }
     }

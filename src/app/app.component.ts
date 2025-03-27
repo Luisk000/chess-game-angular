@@ -20,7 +20,11 @@ export class AppComponent {
   xequeJogador1 = false;
   xequeJogador2 = false;
 
+  vitoriaJogador1 = false;
+  vitoriaJogador2 = false;
+
   popUpXeque = false;
+  popUpXequeMate = false;
 
   adicionarPecaComida(event: any){
     let peca: Peca = event
@@ -44,13 +48,29 @@ export class AppComponent {
     else
       this.xequeJogador2 = true;
     
-    this.popUpText();
+      this.popUpXeque = true;
+      setTimeout(() => {
+        this.popUpXeque = false;
+      }, 1000)
+  }
+
+  mostrarXequeMate(){
+    if (this.jogador1Jogando == true){
+      this.vitoriaJogador2 = true;
+      this.jogador1Jogando = false;
+    }
+    else {
+      this.vitoriaJogador1 = true;
+      this.jogador2Jogando = false;
+    }
+    
+      this.popUpXequeMate = true;
+      setTimeout(() => {
+        this.popUpXequeMate = false;
+      }, 3000)
   }
 
   popUpText(){
-    this.popUpXeque = true;
-    setTimeout(() => {
-      this.popUpXeque = false;
-    }, 1000)
+    
   }
 }

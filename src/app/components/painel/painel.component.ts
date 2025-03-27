@@ -16,6 +16,8 @@ export class PainelComponent implements OnInit, OnChanges {
   @Input() pecasComidas: Peca[] = [];
   @Input() rodada: number = 0;
   @Input() xeque = false;
+  @Input() vitoria = false;
+  @Input() derrota = false;
 
   ngOnInit() {
     if (this.time == "branco")
@@ -30,5 +32,7 @@ export class PainelComponent implements OnInit, OnChanges {
     }
   }
 
-  
+  jogarNovamente(){
+    
+  }
 }

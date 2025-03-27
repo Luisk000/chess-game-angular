@@ -30,6 +30,7 @@ export class TabuleiroComponent implements OnInit {
   @Output() pecaComidaEmit = new EventEmitter<Peca>();
   @Output() timeJogandoEmit = new EventEmitter();
   @Output() xequeEmit = new EventEmitter();
+  @Output() xequeMateEmit = new EventEmitter();
 
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
@@ -203,7 +204,11 @@ export class TabuleiroComponent implements OnInit {
       this.tabuleiroJogo
     );
 
-    if (xeque != undefined) {
+    if (this.xequeService.isXequeMate()){
+      this.xequeMateEmit.emit();
+      this.jogoParado = true;
+    }
+    else if (xeque != undefined) {
       this.xequeEmit.emit();
       let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
       casaXeque.cor = 'red';
