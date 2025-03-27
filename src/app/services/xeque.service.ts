@@ -110,17 +110,16 @@ export class XequeService {
     for (let colIndex = 0; colIndex <= 7; colIndex++) {
       for (let caIndex = 0; caIndex <= 7; caIndex++) {
         var casa: Casa = tabuleiro[colIndex][caIndex];
-        if (casa.peca) {
+        if (casa.peca && casa.peca.cor != cor) {
           casa.peca.verMovimentosPossiveis(
             new Posicao(colIndex, caIndex),
             casa.peca.cor,
             tabuleiro
           );
-          if (casa.peca.cor != cor) {
-            let xeque = this.findPosicao(posicaoRei, casa.peca.acoes);
 
-            if (xeque != undefined) haXeque = true;
-          }
+          let xeque = this.findPosicao(posicaoRei, casa.peca.acoes);
+
+          if (xeque != undefined) haXeque = true;
         }
       }
     }
