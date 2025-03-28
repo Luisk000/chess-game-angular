@@ -345,10 +345,9 @@ export class TabuleiroComponent implements OnInit {
       else 
         posicaoRei = this.posicaoReiTimeBranco!;
       
-      let peca = this.tabuleiroJogo[col][ca].peca;
-      peca.verMovimentosPossiveis(this.posicaoPromocao, peca.cor, this.tabuleiroJogo);
+      this.verificarMovimentos();
       this.verificarXeque(posicaoRei);
-
+      
       this.posicaoPromocao = undefined;
       this.jogoParado = false;
     }
