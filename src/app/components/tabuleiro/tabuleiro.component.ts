@@ -151,7 +151,7 @@ export class TabuleiroComponent implements OnInit {
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
       this.verificarRoqueFinal(casa.peca!);
       this.mudarTimeJogando();
-      this.verificarXeque(casa.peca!, new Posicao(coluna, linha));
+      this.verificarXequePeca(casa.peca!, new Posicao(coluna, linha));
     }
   }
 
@@ -207,7 +207,7 @@ export class TabuleiroComponent implements OnInit {
 
   //#region Xeque
 
-  verificarXeque(peca: Peca, posicao: Posicao) {
+  verificarXequePeca(peca: Peca, posicao: Posicao) {
     this.apagarLocalXeque();
     if (peca instanceof Rei) {
       if (peca.cor === 'branco') this.posicaoReiTimeBranco = posicao;
@@ -220,6 +220,10 @@ export class TabuleiroComponent implements OnInit {
     else 
       posicaoRei = this.posicaoReiTimePreto;
 
+    this.verificarXeque(posicaoRei!)
+  }
+
+  verificarXeque(posicaoRei: Posicao){
     let xeque: Posicao | undefined = this.xequeService.verificarXeque(
       this.timeJogando,
       posicaoRei!,
@@ -334,6 +338,17 @@ export class TabuleiroComponent implements OnInit {
       let col = this.posicaoPromocao.coluna;
       let ca = this.posicaoPromocao.linha;
       this.tabuleiroJogo[col][ca].peca = $event;
+
+      let posicaoRei: Posicao;
+      if ($event.cor == "branco")
+        posicaoRei = this.posicaoReiTimePreto!;
+      else 
+        posicaoRei = this.posicaoReiTimeBranco!;
+      
+      let peca = this.tabuleiroJogo[col][ca].peca;
+      peca.verMovimentosPossiveis(this.posicaoPromocao, peca.cor, this.tabuleiroJogo);
+      this.verificarXeque(posicaoRei);
+
       this.posicaoPromocao = undefined;
       this.jogoParado = false;
     }

@@ -55,7 +55,6 @@ export class XequeService {
   }
 
   isXequeMate(): boolean{
-    console.log(this.xequeMate)
     return this.xequeMate;
   }
 
@@ -156,8 +155,6 @@ export class XequeService {
     var xeque: boolean = 
       this.verificarXequeProximoTurno(cor, posicaoRei!, tabuleiroHipotetico)
 
-    console.log(tabuleiroHipotetico)
-
     if (xeque == true)
       return false;
     else
@@ -165,7 +162,7 @@ export class XequeService {
     
   }
 
-  private verificarXequeProximoTurno(
+  verificarXequeProximoTurno(
     cor: string,
     posicaoRei: Posicao,
     tabuleiro: Casa[][]
