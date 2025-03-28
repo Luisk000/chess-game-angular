@@ -19,11 +19,11 @@
   <div class="title-jogando">
     <p class="title-xeque" *ngIf="xeque">Em Xeque!</p>
     <p class="title-vitoria" *ngIf="vitoria">Vitória!</p>
-    <p class="title-empate" *ngIf="empate">Empate!</p>
+    <p class="title-empate" *ngIf="empate">{{empate}}</p>
   </div>
   <div class="botao-box" >
     <button 
-      *ngIf="vitoria || derrota || empate"
+      *ngIf="vitoria || derrota || empate != ''"
       class="botao-jogar-novamente"
       (click)="jogarNovamente()"
     >Jogar Novamente</button>

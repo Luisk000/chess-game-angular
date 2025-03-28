@@ -11,14 +11,15 @@ import { Peca } from '../../models/peca.model';
 export class PainelComponent implements OnInit, OnChanges {
 
   title = "";
+
   @Input() time = ""
   @Input() jogando = false;
   @Input() pecasComidas: Peca[] = [];
-  @Input() rodada: number = 0;
   @Input() xeque = false;
   @Input() vitoria = false;
   @Input() derrota = false;
-  @Input() empate = false;
+  @Input() empate = "";
+  rodada = 0;
 
   @Output() reiniciarPartida = new EventEmitter();
 
@@ -29,15 +30,15 @@ export class PainelComponent implements OnInit, OnChanges {
       this.title = "JOGADOR 2";
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['jogando'] && changes['jogando'].currentValue === true) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['empate'] && changes['empate'].currentValue === "")
+      this.rodada = 0;   
+    
+    if (changes['jogando'] && changes['jogando'].currentValue == true) 
       this.rodada++;
-    }
   }
 
   jogarNovamente(){
-    this.rodada = 0;
-
     this.reiniciarPartida.emit();
   }
 }

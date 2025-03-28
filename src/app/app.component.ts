@@ -12,7 +12,7 @@ import { Rei } from './models/pecas/rei.model';
   animations: [fade]
 })
 export class AppComponent {
-  title = 'chess-game';
+
   pecasComidasJogador1: Peca[] = []
   pecasComidasJogador2: Peca[] = []
 
@@ -26,6 +26,7 @@ export class AppComponent {
   vitoriaJogador2 = false;
 
   empate = false;
+  empateText = "";
 
   xeque = false;
   xequeMate = false;
@@ -92,6 +93,7 @@ export class AppComponent {
     this.vitoriaJogador2 = false;
 
     this.empate = false;
+    this.empateText = "";
 
     this.xequeMate = false;
 
@@ -101,15 +103,19 @@ export class AppComponent {
   verificarEmpatePorApenasDoisReis(){
     if (this.pecasComidasJogador1.length == 15 &&
       this.pecasComidasJogador2.length == 15
-    )
-    this.empatar();
+    ){
+      this.empatar("Empate por Insuficiência");
+    }
   }
 
   empatePorAfogamento(){
-    this.empatar();
+    this.empatar("Empate por Afogamento");
   }
 
-  empatar(){
+  empatar(text: string){
+    this.jogador1Jogando = false;
+    this.jogador2Jogando = false;
+    this.empateText = text;
     this.tabuleiroComponent.jogoParado = true;
     this.empate = true;
     setTimeout(() => {

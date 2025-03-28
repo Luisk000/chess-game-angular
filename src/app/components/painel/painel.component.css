@@ -63,7 +63,7 @@
     align-items: center;
     justify-content: center;
     height: 150px;
-    width: 100%;  
+    width: 90%;  
     font-weight:bold;   
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -86,7 +86,8 @@
 }
 
 .title-empate{
-    font-size: 25px;
+    text-align: center;
+    font-size: 20px;
     color:aqua;
 }
 

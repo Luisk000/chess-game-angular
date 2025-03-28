@@ -6,7 +6,7 @@
     [xeque]="xequeJogador1"
     [vitoria]="vitoriaJogador1"
     [derrota]="vitoriaJogador2"
-    [empate]="empate"
+    [empate]="empateText"
     (reiniciarPartida)="reiniciarPartida()"
   ></app-painel>
   <app-tabuleiro
@@ -23,7 +23,7 @@
     [xeque]="xequeJogador2"
     [vitoria]="vitoriaJogador2"
     [derrota]="vitoriaJogador1"
-    [empate]="empate"
+    [empate]="empateText"
     (reiniciarPartida)="reiniciarPartida()"
   ></app-painel>
   <div class="popup-text xeque" *ngIf="xeque" @fade>XEQUE</div>

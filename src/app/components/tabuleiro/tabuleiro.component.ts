@@ -193,8 +193,7 @@ export class TabuleiroComponent implements OnInit {
   
     this.timeJogando = 'branco';
     this.jogoParado = false;
-    this.primeiroTurno = true;
-  
+     
     this.posicaoPromocao = undefined;
     this.posicaoEnPassant = undefined;
     this.timeEnPassant = '';
@@ -204,8 +203,12 @@ export class TabuleiroComponent implements OnInit {
     this.casaDragging = undefined;
     this.dragging = false;
     
+    this.primeiroTurno = true;
+
     await this.prepararTabuleiro();
     this.verificarMovimentos();
+
+    this.primeiroTurno = false;
   }
 
   verificarEmpatePorAfogamento(){
