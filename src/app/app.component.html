@@ -6,6 +6,7 @@
     [xeque]="xequeJogador1"
     [vitoria]="vitoriaJogador1"
     [derrota]="vitoriaJogador2"
+    [empate]="empate"
     (reiniciarPartida)="reiniciarPartida()"
   ></app-painel>
   <app-tabuleiro
@@ -13,6 +14,7 @@
     (timeJogandoEmit)="mudarTimeJogando()"
     (xequeEmit)="mostrarXeque()"
     (xequeMateEmit)="mostrarXequeMate()"
+    (empatePorAfogamentoEmit)="empatePorAfogamento()"
   ></app-tabuleiro>
   <app-painel
     time="preto"
@@ -21,8 +23,10 @@
     [xeque]="xequeJogador2"
     [vitoria]="vitoriaJogador2"
     [derrota]="vitoriaJogador1"
+    [empate]="empate"
     (reiniciarPartida)="reiniciarPartida()"
   ></app-painel>
-  <div class="popup-text xeque" *ngIf="popUpXeque" @fade>XEQUE!</div>
-  <div class="popup-text xeque-mate" *ngIf="popUpXequeMate" @fade>XEQUE-MATE!</div>
+  <div class="popup-text xeque" *ngIf="xeque" @fade>XEQUE</div>
+  <div class="popup-text xeque-mate" *ngIf="xequeMate" @fade>XEQUE-MATE</div>
+  <div class="popup-text empate" *ngIf="empate" @fade>EMPATE</div>
 </div>

@@ -85,6 +85,11 @@
     color:#8B0000;
 }
 
+.title-empate{
+    font-size: 25px;
+    color:aqua;
+}
+
 .title-vitoria{
     font-size: 35px;
     color: #32CD32;

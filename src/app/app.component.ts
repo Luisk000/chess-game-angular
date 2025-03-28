@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Peca } from './models/peca.model';
 import { fade } from './animations';
 import { TabuleiroComponent } from './components/tabuleiro/tabuleiro.component';
+import { Rei } from './models/pecas/rei.model';
 
 @Component({
   selector: 'app-root',
@@ -24,17 +25,24 @@ export class AppComponent {
   vitoriaJogador1 = false;
   vitoriaJogador2 = false;
 
-  popUpXeque = false;
-  popUpXequeMate = false;
+  empate = false;
+
+  xeque = false;
+  xequeMate = false;
 
   @ViewChild(TabuleiroComponent) tabuleiroComponent!: TabuleiroComponent;
 
   adicionarPecaComida(event: any){
-    let peca: Peca = event
+    let peca: Peca = event;
     if (peca.cor === "branco")
       this.pecasComidasJogador2.push(peca);
     else
       this.pecasComidasJogador1.push(peca)
+
+    if (peca instanceof Rei)
+      console.log("Bug: Rei não está em jogo")
+    
+    this.verificarEmpatePorApenasDoisReis();
   }
 
   mudarTimeJogando(){
@@ -51,9 +59,9 @@ export class AppComponent {
     else
       this.xequeJogador2 = true;
     
-      this.popUpXeque = true;
+      this.xeque = true;
       setTimeout(() => {
-        this.popUpXeque = false;
+        this.xeque = false;
       }, 1000)
   }
 
@@ -67,9 +75,9 @@ export class AppComponent {
       this.jogador2Jogando = false;
     }
     
-      this.popUpXequeMate = true;
+      this.xequeMate = true;
       setTimeout(() => {
-        this.popUpXequeMate = false;
+        this.xequeMate = false;
       }, 3000)
   }
 
@@ -83,8 +91,29 @@ export class AppComponent {
     this.vitoriaJogador1 = false;
     this.vitoriaJogador2 = false;
 
-    this.popUpXequeMate = false;
+    this.empate = false;
+
+    this.xequeMate = false;
 
     this.tabuleiroComponent.reiniciarPartida();
+  }
+
+  verificarEmpatePorApenasDoisReis(){
+    if (this.pecasComidasJogador1.length == 15 &&
+      this.pecasComidasJogador2.length == 15
+    )
+    this.empatar();
+  }
+
+  empatePorAfogamento(){
+    this.empatar();
+  }
+
+  empatar(){
+    this.tabuleiroComponent.jogoParado = true;
+    this.empate = true;
+    setTimeout(() => {
+      this.empate = false;
+    }, 3000)
   }
 }

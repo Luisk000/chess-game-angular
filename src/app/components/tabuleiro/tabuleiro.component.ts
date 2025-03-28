@@ -31,6 +31,7 @@ export class TabuleiroComponent implements OnInit {
   @Output() timeJogandoEmit = new EventEmitter();
   @Output() xequeEmit = new EventEmitter();
   @Output() xequeMateEmit = new EventEmitter();
+  @Output() empatePorAfogamentoEmit = new EventEmitter();
 
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
@@ -100,6 +101,8 @@ export class TabuleiroComponent implements OnInit {
         
       });
     });
+    if (this.primeiroTurno == false)
+      this.verificarEmpatePorAfogamento();
   }
 
   verificarSegurancaAposMovimentos(peca: Peca, coluna: number, linha: number){
@@ -204,6 +207,16 @@ export class TabuleiroComponent implements OnInit {
     await this.prepararTabuleiro();
     this.verificarMovimentos();
   }
+
+  verificarEmpatePorAfogamento(){
+    var casas: Casa[] = this.tabuleiroJogo.flat().filter(c => c.peca && c.peca.cor == this.timeJogando)
+    var acoes: Posicao[] = casas.map(c => c.peca!).map(p => p.acoes).flat();
+
+    if (acoes.length == 0)
+      this.empatePorAfogamentoEmit.emit();
+    
+  }
+
 
   //#region Xeque
 

@@ -37,9 +37,6 @@ export class PainelComponent implements OnInit, OnChanges {
 
   jogarNovamente(){
     this.rodada = 0;
-    this.vitoria = false;
-    this.derrota = false;
-    this.empate = false;
 
     this.reiniciarPartida.emit();
   }

@@ -36,7 +36,7 @@ export class XequeService {
     }
 
     if (xeques.length > 1) {
-      console.log('?????????????');
+      console.log("Bug: dois xeques simultâneos");
     }
 
     if (xeques.length == 0) 
