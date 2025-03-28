@@ -32,6 +32,7 @@ export class TabuleiroComponent implements OnInit {
   @Output() xequeEmit = new EventEmitter();
   @Output() xequeMateEmit = new EventEmitter();
   @Output() empatePorAfogamentoEmit = new EventEmitter();
+  @Output() empatePorRepeticaoEmit = new EventEmitter();
 
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
@@ -47,6 +48,8 @@ export class TabuleiroComponent implements OnInit {
 
   posicaoReiTimeBranco: Posicao | undefined;
   posicaoReiTimePreto: Posicao | undefined;
+
+  ultimosMovimentos: Posicao[] = [];
 
   posicaoPromocao: Posicao | undefined;
   posicaoEnPassant: Posicao | undefined = undefined;
@@ -146,13 +149,17 @@ export class TabuleiroComponent implements OnInit {
       this.casaSelecionada!.peca!.animationState = 'moved'
       casa.peca = this.casaSelecionada!.peca;
 
-      this.tabuleiroJogo[this.posicaoSelecionada!.coluna][
-        this.posicaoSelecionada!.linha
-      ].peca = undefined;
+      let posicaoAnterior = 
+        this.tabuleiroJogo[this.posicaoSelecionada!.coluna][
+          this.posicaoSelecionada!.linha
+          ]
+      
+      posicaoAnterior.peca = undefined;
 
       this.apagarLocaisAnteriores();
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
       this.verificarRoqueFinal(casa.peca!);
+      this.verificarEmpatePorRepeticao(coluna, linha)
       this.mudarTimeJogando();
       this.verificarXequePeca(casa.peca!, new Posicao(coluna, linha));
     }
@@ -197,6 +204,8 @@ export class TabuleiroComponent implements OnInit {
     this.posicaoPromocao = undefined;
     this.posicaoEnPassant = undefined;
     this.timeEnPassant = '';
+
+    this.ultimosMovimentos = [];
   
     this.posicaoRoque = '';
   
@@ -216,8 +225,38 @@ export class TabuleiroComponent implements OnInit {
     var acoes: Posicao[] = casas.map(c => c.peca!).map(p => p.acoes).flat();
 
     if (acoes.length == 0)
-      this.empatePorAfogamentoEmit.emit();
+      this.empatePorAfogamentoEmit.emit();  
+  }
+
+  verificarEmpatePorRepeticao(coluna: number, linha: number){
+    let posicao = new Posicao(coluna, linha);
+
+    this.ultimosMovimentos.push(posicao)
+    console.log(this.ultimosMovimentos)
+    if (this.ultimosMovimentos.length >= 9)
+      this.verificarRepeticao(this.ultimosMovimentos)
     
+
+  }
+
+  verificarRepeticao(movimentos: Posicao[]){
+    let length = movimentos.length
+    if ((
+      this.posicoesIguais(movimentos[length - 1], movimentos[length - 5]) &&
+      this.posicoesIguais(movimentos[length - 5], movimentos[length - 9]) &&
+      this.posicoesIguais(movimentos[length - 2], movimentos[length - 6])
+    )){
+      console.log("repeticao")
+      this.empatePorRepeticaoEmit.emit();
+    }
+  }
+
+  posicoesIguais(posicaoA: Posicao, posicaoB: Posicao){
+    if (posicaoA.coluna == posicaoB.coluna &&
+      posicaoA.linha == posicaoB.linha)
+      return true
+    else
+      return false
   }
 
 
