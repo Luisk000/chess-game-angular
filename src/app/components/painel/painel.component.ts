@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Peca } from '../../models/peca.model';
 
 @Component({
@@ -18,6 +18,9 @@ export class PainelComponent implements OnInit, OnChanges {
   @Input() xeque = false;
   @Input() vitoria = false;
   @Input() derrota = false;
+  @Input() empate = false;
+
+  @Output() reiniciarPartida = new EventEmitter();
 
   ngOnInit() {
     if (this.time == "branco")
@@ -33,6 +36,11 @@ export class PainelComponent implements OnInit, OnChanges {
   }
 
   jogarNovamente(){
-    
+    this.rodada = 0;
+    this.vitoria = false;
+    this.derrota = false;
+    this.empate = false;
+
+    this.reiniciarPartida.emit();
   }
 }

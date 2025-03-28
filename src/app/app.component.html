@@ -6,6 +6,7 @@
     [xeque]="xequeJogador1"
     [vitoria]="vitoriaJogador1"
     [derrota]="vitoriaJogador2"
+    (reiniciarPartida)="reiniciarPartida()"
   ></app-painel>
   <app-tabuleiro
     (pecaComidaEmit)="adicionarPecaComida($event)"
@@ -20,6 +21,7 @@
     [xeque]="xequeJogador2"
     [vitoria]="vitoriaJogador2"
     [derrota]="vitoriaJogador1"
+    (reiniciarPartida)="reiniciarPartida()"
   ></app-painel>
   <div class="popup-text xeque" *ngIf="popUpXeque" @fade>XEQUE!</div>
   <div class="popup-text xeque-mate" *ngIf="popUpXequeMate" @fade>XEQUE-MATE!</div>

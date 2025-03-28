@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Peca } from './models/peca.model';
 import { fade } from './animations';
+import { TabuleiroComponent } from './components/tabuleiro/tabuleiro.component';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,8 @@ export class AppComponent {
 
   popUpXeque = false;
   popUpXequeMate = false;
+
+  @ViewChild(TabuleiroComponent) tabuleiroComponent!: TabuleiroComponent;
 
   adicionarPecaComida(event: any){
     let peca: Peca = event
@@ -70,7 +73,18 @@ export class AppComponent {
       }, 3000)
   }
 
-  popUpText(){
-    
+  reiniciarPartida(){
+    this.pecasComidasJogador1 = []
+    this.pecasComidasJogador2 = []
+
+    this.jogador1Jogando = true;
+    this.jogador2Jogando = false;
+
+    this.vitoriaJogador1 = false;
+    this.vitoriaJogador2 = false;
+
+    this.popUpXequeMate = false;
+
+    this.tabuleiroComponent.reiniciarPartida();
   }
 }

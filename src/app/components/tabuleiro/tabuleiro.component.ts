@@ -184,6 +184,27 @@ export class TabuleiroComponent implements OnInit {
     this.verificarMovimentos();
   }
 
+  async reiniciarPartida(){
+    this.acoesPossiveis = [];
+    this.casaXeque = undefined;
+  
+    this.timeJogando = 'branco';
+    this.jogoParado = false;
+    this.primeiroTurno = true;
+  
+    this.posicaoPromocao = undefined;
+    this.posicaoEnPassant = undefined;
+    this.timeEnPassant = '';
+  
+    this.posicaoRoque = '';
+  
+    this.casaDragging = undefined;
+    this.dragging = false;
+    
+    await this.prepararTabuleiro();
+    this.verificarMovimentos();
+  }
+
   //#region Xeque
 
   verificarXeque(peca: Peca, posicao: Posicao) {

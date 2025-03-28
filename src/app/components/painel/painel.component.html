@@ -22,7 +22,7 @@
   </div>
   <div class="botao-box" >
     <button 
-      *ngIf="vitoria || derrota"
+      *ngIf="vitoria || derrota || empate"
       class="botao-jogar-novamente"
       (click)="jogarNovamente()"
     >Jogar Novamente</button>
