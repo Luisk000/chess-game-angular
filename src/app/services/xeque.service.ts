@@ -107,6 +107,64 @@ export class XequeService {
     else return true;
   }
 
+  verificarSegurancaAposRoque(
+    cor: string,
+    posicaoRoque: string,
+    tabuleiro: Casa[][]
+  ){
+    var tabuleiroHipotetico: Casa[][] = JSON.parse(JSON.stringify(tabuleiro));
+    this.retrieveInstances(tabuleiroHipotetico);
+    var posicaoRei: Posicao;
+
+    if (posicaoRoque === "branco-right"){
+      tabuleiroHipotetico[7][4].peca = undefined;
+      tabuleiroHipotetico[7][7].peca = undefined;
+
+      tabuleiroHipotetico[7][6].peca = new Rei(cor, this.pecaService)
+      tabuleiroHipotetico[7][5].peca = new Torre(cor, this.pecaService)
+
+      posicaoRei = new Posicao(7, 6);
+    }
+    else if (posicaoRoque === "branco-left"){
+      tabuleiroHipotetico[7][4].peca = undefined;
+      tabuleiroHipotetico[7][0].peca = undefined;
+
+      tabuleiroHipotetico[7][2].peca = new Rei(cor, this.pecaService)
+      tabuleiroHipotetico[7][3].peca = new Torre(cor, this.pecaService)
+
+      posicaoRei = new Posicao(7, 2);
+    }
+    else if (posicaoRoque === "preto-right"){
+      tabuleiroHipotetico[0][4].peca = undefined;
+      tabuleiroHipotetico[0][7].peca = undefined;
+
+      tabuleiroHipotetico[0][6].peca = new Rei(cor, this.pecaService)
+      tabuleiroHipotetico[0][5].peca = new Torre(cor, this.pecaService)
+
+      posicaoRei = new Posicao(0, 6);
+    }
+    else if (posicaoRoque === "preto-left"){
+      tabuleiroHipotetico[0][4].peca = undefined;
+      tabuleiroHipotetico[0][0].peca = undefined;
+
+      tabuleiroHipotetico[0][2].peca = new Rei(cor, this.pecaService)
+      tabuleiroHipotetico[0][3].peca = new Torre(cor, this.pecaService)
+
+      posicaoRei = new Posicao(0, 2);
+    }
+
+    var xeque: boolean = 
+      this.verificarXequeProximoTurno(cor, posicaoRei!, tabuleiroHipotetico)
+
+    console.log(tabuleiroHipotetico)
+
+    if (xeque == true)
+      return false;
+    else
+      return true;
+    
+  }
+
   private verificarXequeProximoTurno(
     cor: string,
     posicaoRei: Posicao,
@@ -274,7 +332,7 @@ export class XequeService {
     return acoesRei;
   }
 
-  private retrieveInstances(tabuleiro: Casa[][]) {
+  retrieveInstances(tabuleiro: Casa[][]) {
     for (let coluna of tabuleiro) {
       for (let casa of coluna) {
         if (casa.peca) {
