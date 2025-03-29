@@ -49,7 +49,7 @@ export class TabuleiroComponent implements OnInit {
   posicaoReiTimeBranco: Posicao | undefined;
   posicaoReiTimePreto: Posicao | undefined;
 
-  ultimosMovimentos: Posicao[] = [];
+  statusTabuleiro: string[] = [];
 
   posicaoPromocao: Posicao | undefined;
   posicaoEnPassant: Posicao | undefined = undefined;
@@ -105,7 +105,7 @@ export class TabuleiroComponent implements OnInit {
       });
     });
     if (this.primeiroTurno == false)
-      this.verificarEmpatePorAfogamento();
+      this.verificarEmpate();
   }
 
   verificarSegurancaAposMovimentos(peca: Peca, coluna: number, linha: number){
@@ -159,7 +159,6 @@ export class TabuleiroComponent implements OnInit {
       this.apagarLocaisAnteriores();
       this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
       this.verificarRoqueFinal(casa.peca!);
-      this.verificarEmpatePorRepeticao(coluna, linha)
       this.mudarTimeJogando();
       this.verificarXequePeca(casa.peca!, new Posicao(coluna, linha));
     }
@@ -205,7 +204,7 @@ export class TabuleiroComponent implements OnInit {
     this.posicaoEnPassant = undefined;
     this.timeEnPassant = '';
 
-    this.ultimosMovimentos = [];
+    this.statusTabuleiro = [];
   
     this.posicaoRoque = '';
   
@@ -220,6 +219,16 @@ export class TabuleiroComponent implements OnInit {
     this.primeiroTurno = false;
   }
 
+  verificarEmpate(){
+    this.verificarEmpatePorInsuficiencia()
+    this.verificarEmpatePorAfogamento()
+    this.verificarEmpatePorRepeticao()
+  }
+
+  verificarEmpatePorInsuficiencia(){
+
+  }
+
   verificarEmpatePorAfogamento(){
     var casas: Casa[] = this.tabuleiroJogo.flat().filter(c => c.peca && c.peca.cor == this.timeJogando)
     var acoes: Posicao[] = casas.map(c => c.peca!).map(p => p.acoes).flat();
@@ -228,37 +237,35 @@ export class TabuleiroComponent implements OnInit {
       this.empatePorAfogamentoEmit.emit();  
   }
 
-  verificarEmpatePorRepeticao(coluna: number, linha: number){
-    let posicao = new Posicao(coluna, linha);
+  verificarEmpatePorRepeticao(){
+    this.montarStatusTabuleiro();
 
-    this.ultimosMovimentos.push(posicao)
-    console.log(this.ultimosMovimentos)
-    if (this.ultimosMovimentos.length >= 9)
-      this.verificarRepeticao(this.ultimosMovimentos)
-    
-
+    if (this.statusTabuleiro.length >= 9)
+      this.verificarRepeticao()
   }
 
-  verificarRepeticao(movimentos: Posicao[]){
-    let length = movimentos.length
-    if ((
-      this.posicoesIguais(movimentos[length - 1], movimentos[length - 5]) &&
-      this.posicoesIguais(movimentos[length - 5], movimentos[length - 9]) &&
-      this.posicoesIguais(movimentos[length - 2], movimentos[length - 6])
-    )){
-      console.log("repeticao")
+  montarStatusTabuleiro(){
+    let statusTabuleiro = "";
+    for (let coluna of this.tabuleiroJogo){
+      for (let casa of coluna){
+        if (casa.peca)
+          statusTabuleiro = statusTabuleiro + casa.peca.nome + casa.peca.cor + "."
+        else
+          statusTabuleiro = statusTabuleiro + "vazio."
+      }
+    }
+    this.statusTabuleiro.push(statusTabuleiro)
+  }
+
+  verificarRepeticao(){
+    let length = this.statusTabuleiro.length
+    if (
+      this.statusTabuleiro[length - 1] == this.statusTabuleiro[length - 5] &&
+      this.statusTabuleiro[length - 5] == this.statusTabuleiro[length - 9]
+    ){
       this.empatePorRepeticaoEmit.emit();
     }
   }
-
-  posicoesIguais(posicaoA: Posicao, posicaoB: Posicao){
-    if (posicaoA.coluna == posicaoB.coluna &&
-      posicaoA.linha == posicaoB.linha)
-      return true
-    else
-      return false
-  }
-
 
   //#region Xeque
 

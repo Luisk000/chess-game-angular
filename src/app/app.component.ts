@@ -42,8 +42,6 @@ export class AppComponent {
 
     if (peca instanceof Rei)
       console.log("Bug: Rei não está em jogo")
-    
-    this.verificarEmpatePorApenasDoisReis();
   }
 
   mudarTimeJogando(){
@@ -100,16 +98,16 @@ export class AppComponent {
     this.tabuleiroComponent.reiniciarPartida();
   }
 
-  verificarEmpatePorApenasDoisReis(){
-    if (this.pecasComidasJogador1.length == 15 &&
-      this.pecasComidasJogador2.length == 15
-    ){
-      this.empatar("Empate por Insuficiência");
-    }
+  empatePoInsuficiencia(){
+    this.empatar("Empate por Insuficiência");
   }
 
   empatePorAfogamento(){
-    this.empatar("Empate por Afogamento");
+    this.empatar("Empate por Bloqueio");
+  }
+
+  empatePorRepeticao(){
+    this.empatar("Empate por Tríplice Repetição")
   }
 
   empatar(text: string){
