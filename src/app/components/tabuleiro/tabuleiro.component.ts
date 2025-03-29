@@ -226,6 +226,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarEmpatePorInsuficiencia(){
+    var pecas: Peca[] = this.tabuleiroJogo.flat().filter(c => c.peca && c.peca.nome != 'rei').map(c => c.peca!)
 
   }
 
