@@ -32,7 +32,7 @@ export class TabuleiroComponent implements OnInit {
   @Output() xequeEmit = new EventEmitter();
   @Output() xequeMateEmit = new EventEmitter();
   @Output() empateEmit = new EventEmitter<string>();
-  @Output() empateOpcionalEmit = new EventEmitter<string>();
+  @Output() empateOpcionalEmit = new EventEmitter<{empateTextAtual: string, empateTextOpcional: string}>();
 
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
@@ -42,20 +42,19 @@ export class TabuleiroComponent implements OnInit {
   casaSelecionada: Casa | undefined;
   posicaoSelecionada: Posicao | undefined;
 
-  timeJogando = 'branco';
-  jogoParado = false;
-  primeiroTurno = true;
-
   posicaoReiTimeBranco: Posicao | undefined;
   posicaoReiTimePreto: Posicao | undefined;
-
-  statusTabuleiro: string[] = [];
 
   posicaoPromocao: Posicao | undefined;
   posicaoEnPassant: Posicao | undefined = undefined;
   timeEnPassant = '';
-
   posicaoRoque = '';
+
+  timeJogando = 'branco';
+  jogoParado = false;
+  primeiroTurno = true;
+
+  statusTabuleiro: string[] = [];
 
   casaDragging: Casa | undefined;
   dragging = false;
@@ -304,7 +303,12 @@ export class TabuleiroComponent implements OnInit {
       this.statusTabuleiro[length - 1] == this.statusTabuleiro[length - 5] &&
       this.statusTabuleiro[length - 5] == this.statusTabuleiro[length - 9]
     ){
-      this.empateOpcionalEmit.emit("Mesma posição repetida três vezes");
+      this.empateOpcionalEmit.emit(
+        { 
+          empateTextAtual: "Mesma posição repetida três vezes", 
+          empateTextOpcional: "Empate por Tríplice Repetição"
+        }
+      );
     }
   }
 

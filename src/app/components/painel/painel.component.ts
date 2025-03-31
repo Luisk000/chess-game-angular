@@ -20,8 +20,8 @@ export class PainelComponent implements OnInit, OnChanges {
   @Input() vitoria = false;
   @Input() derrota = false;
   @Input() empate = false;
-  @Input() empateText = "";
-  @Input() opcaoEmpatar = false;
+  @Input() empateTextAtual = "";
+  @Input() empateTextOpcional = "";
 
   @Output() reiniciarPartida = new EventEmitter();
   @Output() empatarEmit = new EventEmitter<string>();
@@ -46,6 +46,6 @@ export class PainelComponent implements OnInit, OnChanges {
   }
 
   pedirEmpate(){
-    this.empatarEmit.emit("Empate por Tríplice Repetição");
+    this.empatarEmit.emit(this.empateTextOpcional);
   }
 }
