@@ -27,7 +27,7 @@ import { PeaoService } from '../../services/peao.service';
   animations: [move]
 })
 export class TabuleiroComponent implements OnInit {
-  @Output() pecaComidaEmit = new EventEmitter<Peca>();
+  @Output() pecaCapturadaEmit = new EventEmitter<Peca>();
   @Output() timeJogandoEmit = new EventEmitter();
   @Output() xequeEmit = new EventEmitter();
   @Output() xequeMateEmit = new EventEmitter();
@@ -143,7 +143,7 @@ export class TabuleiroComponent implements OnInit {
 
   moverPeca(casa: Casa, coluna: number, linha: number) {
     if (casa.cor === 'LimeGreen') {
-      if (casa.peca != undefined) this.sendPecaComida(casa.peca);
+      if (casa.peca != undefined) this.sendPecaCapturada(casa.peca);
 
 
       this.casaSelecionada!.peca!.animationState = 'moved'
@@ -164,8 +164,8 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  sendPecaComida(peca: Peca) {
-    this.pecaComidaEmit.emit(peca);
+  sendPecaCapturada(peca: Peca) {
+    this.pecaCapturadaEmit.emit(peca);
   }
 
   apagarLocaisAnteriores() {
@@ -228,7 +228,10 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarEmpatePorInsuficiencia(){
-    var pecas: Peca[] = this.tabuleiroJogo.flat().filter(c => c.peca && c.peca.nome != 'rei').map(c => c.peca!)
+    var casas = this.tabuleiroJogo.flat();
+    
+    var pecas: Peca[] = casas.map(c => c.peca!).filter(p => p && p.nome != 'rei')
+    
     var pecasBrancas = pecas.filter(p => p.cor === "branco")
     var pecasPretas = pecas.filter(p => p.cor === "preto")
 
@@ -237,9 +240,9 @@ export class TabuleiroComponent implements OnInit {
          ||
         (this.verificarInsuficienciaComDoisCavalos(pecasBrancas, pecasPretas) ||
          this.verificarInsuficienciaComDoisCavalos(pecasPretas, pecasBrancas))
-      ){
+      )
         this.empateEmit.emit("Empate por Insuficiência de Material")
-      }
+
   }
 
   verificarInsuficiencia(pecas: Peca[]){
@@ -472,17 +475,17 @@ export class TabuleiroComponent implements OnInit {
       coluna == this.posicaoEnPassant.coluna &&
       linha == this.posicaoEnPassant.linha
     ) {
-      let pecaComida: Peca | undefined;
+      let pecaCapturada: Peca | undefined;
 
       if (cor == 'branco') {
-        pecaComida = this.tabuleiroJogo[coluna + 1][linha].peca;
+        pecaCapturada = this.tabuleiroJogo[coluna + 1][linha].peca;
         this.tabuleiroJogo[coluna + 1][linha].peca = undefined;
       } else {
-        pecaComida = this.tabuleiroJogo[coluna - 1][linha].peca;
+        pecaCapturada = this.tabuleiroJogo[coluna - 1][linha].peca;
         this.tabuleiroJogo[coluna - 1][linha].peca = undefined;
       }
 
-      if (pecaComida) this.sendPecaComida(pecaComida);
+      if (pecaCapturada) this.sendPecaCapturada(pecaCapturada);
     }
   }
   //#endregion

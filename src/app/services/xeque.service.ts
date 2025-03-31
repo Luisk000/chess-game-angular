@@ -211,14 +211,14 @@ export class XequeService {
           var acoesPeca: Posicao[] = [];
           var posicaoPeca = new Posicao(colIndex, caIndex);
 
-          var movimentoComer: Posicao | undefined = this.escaparXequeComendo(
+          var movimentoCapturar: Posicao | undefined = this.escaparXequeCapturando(
             posicaoXeque,
             posicaoRei,
             posicaoPeca,
             casa.peca,
             tabuleiro
           );
-          if (movimentoComer != undefined) acoesPeca.push(movimentoComer);
+          if (movimentoCapturar != undefined) acoesPeca.push(movimentoCapturar);
 
           if (casa.peca.nome != 'rei') {
             var movimentosBloquear: Posicao[] = this.escaparXequeBloqueando(
@@ -246,19 +246,19 @@ export class XequeService {
     return xequeMate;
   }
 
-  private escaparXequeComendo(
+  private escaparXequeCapturando(
     posicaoXeque: Posicao,
     posicaoRei: Posicao,
     posicaoPeca: Posicao,
     peca: Peca,
     tabuleiro: Casa[][]
   ): Posicao | undefined {
-    var movimentoComer = this.findPosicao(posicaoXeque, peca.acoes);
-    if (movimentoComer == undefined) return undefined;
+    var movimentoCapturar = this.findPosicao(posicaoXeque, peca.acoes);
+    if (movimentoCapturar == undefined) return undefined;
     else {
       let novaPosicao = new Posicao(
-        movimentoComer.coluna,
-        movimentoComer.linha
+        movimentoCapturar.coluna,
+        movimentoCapturar.linha
       );
 
       var podeEscapar: boolean = this.verificarSegurancaAposMovimento(
@@ -268,7 +268,7 @@ export class XequeService {
         posicaoRei,
         tabuleiro
       );
-      if (podeEscapar == true) return movimentoComer;
+      if (podeEscapar == true) return movimentoCapturar;
       else return undefined;
     }
   }

@@ -27,7 +27,7 @@ export class PeaoService {
       return acoes;
   }
   
-  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], acaoEnPassant?: Posicao | undefined): Posicao[] | []{
+  verificarMovimentosPeaoCapturar(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], acaoEnPassant?: Posicao | undefined): Posicao[] | []{
       let acoes: Posicao[] = [];
       for (let acaoPossivel of acoesPossiveis){
         if (acaoPossivel.coluna >= 0 && acaoPossivel.coluna <= 7 

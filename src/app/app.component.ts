@@ -13,8 +13,8 @@ import { Rei } from './models/pecas/rei.model';
 })
 export class AppComponent {
 
-  pecasComidasJogador1: Peca[] = []
-  pecasComidasJogador2: Peca[] = []
+  pecasCapturadasJogador1: Peca[] = []
+  pecasCapturadasJogador2: Peca[] = []
 
   jogador1Jogando = true;
   jogador2Jogando = false;
@@ -35,12 +35,12 @@ export class AppComponent {
 
   @ViewChild(TabuleiroComponent) tabuleiroComponent!: TabuleiroComponent;
 
-  adicionarPecaComida(event: any){
+  adicionarPecaCapturada(event: any){
     let peca: Peca = event;
     if (peca.cor === "branco")
-      this.pecasComidasJogador2.push(peca);
+      this.pecasCapturadasJogador2.push(peca);
     else
-      this.pecasComidasJogador1.push(peca)
+      this.pecasCapturadasJogador1.push(peca)
 
     if (peca instanceof Rei)
       console.log("Bug: Rei não está em jogo")
@@ -86,8 +86,8 @@ export class AppComponent {
   }
 
   reiniciarPartida(){
-    this.pecasComidasJogador1 = []
-    this.pecasComidasJogador2 = []
+    this.pecasCapturadasJogador1 = []
+    this.pecasCapturadasJogador2 = []
 
     this.jogador1Jogando = true;
     this.jogador2Jogando = false;

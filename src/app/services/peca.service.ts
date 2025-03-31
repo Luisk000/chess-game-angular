@@ -175,8 +175,8 @@ export class PecaService {
     return this.peaoService.verificarMovimentosPeaoMover(acoesPossiveis, cor, tabuleiro);
   }
 
-  verificarMovimentosPeaoComer(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], acaoEnPassant?: Posicao | undefined): Posicao[] | []{
-    return this.peaoService.verificarMovimentosPeaoComer(acoesPossiveis, cor, tabuleiro, acaoEnPassant);
+  verificarMovimentosPeaoCapturar(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][], acaoEnPassant?: Posicao | undefined): Posicao[] | []{
+    return this.peaoService.verificarMovimentosPeaoCapturar(acoesPossiveis, cor, tabuleiro, acaoEnPassant);
   }
 
   verificarRoquePequeno(time: string, tabuleiro: Casa[][]): boolean{

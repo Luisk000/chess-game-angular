@@ -15,7 +15,7 @@ export class PainelComponent implements OnInit, OnChanges {
 
   @Input() time = ""
   @Input() jogando = false;
-  @Input() pecasComidas: Peca[] = [];
+  @Input() pecasCapturadas: Peca[] = [];
   @Input() xeque = false;
   @Input() vitoria = false;
   @Input() derrota = false;

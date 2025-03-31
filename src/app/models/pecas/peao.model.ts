@@ -14,34 +14,34 @@ export class Peao extends Peca{
     
     override verMovimentosPossiveis(posicao: Posicao, cor: string, tabuleiro: Casa[][]) {   
         let acoesMoverPossiveis: Posicao[] = [];
-        let acoesComerPossiveis: Posicao[] = [];
+        let acoesCapturarPossiveis: Posicao[] = [];
         
         if (this.cor === "branco"){
             acoesMoverPossiveis.push(new Posicao(posicao.coluna - 1, posicao.linha))
             if (this.iniciando)
                 acoesMoverPossiveis.push(new Posicao(posicao.coluna - 2, posicao.linha))
 
-            acoesComerPossiveis.push(new Posicao(posicao.coluna - 1, posicao.linha - 1))
-            acoesComerPossiveis.push(new Posicao(posicao.coluna - 1, posicao.linha + 1))
+            acoesCapturarPossiveis.push(new Posicao(posicao.coluna - 1, posicao.linha - 1))
+            acoesCapturarPossiveis.push(new Posicao(posicao.coluna - 1, posicao.linha + 1))
         }           
         else{
             acoesMoverPossiveis.push(new Posicao(posicao.coluna + 1, posicao.linha))
             if (this.iniciando)
                 acoesMoverPossiveis.push(new Posicao(posicao.coluna + 2, posicao.linha)) 
 
-            acoesComerPossiveis.push(new Posicao(posicao.coluna + 1, posicao.linha - 1))
-            acoesComerPossiveis.push(new Posicao(posicao.coluna + 1, posicao.linha + 1))
+            acoesCapturarPossiveis.push(new Posicao(posicao.coluna + 1, posicao.linha - 1))
+            acoesCapturarPossiveis.push(new Posicao(posicao.coluna + 1, posicao.linha + 1))
         }   
         
         let acoesMover = this.pecaService.verificarMovimentosPeaoMover(acoesMoverPossiveis, cor, tabuleiro);
-        let acoesComer = this.pecaService.verificarMovimentosPeaoComer(acoesComerPossiveis, cor, tabuleiro, this.posicaoEnPassant);
+        let acoesCapturar = this.pecaService.verificarMovimentosPeaoCapturar(acoesCapturarPossiveis, cor, tabuleiro, this.posicaoEnPassant);
         this.posicaoEnPassant = undefined;
 
         this.acoes = [];
         if (acoesMover)
             this.acoes.push(...acoesMover)
-        if (acoesComer)
-            this.acoes.push(...acoesComer)
+        if (acoesCapturar)
+            this.acoes.push(...acoesCapturar)
 
     }
 

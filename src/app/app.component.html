@@ -2,7 +2,7 @@
   <app-painel
     time="branco"
     [jogando]="jogador1Jogando"
-    [pecasComidas]="pecasComidasJogador1"
+    [pecasCapturadas]="pecasCapturadasJogador1"
     [xeque]="xequeJogador1"
     [vitoria]="vitoriaJogador1"
     [derrota]="vitoriaJogador2"
@@ -13,7 +13,7 @@
     (empatarEmit)="empatar($event)"
   ></app-painel>
   <app-tabuleiro
-    (pecaComidaEmit)="adicionarPecaComida($event)"
+    (pecaCapturadaEmit)="adicionarPecaCapturada($event)"
     (timeJogandoEmit)="mudarTimeJogando()"
     (xequeEmit)="mostrarXeque()"
     (xequeMateEmit)="mostrarXequeMate()"
@@ -23,7 +23,7 @@
   <app-painel
     time="preto"
     [jogando]="jogador2Jogando"
-    [pecasComidas]="pecasComidasJogador2"
+    [pecasCapturadas]="pecasCapturadasJogador2"
     [xeque]="xequeJogador2"
     [vitoria]="vitoriaJogador2"
     [derrota]="vitoriaJogador1"
