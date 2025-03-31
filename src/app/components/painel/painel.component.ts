@@ -11,6 +11,7 @@ import { Peca } from '../../models/peca.model';
 export class PainelComponent implements OnInit, OnChanges {
 
   title = "";
+  rodada = 0;
 
   @Input() time = ""
   @Input() jogando = false;
@@ -18,10 +19,12 @@ export class PainelComponent implements OnInit, OnChanges {
   @Input() xeque = false;
   @Input() vitoria = false;
   @Input() derrota = false;
-  @Input() empate = "";
-  rodada = 0;
+  @Input() empate = false;
+  @Input() empateText = "";
+  @Input() opcaoEmpatar = false;
 
   @Output() reiniciarPartida = new EventEmitter();
+  @Output() empatarEmit = new EventEmitter<string>();
 
   ngOnInit() {
     if (this.time == "branco")
@@ -31,7 +34,7 @@ export class PainelComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['empate'] && changes['empate'].currentValue === "")
+    if (changes['empate'] && changes['empate'].currentValue == false)
       this.rodada = 0;   
     
     if (changes['jogando'] && changes['jogando'].currentValue == true) 
@@ -40,5 +43,9 @@ export class PainelComponent implements OnInit, OnChanges {
 
   jogarNovamente(){
     this.reiniciarPartida.emit();
+  }
+
+  pedirEmpate(){
+    this.empatarEmit.emit("Empate por Tríplice Repetição");
   }
 }

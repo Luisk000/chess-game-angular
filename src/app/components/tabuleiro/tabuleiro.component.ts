@@ -32,6 +32,7 @@ export class TabuleiroComponent implements OnInit {
   @Output() xequeEmit = new EventEmitter();
   @Output() xequeMateEmit = new EventEmitter();
   @Output() empateEmit = new EventEmitter<string>();
+  @Output() empateOpcionalEmit = new EventEmitter<string>();
 
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
@@ -218,6 +219,8 @@ export class TabuleiroComponent implements OnInit {
     this.primeiroTurno = false;
   }
 
+  //#region Empate
+
   verificarEmpate(){
     this.verificarEmpatePorInsuficiencia()
     this.verificarEmpatePorAfogamento()
@@ -298,9 +301,11 @@ export class TabuleiroComponent implements OnInit {
       this.statusTabuleiro[length - 1] == this.statusTabuleiro[length - 5] &&
       this.statusTabuleiro[length - 5] == this.statusTabuleiro[length - 9]
     ){
-      this.empateEmit.emit("Empate por Tríplice Repetição");
+      this.empateOpcionalEmit.emit("Mesma posição repetida três vezes");
     }
   }
+
+  //#endregion
 
   //#region Xeque
 
