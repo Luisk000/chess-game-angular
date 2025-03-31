@@ -227,7 +227,42 @@ export class TabuleiroComponent implements OnInit {
 
   verificarEmpatePorInsuficiencia(){
     var pecas: Peca[] = this.tabuleiroJogo.flat().filter(c => c.peca && c.peca.nome != 'rei').map(c => c.peca!)
+    var pecasBrancas = pecas.filter(p => p.cor === "branco")
+    var pecasPretas = pecas.filter(p => p.cor === "preto")
 
+    if ((this.verificarInsuficiencia(pecasBrancas) &&
+         this.verificarInsuficiencia(pecasPretas)) 
+         ||
+        (this.verificarInsuficienciaComDoisCavalos(pecasBrancas, pecasPretas) ||
+         this.verificarInsuficienciaComDoisCavalos(pecasPretas, pecasBrancas))
+      ){
+        console.log("empate")
+      }
+  }
+
+  verificarInsuficiencia(pecas: Peca[]){
+    if (pecas.length == 0 || 
+      (
+        pecas.length == 1 &&
+        (pecas[0].nome === "bispo" ||
+         pecas[0].nome === "cavalo")
+      )){
+        return true
+      }
+
+    else
+      return false
+  }
+
+  verificarInsuficienciaComDoisCavalos(pecasA: Peca[], pecasB: Peca[]){
+    if ((pecasA.length == 0 &&
+         pecasB.length == 2 &&
+         pecasB[0].nome == "cavalo" && 
+         pecasB[1].nome == "cavalo"
+        ))
+      return true
+    else
+      return false
   }
 
   verificarEmpatePorAfogamento(){
