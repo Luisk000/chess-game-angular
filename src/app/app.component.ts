@@ -98,22 +98,10 @@ export class AppComponent {
     this.tabuleiroComponent.reiniciarPartida();
   }
 
-  empatePoInsuficiencia(){
-    this.empatar("Empate por Insuficiência");
-  }
-
-  empatePorAfogamento(){
-    this.empatar("Empate por Bloqueio");
-  }
-
-  empatePorRepeticao(){
-    this.empatar("Empate por Tríplice Repetição")
-  }
-
-  empatar(text: string){
+  empatar($event: string){
     this.jogador1Jogando = false;
     this.jogador2Jogando = false;
-    this.empateText = text;
+    this.empateText = $event;
     this.tabuleiroComponent.jogoParado = true;
     this.empate = true;
     setTimeout(() => {

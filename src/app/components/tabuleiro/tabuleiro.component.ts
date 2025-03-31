@@ -31,8 +31,7 @@ export class TabuleiroComponent implements OnInit {
   @Output() timeJogandoEmit = new EventEmitter();
   @Output() xequeEmit = new EventEmitter();
   @Output() xequeMateEmit = new EventEmitter();
-  @Output() empatePorAfogamentoEmit = new EventEmitter();
-  @Output() empatePorRepeticaoEmit = new EventEmitter();
+  @Output() empateEmit = new EventEmitter<string>();
 
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
@@ -236,7 +235,7 @@ export class TabuleiroComponent implements OnInit {
         (this.verificarInsuficienciaComDoisCavalos(pecasBrancas, pecasPretas) ||
          this.verificarInsuficienciaComDoisCavalos(pecasPretas, pecasBrancas))
       ){
-        console.log("empate")
+        this.empateEmit.emit("Empate por Insuficiência de Material")
       }
   }
 
@@ -270,7 +269,7 @@ export class TabuleiroComponent implements OnInit {
     var acoes: Posicao[] = casas.map(c => c.peca!).map(p => p.acoes).flat();
 
     if (acoes.length == 0)
-      this.empatePorAfogamentoEmit.emit();  
+      this.empateEmit.emit("Empate por Afogamento");  
   }
 
   verificarEmpatePorRepeticao(){
@@ -299,7 +298,7 @@ export class TabuleiroComponent implements OnInit {
       this.statusTabuleiro[length - 1] == this.statusTabuleiro[length - 5] &&
       this.statusTabuleiro[length - 5] == this.statusTabuleiro[length - 9]
     ){
-      this.empatePorRepeticaoEmit.emit();
+      this.empateEmit.emit("Empate por Tríplice Repetição");
     }
   }
 
