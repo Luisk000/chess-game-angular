@@ -55,6 +55,7 @@ export class TabuleiroComponent implements OnInit {
   primeiroTurno = true;
 
   statusTabuleiro: string[] = [];
+  turnosSemCapturaEMovimentoPeao = 0;
 
   casaDragging: Casa | undefined;
   dragging = false;
@@ -142,11 +143,20 @@ export class TabuleiroComponent implements OnInit {
 
   moverPeca(casa: Casa, coluna: number, linha: number) {
     if (casa.cor === 'LimeGreen') {
-      if (casa.peca != undefined) this.sendPecaCapturada(casa.peca);
 
+      let pecaComida = false;
+      if (casa.peca != undefined) {
+        this.sendPecaCapturada(casa.peca);
+        pecaComida = true;
+      }
 
       this.casaSelecionada!.peca!.animationState = 'moved'
       casa.peca = this.casaSelecionada!.peca;
+
+      if (pecaComida == false && casa.peca!.nome != 'peao' )
+        this.turnosSemCapturaEMovimentoPeao++
+      else
+        this.turnosSemCapturaEMovimentoPeao = 0;
 
       let posicaoAnterior = 
         this.tabuleiroJogo[this.posicaoSelecionada!.coluna][
@@ -224,6 +234,7 @@ export class TabuleiroComponent implements OnInit {
     this.verificarEmpatePorInsuficiencia()
     this.verificarEmpatePorAfogamento()
     this.verificarEmpatePorRepeticao()
+    this.verificarEmpatePor50acoes()
   }
 
   verificarEmpatePorInsuficiencia(){
@@ -304,12 +315,24 @@ export class TabuleiroComponent implements OnInit {
       this.statusTabuleiro[length - 5] == this.statusTabuleiro[length - 9]
     ){
       this.empateOpcionalEmit.emit(
-        { 
+        {
           empateTextAtual: "Mesma posição repetida três vezes", 
           empateTextOpcional: "Empate por Tríplice Repetição"
         }
       );
     }
+  }
+
+  verificarEmpatePor50acoes(){
+    if (this.turnosSemCapturaEMovimentoPeao == 50)
+      this.empateOpcionalEmit.emit(
+        {
+          empateTextAtual: "50 lances sem movimentar um peão ou capturar uma peça", 
+          empateTextOpcional: "Empate pela regra dos 50 lances"
+        }
+      );
+    else if (this.turnosSemCapturaEMovimentoPeao == 75)
+      this.empateEmit.emit("Empate pela regra dos 75 lances")
   }
 
   //#endregion
