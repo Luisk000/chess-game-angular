@@ -17,6 +17,8 @@ import { PreparacaoService } from '../../services/preparacao.service';
 import { move } from '../../animations';
 import { RoqueService } from '../../services/roque.service';
 import { PeaoService } from '../../services/peao.service';
+import { EmpateService } from '../../services/empate.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -54,19 +56,27 @@ export class TabuleiroComponent implements OnInit {
   jogoParado = false;
   primeiroTurno = true;
 
-  statusTabuleiro: string[] = [];
-  turnosSemCapturaEMovimentoPeao = 0;
-
   casaDragging: Casa | undefined;
   dragging = false;
+
+  empateSubscription: Subscription;
+  opcaoEmpateSubscription: Subscription;
 
   constructor(
     private pecaService: PecaService,
     private xequeService: XequeService,
     private roqueService: RoqueService,
     private peaoService: PeaoService,
-    private preparacaoService: PreparacaoService
-  ) {}
+    private preparacaoService: PreparacaoService,
+    private empateService: EmpateService
+  ) {
+    this.empateSubscription = this.empateService.empatar.subscribe(data => {
+      this.empateEmit.emit(data)
+    });
+    this.opcaoEmpateSubscription = this.empateService.opcaoEmpatar.subscribe(data => {
+      this.empateOpcionalEmit.emit(data);
+    })
+  }
 
   async ngOnInit() {
     await this.prepararTabuleiro();
@@ -105,7 +115,7 @@ export class TabuleiroComponent implements OnInit {
       });
     });
     if (this.primeiroTurno == false)
-      this.verificarEmpate();
+      this.empateService.verificarEmpate(this.tabuleiroJogo, this.timeJogando);
   }
 
   verificarSegurancaAposMovimentos(peca: Peca, coluna: number, linha: number){
@@ -153,10 +163,7 @@ export class TabuleiroComponent implements OnInit {
       this.casaSelecionada!.peca!.animationState = 'moved'
       casa.peca = this.casaSelecionada!.peca;
 
-      if (pecaComida == false && casa.peca!.nome != 'peao' )
-        this.turnosSemCapturaEMovimentoPeao++
-      else
-        this.turnosSemCapturaEMovimentoPeao = 0;
+      this.empateService.verificarTurnosSemMovimentarPeaoOuCapturar(pecaComida, casa.peca!.nome);
 
       let posicaoAnterior = 
         this.tabuleiroJogo[this.posicaoSelecionada!.coluna][
@@ -213,7 +220,8 @@ export class TabuleiroComponent implements OnInit {
     this.posicaoEnPassant = undefined;
     this.timeEnPassant = '';
 
-    this.statusTabuleiro = [];
+    this.empateService.statusTabuleiro = [];
+    this.empateService.turnosSemCapturaEMovimentoPeao = 0;
   
     this.posicaoRoque = '';
   
@@ -227,115 +235,6 @@ export class TabuleiroComponent implements OnInit {
 
     this.primeiroTurno = false;
   }
-
-  //#region Empate
-
-  verificarEmpate(){
-    this.verificarEmpatePorInsuficiencia()
-    this.verificarEmpatePorAfogamento()
-    this.verificarEmpatePorRepeticao()
-    this.verificarEmpatePor50acoes()
-  }
-
-  verificarEmpatePorInsuficiencia(){
-    var casas = this.tabuleiroJogo.flat();
-    
-    var pecas: Peca[] = casas.map(c => c.peca!).filter(p => p && p.nome != 'rei')
-    
-    var pecasBrancas = pecas.filter(p => p.cor === "branco")
-    var pecasPretas = pecas.filter(p => p.cor === "preto")
-
-    if ((this.verificarInsuficiencia(pecasBrancas) &&
-         this.verificarInsuficiencia(pecasPretas)) 
-         ||
-        (this.verificarInsuficienciaComDoisCavalos(pecasBrancas, pecasPretas) ||
-         this.verificarInsuficienciaComDoisCavalos(pecasPretas, pecasBrancas))
-      )
-        this.empateEmit.emit("Empate por Insuficiência de Material")
-
-  }
-
-  verificarInsuficiencia(pecas: Peca[]){
-    if (pecas.length == 0 || 
-      (
-        pecas.length == 1 &&
-        (pecas[0].nome === "bispo" ||
-         pecas[0].nome === "cavalo")
-      )){
-        return true
-      }
-
-    else
-      return false
-  }
-
-  verificarInsuficienciaComDoisCavalos(pecasA: Peca[], pecasB: Peca[]){
-    if ((pecasA.length == 0 &&
-         pecasB.length == 2 &&
-         pecasB[0].nome == "cavalo" && 
-         pecasB[1].nome == "cavalo"
-        ))
-      return true
-    else
-      return false
-  }
-
-  verificarEmpatePorAfogamento(){
-    var casas: Casa[] = this.tabuleiroJogo.flat().filter(c => c.peca && c.peca.cor == this.timeJogando)
-    var acoes: Posicao[] = casas.map(c => c.peca!).map(p => p.acoes).flat();
-
-    if (acoes.length == 0)
-      this.empateEmit.emit("Empate por Afogamento");  
-  }
-
-  verificarEmpatePorRepeticao(){
-    this.montarStatusTabuleiro();
-
-    if (this.statusTabuleiro.length >= 9)
-      this.verificarRepeticao()
-  }
-
-  montarStatusTabuleiro(){
-    let statusTabuleiro = "";
-    for (let coluna of this.tabuleiroJogo){
-      for (let casa of coluna){
-        if (casa.peca)
-          statusTabuleiro = statusTabuleiro + casa.peca.nome + casa.peca.cor + "."
-        else
-          statusTabuleiro = statusTabuleiro + "vazio."
-      }
-    }
-    this.statusTabuleiro.push(statusTabuleiro)
-  }
-
-  verificarRepeticao(){
-    let length = this.statusTabuleiro.length
-    if (
-      this.statusTabuleiro[length - 1] == this.statusTabuleiro[length - 5] &&
-      this.statusTabuleiro[length - 5] == this.statusTabuleiro[length - 9]
-    ){
-      this.empateOpcionalEmit.emit(
-        {
-          empateTextAtual: "Mesma posição repetida três vezes", 
-          empateTextOpcional: "Empate por Tríplice Repetição"
-        }
-      );
-    }
-  }
-
-  verificarEmpatePor50acoes(){
-    if (this.turnosSemCapturaEMovimentoPeao == 50)
-      this.empateOpcionalEmit.emit(
-        {
-          empateTextAtual: "50 lances sem movimentar um peão ou capturar uma peça", 
-          empateTextOpcional: "Empate pela regra dos 50 lances"
-        }
-      );
-    else if (this.turnosSemCapturaEMovimentoPeao == 75)
-      this.empateEmit.emit("Empate pela regra dos 75 lances")
-  }
-
-  //#endregion
 
   //#region Xeque
 
