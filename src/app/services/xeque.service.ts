@@ -9,16 +9,53 @@ import { Rainha } from '../models/pecas/rainha.mode';
 import { Cavalo } from '../models/pecas/cavalo.model';
 import { Peao } from '../models/pecas/peao.model';
 import { PecaService } from './peca.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class XequeService {
+
   constructor(private pecaService: PecaService) {}
 
   xequeMate = false;
+  casaXeque: Casa | undefined;
 
-  verificarXeque(
+  private xequeSubject = new Subject<Casa>();
+  private xequeMateSubject = new Subject<void>();
+
+  xequeObs = this.xequeSubject.asObservable();
+  xequeMateObs = this.xequeMateSubject.asObservable();
+
+  verificarXeque(posicaoRei: Posicao, timeJogando: string, tabuleiro: Casa[][]){
+    let xeque: Posicao | undefined = this.verificarPosicoesXeque(
+      timeJogando,
+      posicaoRei!,
+      tabuleiro
+    );
+
+    if (this.isXequeMate()){
+      this.xequeMateSubject.next();
+    }
+    else if (xeque != undefined) {
+      this.casaXeque = tabuleiro[xeque.coluna][xeque.linha];
+      this.xequeSubject.next(this.casaXeque)
+    }
+  }
+
+  apagarLocalXeque() {
+    if (this.casaXeque){
+      this.casaXeque.cor = '';
+      this.casaXeque = undefined;
+    }
+  }
+
+  manterXeques(casa: Casa) {
+    if (this.casaXeque == casa)
+      casa.cor = 'red';
+  }
+
+  verificarPosicoesXeque(
     cor: string,
     posicaoRei: Posicao,
     tabuleiro: Casa[][]

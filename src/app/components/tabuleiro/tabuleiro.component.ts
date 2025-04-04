@@ -61,6 +61,8 @@ export class TabuleiroComponent implements OnInit {
 
   empateSubscription: Subscription;
   opcaoEmpateSubscription: Subscription;
+  xequeSubscription: Subscription;
+  xequeMateSubscription: Subscription;
 
   constructor(
     private pecaService: PecaService,
@@ -70,11 +72,23 @@ export class TabuleiroComponent implements OnInit {
     private preparacaoService: PreparacaoService,
     private empateService: EmpateService
   ) {
-    this.empateSubscription = this.empateService.empatar.subscribe(data => {
+    this.empateSubscription = this.empateService.empatarObs.subscribe(data => {
       this.empateEmit.emit(data)
     });
-    this.opcaoEmpateSubscription = this.empateService.opcaoEmpatar.subscribe(data => {
+
+    this.opcaoEmpateSubscription = this.empateService.opcaoEmpatarObs.subscribe(data => {
       this.empateOpcionalEmit.emit(data);
+    })
+
+    this.xequeSubscription = this.xequeService.xequeObs.subscribe(data => {
+      this.xequeEmit.emit();
+      this.casaXeque = data;
+      this.casaXeque.cor = 'red';
+    })
+
+    this.xequeMateSubscription = this.xequeService.xequeMateObs.subscribe(data => {
+      this.xequeMateEmit.emit();
+      this.jogoParado = true;
     })
   }
 
@@ -187,7 +201,7 @@ export class TabuleiroComponent implements OnInit {
   apagarLocaisAnteriores() {
     for (let casa of this.acoesPossiveis) {
       casa.cor = '';
-      this.manterXeques(casa);
+      this.xequeService.manterXeques(casa);
     }
     this.acoesPossiveis = [];
   }
@@ -239,7 +253,6 @@ export class TabuleiroComponent implements OnInit {
   //#region Xeque
 
   verificarXequePeca(peca: Peca, posicao: Posicao) {
-    this.apagarLocalXeque();
     if (peca instanceof Rei) {
       if (peca.cor === 'branco') this.posicaoReiTimeBranco = posicao;
       else this.posicaoReiTimePreto = posicao;
@@ -251,39 +264,14 @@ export class TabuleiroComponent implements OnInit {
     else 
       posicaoRei = this.posicaoReiTimePreto;
 
-    this.verificarXeque(posicaoRei!)
-  }
-
-  verificarXeque(posicaoRei: Posicao){
-    let xeque: Posicao | undefined = this.xequeService.verificarXeque(
-      this.timeJogando,
+    this.xequeService.apagarLocalXeque();
+    this.xequeService.verificarXeque(      
       posicaoRei!,
+      this.timeJogando,
       this.tabuleiroJogo
     );
-
-    if (this.xequeService.isXequeMate()){
-      this.xequeMateEmit.emit();
-      this.jogoParado = true;
-    }
-    else if (xeque != undefined) {
-      this.xequeEmit.emit();
-      let casaXeque = this.tabuleiroJogo[xeque.coluna][xeque.linha];
-      casaXeque.cor = 'red';
-      this.casaXeque = casaXeque;
-    }
   }
 
-  apagarLocalXeque() {
-    if (this.casaXeque){
-      this.casaXeque.cor = '';
-      this.casaXeque = undefined;
-    }
-  }
-
-  manterXeques(casa: Casa) {
-    if (this.casaXeque == casa)
-      casa.cor = 'red';
-  }
 
   //#endregion
 
@@ -377,7 +365,11 @@ export class TabuleiroComponent implements OnInit {
         posicaoRei = this.posicaoReiTimeBranco!;
       
       this.verificarMovimentos();
-      this.verificarXeque(posicaoRei);
+      this.xequeService.verificarXeque(      
+        posicaoRei!,
+        this.timeJogando,
+        this.tabuleiroJogo
+      );
       
       this.posicaoPromocao = undefined;
       this.jogoParado = false;

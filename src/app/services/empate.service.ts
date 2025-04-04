@@ -15,8 +15,8 @@ export class EmpateService {
   private empatarSubject = new Subject<string>();
   private empateOpcionalSubject = new Subject<{empateTextAtual: string, empateTextOpcional: string}>();
   
-  empatar = this.empatarSubject.asObservable();
-  opcaoEmpatar = this.empateOpcionalSubject.asObservable();
+  empatarObs = this.empatarSubject.asObservable();
+  opcaoEmpatarObs = this.empateOpcionalSubject.asObservable();
 
   constructor() { }
 
