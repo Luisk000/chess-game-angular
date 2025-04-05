@@ -133,16 +133,12 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarSegurancaAposMovimentos(peca: Peca, coluna: number, linha: number){
-    var posicaoRei: Posicao;
-    if (peca.cor === 'branco')
-      posicaoRei = this.posicaoReiTimeBranco!
-    else
-      posicaoRei = this.posicaoReiTimePreto!
+    let posicaoRei = this.getPosicaoRei(peca.cor);
 
     this.xequeService.verificarSegurancaAposMovimentos(
       new Posicao(coluna, linha),
       peca,
-      posicaoRei,
+      posicaoRei!,
       this.tabuleiroJogo
     )
   }
@@ -223,6 +219,13 @@ export class TabuleiroComponent implements OnInit {
     this.verificarMovimentos();
   }
 
+  getPosicaoRei(cor: string): Posicao | undefined {
+    if (cor === 'branco') 
+      return this.posicaoReiTimeBranco;
+    else 
+      return this.posicaoReiTimePreto;
+  }
+
   async reiniciarPartida(){
     this.acoesPossiveis = [];
     this.casaXeque = undefined;
@@ -250,19 +253,15 @@ export class TabuleiroComponent implements OnInit {
     this.primeiroTurno = false;
   }
 
-  //#region Xeque
-
   verificarXequePeca(peca: Peca, posicao: Posicao) {
     if (peca instanceof Rei) {
-      if (peca.cor === 'branco') this.posicaoReiTimeBranco = posicao;
-      else this.posicaoReiTimePreto = posicao;
+      if (peca.cor === 'branco') 
+        this.posicaoReiTimeBranco = posicao;
+      else 
+        this.posicaoReiTimePreto = posicao;
     }
 
-    let posicaoRei: Posicao | undefined;
-    if (this.timeJogando === 'branco') 
-      posicaoRei = this.posicaoReiTimeBranco;
-    else 
-      posicaoRei = this.posicaoReiTimePreto;
+    let posicaoRei = this.getPosicaoRei(this.timeJogando);
 
     this.xequeService.apagarLocalXeque();
     this.xequeService.verificarXeque(      
@@ -271,9 +270,6 @@ export class TabuleiroComponent implements OnInit {
       this.tabuleiroJogo
     );
   }
-
-
-  //#endregion
 
   //#region Roque
 
@@ -320,7 +316,8 @@ export class TabuleiroComponent implements OnInit {
     else if (posicao == 'preto-right')
       this.posicaoReiTimeBranco = new Posicao(0, 6);
 
-    if (posicao == 'branco-left') this.posicaoReiTimeBranco = new Posicao(7, 2);
+    if (posicao == 'branco-left') 
+      this.posicaoReiTimeBranco = new Posicao(7, 2);
     else if (posicao == 'preto-left')
       this.posicaoReiTimeBranco = new Posicao(0, 2);
   }
@@ -358,11 +355,7 @@ export class TabuleiroComponent implements OnInit {
       let ca = this.posicaoPromocao.linha;
       this.tabuleiroJogo[col][ca].peca = $event;
 
-      let posicaoRei: Posicao;
-      if ($event.cor == "branco")
-        posicaoRei = this.posicaoReiTimePreto!;
-      else 
-        posicaoRei = this.posicaoReiTimeBranco!;
+      let posicaoRei = this.getPosicaoRei($event.cor);
       
       this.verificarMovimentos();
       this.xequeService.verificarXeque(      
