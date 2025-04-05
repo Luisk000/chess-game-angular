@@ -7,6 +7,7 @@ import { Torre } from '../models/pecas/torre.model';
 import { Peao } from '../models/pecas/peao.model';
 import { Casa } from '../models/casa.model';
 import { PecaService } from './peca.service';
+import * as flatted from 'flatted';
 
 @Injectable({
   providedIn: 'root',
@@ -23,9 +24,7 @@ export class PreparacaoService {
   }
 
   async prepararTabuleiroJogo(tabuleiroBackground: Casa[][], pecaService: PecaService) {
-    let tabuleiroCopia = await JSON.parse(
-      JSON.stringify(tabuleiroBackground)
-    );
+    let tabuleiroCopia = await flatted.parse(flatted.stringify(tabuleiroBackground));
 
     let tabuleiroJogo = await this.prepararPecas(
       tabuleiroCopia,

@@ -150,7 +150,7 @@ export class XequeService {
     posicaoRoque: string,
     tabuleiro: Casa[][]
   ){
-    var tabuleiroHipotetico: Casa[][] = JSON.parse(JSON.stringify(tabuleiro));
+    var tabuleiroHipotetico: Casa[][] = flatted.parse(flatted.stringify(tabuleiro));
     this.retrieveInstances(tabuleiroHipotetico);
     var posicaoRei: Posicao;
 
