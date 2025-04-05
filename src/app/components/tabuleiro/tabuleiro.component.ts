@@ -47,8 +47,6 @@ export class TabuleiroComponent implements OnInit {
   posicaoReiTimePreto: Posicao | undefined;
 
   posicaoPromocao: Posicao | undefined;
-  posicaoEnPassant: Posicao | undefined = undefined;
-  timeEnPassant = '';
   posicaoRoque = '';
 
   timeJogando = 'branco';
@@ -62,6 +60,8 @@ export class TabuleiroComponent implements OnInit {
   opcaoEmpateSubscription: Subscription;
   xequeSubscription: Subscription;
   xequeMateSubscription: Subscription;
+  promocaoSubscription: Subscription;
+  enPassantSubscription: Subscription;
 
   constructor(
     private pecaService: PecaService,
@@ -79,16 +79,26 @@ export class TabuleiroComponent implements OnInit {
       this.empateOpcionalEmit.emit(data);
     })
 
-    this.xequeSubscription = this.xequeService.xequeObs.subscribe(data => {
+    this.xequeSubscription = this.xequeService.xequeObs.subscribe(() => {
       this.xequeEmit.emit();
     })
 
-    this.xequeMateSubscription = this.xequeService.xequeMateObs.subscribe(data => {
+    this.xequeMateSubscription = this.xequeService.xequeMateObs.subscribe(() => {
       this.xequeMateEmit.emit();
       this.jogoParado = true;
     })
-  }
 
+    this.promocaoSubscription = this.peaoService.promocaoObs.subscribe(data => {
+      this.posicaoPromocao = new Posicao(data.coluna, data.linha);
+      this.jogoParado = true;
+    })
+
+    this.enPassantSubscription = this.peaoService.enPassantObs.subscribe(data => {
+      this.sendPecaCapturada(data);
+    })
+  }
+  
+  //#region all
   async ngOnInit() {
     await this.prepararTabuleiro();
     this.verificarMovimentos();
@@ -111,8 +121,9 @@ export class TabuleiroComponent implements OnInit {
   verificarMovimentos() {
     this.tabuleiroJogo.map((coluna, colunaIndex) => {
       coluna.map((casa, casaIndex) => {
-        if (casa.peca) {                 
-          this.verificarEnPassantInicio(casa.peca);
+        if (casa.peca) {       
+          if (casa.peca instanceof Peao)          
+            this.peaoService.verificarEnPassantInicio(casa.peca);
           casa.peca.verMovimentosPossiveis(
             new Posicao(colunaIndex, casaIndex),
             casa.peca.cor,
@@ -180,7 +191,7 @@ export class TabuleiroComponent implements OnInit {
       posicaoAnterior.peca = undefined;
 
       this.apagarLocaisAnteriores();
-      this.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha);
+      this.peaoService.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha, this.tabuleiroJogo);
       this.verificarRoqueFinal(casa.peca!);
       this.mudarTimeJogando();
       this.verificarXequePeca(casa.peca!, new Posicao(coluna, linha));
@@ -232,8 +243,8 @@ export class TabuleiroComponent implements OnInit {
     this.jogoParado = false;
      
     this.posicaoPromocao = undefined;
-    this.posicaoEnPassant = undefined;
-    this.timeEnPassant = '';
+    this.peaoService.posicaoEnPassant = undefined;
+    this.peaoService.timeEnPassant = '';
 
     this.empateService.statusTabuleiro = [];
     this.empateService.turnosSemCapturaEMovimentoPeao = 0;
@@ -322,81 +333,21 @@ export class TabuleiroComponent implements OnInit {
     }
   }
 
-  //#region Peão
-
-  verificarAcoesEspeciaisPeaoFinal(peca: Peca, coluna: number, linha: number) {
-    if (peca instanceof Peao) {
-      if (peca.iniciando == true) {
-        this.posicaoEnPassant = this.peaoService.verificarEnPassant(
-          peca,
-          coluna,
-          linha
-        );
-        this.timeEnPassant = peca.cor;
-        peca.iniciando = false;
-      }
-      this.realizarEnPassant(peca.cor, coluna, linha);
-      this.realizarPromocao(peca, coluna, linha);
-    }
-  }
-
-  realizarPromocao(peao: Peao, coluna: number, linha: number) {
-    if (this.peaoService.verificarPromocao(peao, coluna)) {
-      this.posicaoPromocao = new Posicao(coluna, linha);
-      this.jogoParado = true;
-    }
-  }
-
   confirmarPecaPeaoPromovido($event: Peca) {
-    if (this.posicaoPromocao) {
-      let col = this.posicaoPromocao.coluna;
-      let ca = this.posicaoPromocao.linha;
-      this.tabuleiroJogo[col][ca].peca = $event;
-
-      let posicaoRei = this.getPosicaoRei(this.timeJogando);
-      
-      this.verificarMovimentos();
-      this.xequeService.verificarXeque(      
-        posicaoRei!,
-        this.timeJogando,
-        this.tabuleiroJogo
-      );
-      
-      this.posicaoPromocao = undefined;
-      this.jogoParado = false;
-    }
+    let posicaoRei = this.getPosicaoRei(this.timeJogando);
+    this.peaoService.confirmarPecaPeaoPromovido($event, this.posicaoPromocao, this.tabuleiroJogo)
+        
+    this.verificarMovimentos();
+    this.xequeService.verificarXeque(      
+      posicaoRei!,
+      this.timeJogando,
+      this.tabuleiroJogo
+    );
+    
+    this.jogoParado = false;
+    this.posicaoPromocao = undefined;
   }
 
-  verificarEnPassantInicio(peca: Peca) {
-    if (peca instanceof Peao){
-      if (this.timeEnPassant != peca.cor && 
-        !peca.posicaoEnPassant
-      )
-        peca.posicaoEnPassant = this.posicaoEnPassant;
-      else
-        peca.posicaoEnPassant = undefined;     
-    }
-  }
-
-  realizarEnPassant(cor: string, coluna: number, linha: number) {
-    if (
-      this.posicaoEnPassant &&
-      coluna == this.posicaoEnPassant.coluna &&
-      linha == this.posicaoEnPassant.linha
-    ) {
-      let pecaCapturada: Peca | undefined;
-
-      if (cor == 'branco') {
-        pecaCapturada = this.tabuleiroJogo[coluna + 1][linha].peca;
-        this.tabuleiroJogo[coluna + 1][linha].peca = undefined;
-      } else {
-        pecaCapturada = this.tabuleiroJogo[coluna - 1][linha].peca;
-        this.tabuleiroJogo[coluna - 1][linha].peca = undefined;
-      }
-
-      if (pecaCapturada) this.sendPecaCapturada(pecaCapturada);
-    }
-  }
   //#endregion
 
   //#region Dragging

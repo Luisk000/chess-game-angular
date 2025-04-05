@@ -3,13 +3,78 @@ import { Posicao } from '../models/posicao.model';
 import { Casa } from '../models/casa.model';
 import { Peca } from '../models/peca.model';
 import { Peao } from '../models/pecas/peao.model';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeaoService {
 
+  posicaoEnPassant: Posicao | undefined;
+  timeEnPassant: string = "";
+
+  private promocaoSubject = new Subject<Posicao>();
+  private enPassantSubject = new Subject<Peca>();
+
+  promocaoObs = this.promocaoSubject.asObservable();
+  enPassantObs = this.enPassantSubject.asObservable();
+
   constructor() { }
+
+    verificarAcoesEspeciaisPeaoFinal(peca: Peca, coluna: number, linha: number, tabuleiro: Casa[][]) {
+      if (peca instanceof Peao) {
+        if (peca.iniciando == true) {
+          this.posicaoEnPassant = this.getPosicaoEnPassant(
+            peca,
+            coluna,
+            linha
+          );
+          this.timeEnPassant = peca.cor;
+          peca.iniciando = false;
+        }
+
+        let pecaCapturadaEnPassant = this.verificarEnPassant(peca.cor, coluna, linha, tabuleiro);
+        if (pecaCapturadaEnPassant)
+          this.enPassantSubject.next(pecaCapturadaEnPassant)
+
+        if (this.verificarPromocao(peca, coluna))
+          this.promocaoSubject.next(new Posicao(coluna, linha));
+      }
+    }
+  
+    confirmarPecaPeaoPromovido($event: Peca, posicaoPromocao: Posicao | undefined, tabuleiro: Casa[][]) {
+        let col = posicaoPromocao!.coluna;
+        let ca = posicaoPromocao!.linha;
+        tabuleiro[col][ca].peca = $event;
+    }
+  
+    verificarEnPassantInicio(peca: Peao) {
+      if (this.timeEnPassant != peca.cor && 
+        !peca.posicaoEnPassant
+      )
+        peca.posicaoEnPassant = this.posicaoEnPassant;
+      else
+        peca.posicaoEnPassant = undefined;   
+    }
+  
+    verificarEnPassant(cor: string, coluna: number, linha: number, tabuleiro: Casa[][]): Peca | undefined {
+      let pecaCapturada: Peca | undefined = undefined;
+      
+      if (
+        this.posicaoEnPassant &&
+        coluna == this.posicaoEnPassant.coluna &&
+        linha == this.posicaoEnPassant.linha
+      ) {
+        if (cor == 'branco') {
+          pecaCapturada = tabuleiro[coluna + 1][linha].peca;
+          tabuleiro[coluna + 1][linha].peca = undefined;
+        } else {
+          pecaCapturada = tabuleiro[coluna - 1][linha].peca;
+          tabuleiro[coluna - 1][linha].peca = undefined;
+        }
+      }
+      return pecaCapturada;
+    }
 
   verificarMovimentosPeaoMover(acoesPossiveis: Posicao[], cor: string, tabuleiro: Casa[][]): Posicao[] | []{
       let acoes: Posicao[] = [];
@@ -69,7 +134,7 @@ export class PeaoService {
     return peao.promocao; 
   }
   
-  verificarEnPassant(peao: Peao, coluna: number, linha: number): Posicao | undefined {
+  getPosicaoEnPassant(peao: Peao, coluna: number, linha: number): Posicao | undefined {
     let posicaoEnPassant = undefined;
   
     if (peao.cor == 'branco' && coluna == 4)

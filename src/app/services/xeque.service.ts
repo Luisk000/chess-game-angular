@@ -10,6 +10,7 @@ import { Cavalo } from '../models/pecas/cavalo.model';
 import { Peao } from '../models/pecas/peao.model';
 import { PecaService } from './peca.service';
 import { Subject } from 'rxjs';
+import * as flatted from 'flatted';
 
 @Injectable({
   providedIn: 'root',
@@ -124,7 +125,7 @@ export class XequeService {
     posicaoRei: Posicao,
     tabuleiro: Casa[][]
   ) {
-    var tabuleiroHipotetico = JSON.parse(JSON.stringify(tabuleiro));
+    let tabuleiroHipotetico = flatted.parse(flatted.stringify(tabuleiro));
     this.retrieveInstances(tabuleiroHipotetico);
 
     tabuleiroHipotetico[posicaoAntiga.coluna][posicaoAntiga.linha].peca =
