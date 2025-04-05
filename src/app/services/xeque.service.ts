@@ -201,6 +201,24 @@ export class XequeService {
     
   }
 
+  verificarSegurancaAposRoqueDuplo(
+    cor: string,
+    posicaoRoque: string,
+    tabuleiro: Casa[][]
+  ){
+    var xequeLeft = this.verificarSegurancaAposRoque(
+      cor + "left",
+      posicaoRoque,
+      tabuleiro
+    )
+
+    var xequeRight = this.verificarSegurancaAposRoque(
+      cor + "right",
+      posicaoRoque,
+      tabuleiro
+    )
+}
+
   verificarXequeProximoTurno(
     cor: string,
     posicaoRei: Posicao,
