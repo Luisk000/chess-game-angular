@@ -39,7 +39,6 @@ export class TabuleiroComponent implements OnInit {
   tabuleiroJogo: Casa[][] = [];
   tabuleiroBackground: Casa[][] = [];
   acoesPossiveis: Casa[] = [];
-  casaXeque: Casa | undefined;
 
   casaSelecionada: Casa | undefined;
   posicaoSelecionada: Posicao | undefined;
@@ -82,8 +81,6 @@ export class TabuleiroComponent implements OnInit {
 
     this.xequeSubscription = this.xequeService.xequeObs.subscribe(data => {
       this.xequeEmit.emit();
-      this.casaXeque = data;
-      this.casaXeque.cor = 'red';
     })
 
     this.xequeMateSubscription = this.xequeService.xequeMateObs.subscribe(data => {
@@ -214,7 +211,8 @@ export class TabuleiroComponent implements OnInit {
 
   mudarTimeJogando() {
     this.timeJogandoEmit.emit();
-    if (this.timeJogando === 'branco') this.timeJogando = 'preto';
+    if (this.timeJogando === 'branco') 
+      this.timeJogando = 'preto';
     else this.timeJogando = 'branco';
     this.verificarMovimentos();
   }
@@ -228,7 +226,7 @@ export class TabuleiroComponent implements OnInit {
 
   async reiniciarPartida(){
     this.acoesPossiveis = [];
-    this.casaXeque = undefined;
+    this.xequeService.casaXeque = undefined;
   
     this.timeJogando = 'branco';
     this.jogoParado = false;
@@ -271,23 +269,19 @@ export class TabuleiroComponent implements OnInit {
     );
   }
 
-  //#region Roque
-
   verificarRoqueInicio(peca: Peca) {
-    if (
-      (peca instanceof Torre || peca instanceof Rei) &&
-      this.casaXeque == undefined
-    ){
+    if ((peca instanceof Torre || peca instanceof Rei) &&
+      this.xequeService.casaXeque == undefined)
+    {
       let posicaoRoque = this.roqueService.verificarPosicaoRoque(peca);
-      if (posicaoRoque != ""){
-        if (this.xequeService.verificarSegurancaAposRoque(
-          peca.cor, posicaoRoque, this.tabuleiroJogo) == true
+      if (posicaoRoque != "" && 
+          this.xequeService.verificarSegurancaAposRoque(
+            peca.cor, 
+            posicaoRoque, 
+            this.tabuleiroJogo) == true
         )
-          this.posicaoRoque = this.roqueService.verificarPosicaoRoque(peca);
-      }
-        
+          this.posicaoRoque = posicaoRoque;
     }
-
     else this.posicaoRoque = '';
   }
 
@@ -308,21 +302,25 @@ export class TabuleiroComponent implements OnInit {
     this.apagarLocaisAnteriores();
     this.mudarTimeJogando();
     this.setPosicaoReiRoque(posicaoRoque);
+
   }
 
   setPosicaoReiRoque(posicao: string) {
-    if (posicao == 'branco-right')
-      this.posicaoReiTimeBranco = new Posicao(7, 6);
-    else if (posicao == 'preto-right')
-      this.posicaoReiTimeBranco = new Posicao(0, 6);
-
-    if (posicao == 'branco-left') 
-      this.posicaoReiTimeBranco = new Posicao(7, 2);
-    else if (posicao == 'preto-left')
-      this.posicaoReiTimeBranco = new Posicao(0, 2);
+    switch (posicao){
+      case 'branco-right':
+        this.posicaoReiTimeBranco = new Posicao(7, 6);
+        break;
+      case 'preto-right':
+        this.posicaoReiTimePreto = new Posicao(0, 6);
+        break;
+      case 'branco-left': 
+        this.posicaoReiTimeBranco = new Posicao(7, 2);
+        break;
+      case 'preto-left':
+        this.posicaoReiTimePreto = new Posicao(0, 2); 
+        break;
+    }
   }
-
-  //#endregion
 
   //#region Peão
 
@@ -355,7 +353,7 @@ export class TabuleiroComponent implements OnInit {
       let ca = this.posicaoPromocao.linha;
       this.tabuleiroJogo[col][ca].peca = $event;
 
-      let posicaoRei = this.getPosicaoRei($event.cor);
+      let posicaoRei = this.getPosicaoRei(this.timeJogando);
       
       this.verificarMovimentos();
       this.xequeService.verificarXeque(      

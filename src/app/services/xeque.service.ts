@@ -21,7 +21,7 @@ export class XequeService {
   xequeMate = false;
   casaXeque: Casa | undefined;
 
-  private xequeSubject = new Subject<Casa>();
+  private xequeSubject = new Subject<void>();
   private xequeMateSubject = new Subject<void>();
 
   xequeObs = this.xequeSubject.asObservable();
@@ -39,7 +39,8 @@ export class XequeService {
     }
     else if (xeque != undefined) {
       this.casaXeque = tabuleiro[xeque.coluna][xeque.linha];
-      this.xequeSubject.next(this.casaXeque)
+      this.casaXeque.cor = 'red';
+      this.xequeSubject.next()
     }
   }
 

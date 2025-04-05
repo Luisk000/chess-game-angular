@@ -3,7 +3,6 @@ import { Rei } from '../models/pecas/rei.model';
 import { Torre } from '../models/pecas/torre.model';
 import { Casa } from '../models/casa.model';
 import { PecaService } from './peca.service';
-import { XequeService } from './xeque.service';
 
 @Injectable({
   providedIn: 'root'
