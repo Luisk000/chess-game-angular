@@ -205,18 +205,31 @@ export class XequeService {
     cor: string,
     posicaoRoque: string,
     tabuleiro: Casa[][]
-  ){
+  ): string{
     var xequeLeft = this.verificarSegurancaAposRoque(
-      cor + "left",
-      posicaoRoque,
+      cor,
+      posicaoRoque + "-left",
       tabuleiro
     )
 
     var xequeRight = this.verificarSegurancaAposRoque(
-      cor + "right",
-      posicaoRoque,
+      cor,
+      posicaoRoque + "-right",
       tabuleiro
     )
+
+    if (xequeLeft == true && xequeRight == true)
+      return cor;   
+
+    else if (xequeLeft == true && xequeRight == false)
+      return cor + "-left";
+    
+    else if (xequeLeft == false && xequeRight == true)
+      return cor + "-right";
+    
+    else
+      return "";
+    
 }
 
   verificarXequeProximoTurno(

@@ -56,13 +56,6 @@ export class TabuleiroComponent implements OnInit {
   casaDragging: Casa | undefined;
   dragging = false;
 
-  empateSubscription: Subscription;
-  opcaoEmpateSubscription: Subscription;
-  xequeSubscription: Subscription;
-  xequeMateSubscription: Subscription;
-  promocaoSubscription: Subscription;
-  enPassantSubscription: Subscription;
-
   constructor(
     private pecaService: PecaService,
     private xequeService: XequeService,
@@ -71,29 +64,29 @@ export class TabuleiroComponent implements OnInit {
     private preparacaoService: PreparacaoService,
     private empateService: EmpateService
   ) {
-    this.empateSubscription = this.empateService.empatarObs.subscribe(data => {
+    this.empateService.empatarObs.subscribe(data => {
       this.empateEmit.emit(data)
     });
 
-    this.opcaoEmpateSubscription = this.empateService.opcaoEmpatarObs.subscribe(data => {
+    this.empateService.opcaoEmpatarObs.subscribe(data => {
       this.empateOpcionalEmit.emit(data);
     })
 
-    this.xequeSubscription = this.xequeService.xequeObs.subscribe(() => {
+    this.xequeService.xequeObs.subscribe(() => {
       this.xequeEmit.emit();
     })
 
-    this.xequeMateSubscription = this.xequeService.xequeMateObs.subscribe(() => {
+    this.xequeService.xequeMateObs.subscribe(() => {
       this.xequeMateEmit.emit();
       this.jogoParado = true;
     })
 
-    this.promocaoSubscription = this.peaoService.promocaoObs.subscribe(data => {
+    this.peaoService.promocaoObs.subscribe(data => {
       this.posicaoPromocao = new Posicao(data.coluna, data.linha);
       this.jogoParado = true;
     })
 
-    this.enPassantSubscription = this.peaoService.enPassantObs.subscribe(data => {
+    this.peaoService.enPassantObs.subscribe(data => {
       this.sendPecaCapturada(data);
     })
   }
@@ -285,13 +278,22 @@ export class TabuleiroComponent implements OnInit {
       this.xequeService.casaXeque == undefined)
     {
       let posicaoRoque = this.roqueService.verificarPosicaoRoque(peca);
-      if (posicaoRoque != "" && 
-          this.xequeService.verificarSegurancaAposRoque(
+      if (posicaoRoque != "") {
+        if (posicaoRoque === "preto" || posicaoRoque === "branco"){
+          this.posicaoRoque = this.xequeService.verificarSegurancaAposRoqueDuplo(
             peca.cor, 
             posicaoRoque, 
-            this.tabuleiroJogo) == true
+            this.tabuleiroJogo
+          );
+        }
+        else if (
+          this.xequeService.verificarSegurancaAposRoque(
+          peca.cor, 
+          posicaoRoque, 
+          this.tabuleiroJogo) == true
         )
           this.posicaoRoque = posicaoRoque;
+      } 
     }
     else this.posicaoRoque = '';
   }

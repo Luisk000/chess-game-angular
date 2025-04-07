@@ -36,8 +36,8 @@ export class PreparacaoService {
 
   async prepararPecas(tabuleiro: Casa[][], pecaService: PecaService) {
    for (let i = 0; i <= 7; i++) {
-      tabuleiro[1][i].peca = new Peao('preto', pecaService);
-      tabuleiro[6][i].peca = new Peao('branco', pecaService);
+      /* tabuleiro[1][i].peca = new Peao('preto', pecaService);
+      tabuleiro[6][i].peca = new Peao('branco', pecaService); */
     }  
 
     tabuleiro[0][0].peca = new Torre('preto', pecaService);
@@ -45,7 +45,7 @@ export class PreparacaoService {
     tabuleiro[7][0].peca = new Torre('branco', pecaService);
     tabuleiro[7][7].peca = new Torre('branco', pecaService);
 
-    tabuleiro[0][1].peca = new Cavalo('preto', pecaService);
+    /* tabuleiro[0][1].peca = new Cavalo('preto', pecaService);
     tabuleiro[0][6].peca = new Cavalo('preto', pecaService);
     tabuleiro[7][1].peca = new Cavalo('branco', pecaService);
     tabuleiro[7][6].peca = new Cavalo('branco', pecaService);
@@ -53,7 +53,7 @@ export class PreparacaoService {
     tabuleiro[0][2].peca = new Bispo('preto', pecaService);
     tabuleiro[0][5].peca = new Bispo('preto', pecaService);
     tabuleiro[7][2].peca = new Bispo('branco', pecaService);
-    tabuleiro[7][5].peca = new Bispo('branco', pecaService);
+    tabuleiro[7][5].peca = new Bispo('branco', pecaService); */
 
     tabuleiro[0][4].peca = new Rei('preto', pecaService);
     tabuleiro[7][4].peca = new Rei('branco', pecaService);
