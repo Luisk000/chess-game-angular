@@ -95,7 +95,7 @@ export class TabuleiroComponent implements OnInit {
 
   async ngOnInit() {
     await this.prepararTabuleiro();
-    this.verificarMovimentos();
+    await this.verificarMovimentos();
   }
 
   async prepararTabuleiro() {
@@ -111,22 +111,26 @@ export class TabuleiroComponent implements OnInit {
     this.posicaoReiTimePreto = new Posicao(0, 4);
   }
 
-  verificarMovimentos() {
-    this.tabuleiroJogo.map((coluna, colunaIndex) => {
-      coluna.map((casa, casaIndex) => {
-        if (casa.peca) {       
+  async verificarMovimentos() {
+    for (let colIndex = 0; colIndex <= 7; colIndex++) {
+      for (let caIndex = 0; caIndex <= 7; caIndex++) {
+
+        var casa = this.tabuleiroJogo[colIndex][caIndex];
+        if (casa.peca)
+        {
           if (casa.peca instanceof Peao)          
             this.peaoService.verificarEnPassantInicio(casa.peca);
+
           casa.peca.verMovimentosPossiveis(
-            new Posicao(colunaIndex, casaIndex),
+            new Posicao(colIndex, caIndex),
             casa.peca.cor,
             this.tabuleiroJogo
           );
-          this.verificarSegurancaAposMovimentos(casa.peca, colunaIndex, casaIndex)     
+          
+          this.verificarSegurancaAposMovimentos(casa.peca, colIndex, caIndex)  
         }
-        
-      });
-    });
+      }
+    }
   }
 
   verificarSegurancaAposMovimentos(peca: Peca, coluna: number, linha: number){
@@ -141,55 +145,66 @@ export class TabuleiroComponent implements OnInit {
   }
 
   mostrarAcoesPossiveis(peca: Peca, coluna: number, linha: number) {
-    if (peca.cor == this.timeJogando && !this.jogoParado){
+    if (peca.cor == this.timeJogando && !this.jogoParado)
+    {
+      this.prepararParaMostrarAcoesPossiveis(peca, coluna, linha);
 
-      this.resetAnimationState();
-      this.casaSelecionada = this.tabuleiroJogo[coluna][linha];
-      this.posicaoSelecionada = new Posicao(coluna, linha);
-      this.verificarRoqueInicio(peca);
-      this.apagarLocaisAnteriores();
-  
-      for (let acao of peca.acoes) {
+      for (let acao of peca.acoes) 
+      {
         let acaoPecaSelecionada = this.tabuleiroJogo[acao.coluna][acao.linha];
-  
         acaoPecaSelecionada.cor = 'LimeGreen';
         this.acoesPossiveis.push(acaoPecaSelecionada);
       }
     }
   }
 
-  moverPeca(casa: Casa, coluna: number, linha: number) {
-    if (casa.cor === 'LimeGreen') {
+  prepararParaMostrarAcoesPossiveis(peca: Peca, coluna: number, linha: number){
+    this.resetAnimationState();
+    this.casaSelecionada = this.tabuleiroJogo[coluna][linha];
+    this.posicaoSelecionada = new Posicao(coluna, linha);
+    this.verificarRoqueInicio(peca);
+    this.apagarLocaisAnteriores();
+  }
 
+  moverPeca(casa: Casa, coluna: number, linha: number) {
+    if (casa.cor === 'LimeGreen') 
+    {
       let pecaComida = false;
-      if (casa.peca != undefined) {
+      if (casa.peca != undefined) 
+      {
         this.sendPecaCapturada(casa.peca);
         pecaComida = true;
       }
 
       this.casaSelecionada!.peca!.animationState = 'moved'
       casa.peca = this.casaSelecionada!.peca;
-
-      this.empateService.verificarTurnosSemMovimentarPeaoOuCapturar(pecaComida, casa.peca!.nome);
-
-      let posicaoAnterior = 
-        this.tabuleiroJogo[this.posicaoSelecionada!.coluna][
-          this.posicaoSelecionada!.linha
-          ]
-      
-      posicaoAnterior.peca = undefined;
-
-      this.apagarLocaisAnteriores();
-      this.peaoService.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha, this.tabuleiroJogo);
-      this.verificarRoqueFinal(casa.peca!);
-      this.mudarTimeJogando();
-      this.verificarXequePeca(casa.peca!, new Posicao(coluna, linha));
-      this.empateService.verificarEmpate(this.tabuleiroJogo, this.timeJogando);
+  
+      this.prepararJogoAposMovimento(casa, coluna, linha, pecaComida)
     }
   }
 
   sendPecaCapturada(peca: Peca) {
     this.pecaCapturadaEmit.emit(peca);
+  }
+
+  prepararJogoAposMovimento(casa: Casa, coluna: number, linha: number, pecaComida: boolean){
+    this.empateService.verificarTurnosSemMovimentarPeaoOuCapturar(pecaComida, casa.peca!.nome);
+    this.apagarPecaPosicaoAnterior();
+    this.apagarLocaisAnteriores();
+    this.peaoService.verificarAcoesEspeciaisPeaoFinal(casa.peca!, coluna, linha, this.tabuleiroJogo);
+    this.verificarRoqueFinal(casa.peca!);
+    this.mudarTimeJogando();
+    this.verificarXequePeca(casa.peca!, new Posicao(coluna, linha));
+    this.empateService.verificarEmpate(this.tabuleiroJogo, this.timeJogando);
+  }
+
+  apagarPecaPosicaoAnterior(){
+    let posicaoAnterior = 
+    this.tabuleiroJogo[this.posicaoSelecionada!.coluna][
+      this.posicaoSelecionada!.linha
+      ]
+  
+    posicaoAnterior.peca = undefined;
   }
 
   apagarLocaisAnteriores() {
@@ -214,7 +229,8 @@ export class TabuleiroComponent implements OnInit {
     this.timeJogandoEmit.emit();
     if (this.timeJogando === 'branco') 
       this.timeJogando = 'preto';
-    else this.timeJogando = 'branco';
+    else 
+      this.timeJogando = 'branco';
     this.verificarMovimentos();
   }
 
@@ -226,7 +242,8 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarXequePeca(peca: Peca, posicao: Posicao) {
-    if (peca instanceof Rei) {
+    if (peca instanceof Rei) 
+    {
       if (peca.cor === 'branco') 
         this.posicaoReiTimeBranco = posicao;
       else 
@@ -282,10 +299,13 @@ export class TabuleiroComponent implements OnInit {
       this.pecaService
     );
     this.posicaoRoque = '';
+    this.prepararJogoAposRoque(posicaoRoque)
+  }
+
+  prepararJogoAposRoque(posicaoRoque: string){
     this.apagarLocaisAnteriores();
     this.mudarTimeJogando();
     this.setPosicaoReiRoque(posicaoRoque);
-
   }
 
   setPosicaoReiRoque(posicao: string) {
@@ -306,9 +326,13 @@ export class TabuleiroComponent implements OnInit {
   }
 
   confirmarPecaPeaoPromovido($event: Peca) {
-    let posicaoRei = this.getPosicaoRei(this.timeJogando);
     this.peaoService.confirmarPecaPeaoPromovido($event, this.posicaoPromocao, this.tabuleiroJogo)
-        
+    
+    let posicaoRei = this.getPosicaoRei(this.timeJogando);
+    this.prepararJogoAposPeaoPromovido(posicaoRei!)    
+  }
+
+  prepararJogoAposPeaoPromovido(posicaoRei: Posicao){
     this.verificarMovimentos();
     this.xequeService.verificarXeque(      
       posicaoRei!,
