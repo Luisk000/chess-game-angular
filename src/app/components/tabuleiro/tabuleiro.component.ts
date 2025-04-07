@@ -18,7 +18,7 @@ import { move } from '../../animations';
 import { RoqueService } from '../../services/roque.service';
 import { PeaoService } from '../../services/peao.service';
 import { EmpateService } from '../../services/empate.service';
-import { Subscription } from 'rxjs';
+import { getAnimationData } from '../../move-animation.helper';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -64,7 +64,6 @@ export class TabuleiroComponent implements OnInit {
     private empateService: EmpateService
   ) {
     this.empateService.empatarObs.subscribe(data => {
-      console.log("empate")
       if (this.xequeService.isXequeMate() == false)
         this.empateEmit.emit(data)
     });
@@ -74,7 +73,6 @@ export class TabuleiroComponent implements OnInit {
     })
 
     this.xequeService.xequeObs.subscribe(() => {
-      console.log("xeque")
       this.xequeEmit.emit();
     })
 
@@ -94,6 +92,7 @@ export class TabuleiroComponent implements OnInit {
   }
   
   //#region all
+
   async ngOnInit() {
     await this.prepararTabuleiro();
     this.verificarMovimentos();
@@ -226,30 +225,6 @@ export class TabuleiroComponent implements OnInit {
       return this.posicaoReiTimePreto;
   }
 
-  async reiniciarPartida(){
-    this.acoesPossiveis = [];
-    this.xequeService.casaXeque = undefined;
-    this.xequeService.xequeMate = false;
-  
-    this.timeJogando = 'branco';
-    this.jogoParado = false;
-     
-    this.posicaoPromocao = undefined;
-    this.peaoService.posicaoEnPassant = undefined;
-    this.peaoService.timeEnPassant = '';
-
-    this.empateService.statusTabuleiro = [];
-    this.empateService.turnosSemCapturaEMovimentoPeao = 0;
-  
-    this.posicaoRoque = '';
-  
-    this.casaDragging = undefined;
-    this.dragging = false;
-
-    await this.prepararTabuleiro();
-    this.verificarMovimentos();
-  }
-
   verificarXequePeca(peca: Peca, posicao: Posicao) {
     if (peca instanceof Rei) {
       if (peca.cor === 'branco') 
@@ -345,6 +320,37 @@ export class TabuleiroComponent implements OnInit {
     this.posicaoPromocao = undefined;
   }
 
+  getAnimation(peca: Peca, coluna: number, linha: number) {
+    if (!this.dragging)
+      return getAnimationData(peca, this.posicaoSelecionada, coluna, linha)
+    else 
+      return '';
+  }
+
+  async reiniciarPartida(){
+    this.acoesPossiveis = [];
+    this.xequeService.casaXeque = undefined;
+    this.xequeService.xequeMate = false;
+  
+    this.timeJogando = 'branco';
+    this.jogoParado = false;
+     
+    this.posicaoPromocao = undefined;
+    this.peaoService.posicaoEnPassant = undefined;
+    this.peaoService.timeEnPassant = '';
+
+    this.empateService.statusTabuleiro = [];
+    this.empateService.turnosSemCapturaEMovimentoPeao = 0;
+  
+    this.posicaoRoque = '';
+  
+    this.casaDragging = undefined;
+    this.dragging = false;
+
+    await this.prepararTabuleiro();
+    this.verificarMovimentos();
+  }
+
   //#endregion
 
   //#region Dragging
@@ -380,36 +386,6 @@ export class TabuleiroComponent implements OnInit {
       this.apagarLocaisAnteriores();
     }
     this.dragging = false;
-  }
-
-  //#endregion
-
-  //#region Animation
-
-  getXMovement(linha: number) {
-    let valor = 0;
-    if (this.posicaoSelecionada) 
-      valor = this.posicaoSelecionada.linha - linha;
-    return valor;
-  }
-
-  getYMovement(coluna: number) {
-    let valor = 0;
-    if (this.posicaoSelecionada)
-      valor = this.posicaoSelecionada.coluna - coluna;
-    return valor;
-  }
-
-  getAnimation(peca: Peca, coluna: number, linha: number) {
-    if (!this.dragging)
-      return {
-        value: peca.animationState,
-        params: {
-          X: this.getXMovement(linha) * 70,
-          Y: this.getYMovement(coluna) * 70,
-        },
-      };
-    else return '';
   }
 
   //#endregion
