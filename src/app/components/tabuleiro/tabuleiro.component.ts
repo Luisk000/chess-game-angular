@@ -51,7 +51,6 @@ export class TabuleiroComponent implements OnInit {
 
   timeJogando = 'branco';
   jogoParado = false;
-  primeiroTurno = true;
 
   casaDragging: Casa | undefined;
   dragging = false;
@@ -65,7 +64,9 @@ export class TabuleiroComponent implements OnInit {
     private empateService: EmpateService
   ) {
     this.empateService.empatarObs.subscribe(data => {
-      this.empateEmit.emit(data)
+      console.log("empate")
+      if (this.xequeService.isXequeMate() == false)
+        this.empateEmit.emit(data)
     });
 
     this.empateService.opcaoEmpatarObs.subscribe(data => {
@@ -73,6 +74,7 @@ export class TabuleiroComponent implements OnInit {
     })
 
     this.xequeService.xequeObs.subscribe(() => {
+      console.log("xeque")
       this.xequeEmit.emit();
     })
 
@@ -95,7 +97,6 @@ export class TabuleiroComponent implements OnInit {
   async ngOnInit() {
     await this.prepararTabuleiro();
     this.verificarMovimentos();
-    this.primeiroTurno = false;
   }
 
   async prepararTabuleiro() {
@@ -122,15 +123,11 @@ export class TabuleiroComponent implements OnInit {
             casa.peca.cor,
             this.tabuleiroJogo
           );
-
-          if (this.primeiroTurno == false)
-            this.verificarSegurancaAposMovimentos(casa.peca, colunaIndex, casaIndex)     
+          this.verificarSegurancaAposMovimentos(casa.peca, colunaIndex, casaIndex)     
         }
         
       });
     });
-    if (this.primeiroTurno == false)
-      this.empateService.verificarEmpate(this.tabuleiroJogo, this.timeJogando);
   }
 
   verificarSegurancaAposMovimentos(peca: Peca, coluna: number, linha: number){
@@ -188,6 +185,7 @@ export class TabuleiroComponent implements OnInit {
       this.verificarRoqueFinal(casa.peca!);
       this.mudarTimeJogando();
       this.verificarXequePeca(casa.peca!, new Posicao(coluna, linha));
+      this.empateService.verificarEmpate(this.tabuleiroJogo, this.timeJogando);
     }
   }
 
@@ -231,6 +229,7 @@ export class TabuleiroComponent implements OnInit {
   async reiniciarPartida(){
     this.acoesPossiveis = [];
     this.xequeService.casaXeque = undefined;
+    this.xequeService.xequeMate = false;
   
     this.timeJogando = 'branco';
     this.jogoParado = false;
@@ -246,13 +245,9 @@ export class TabuleiroComponent implements OnInit {
   
     this.casaDragging = undefined;
     this.dragging = false;
-    
-    this.primeiroTurno = true;
 
     await this.prepararTabuleiro();
     this.verificarMovimentos();
-
-    this.primeiroTurno = false;
   }
 
   verificarXequePeca(peca: Peca, posicao: Posicao) {

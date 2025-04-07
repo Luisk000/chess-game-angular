@@ -205,7 +205,7 @@ export class XequeService {
     cor: string,
     posicaoRoque: string,
     tabuleiro: Casa[][]
-  ): string{
+  ): string {
     var xequeLeft = this.verificarSegurancaAposRoque(
       cor,
       posicaoRoque + "-left",
@@ -229,7 +229,6 @@ export class XequeService {
     
     else
       return "";
-    
 }
 
   verificarXequeProximoTurno(

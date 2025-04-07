@@ -78,7 +78,7 @@ export class AppComponent {
       this.vitoriaJogador1 = true;
       this.jogador2Jogando = false;
     }
-    
+      this.empatePopUp = false;
       this.xequeMate = true;
       setTimeout(() => {
         this.xequeMate = false;
@@ -95,6 +95,9 @@ export class AppComponent {
     this.vitoriaJogador1 = false;
     this.vitoriaJogador2 = false;
 
+    this.xequeJogador1 = false;
+    this.xequeJogador2 = false;
+
     this.empate = false;
     this.empateTextAtual = "";
     this.empatePopUp = false;
@@ -110,6 +113,7 @@ export class AppComponent {
     this.empateTextOpcional = "";
     this.empateTextAtual = $event;
     this.tabuleiroComponent.jogoParado = true;
+    this.xeque = false;
     this.empate = true;
     this.empatePopUp = true;
     setTimeout(() => {

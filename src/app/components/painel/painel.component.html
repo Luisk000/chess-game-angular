@@ -17,7 +17,7 @@
     </p>
   </div>
   <div class="title-jogando">
-    <p class="title-xeque" *ngIf="xeque">Em Xeque!</p>
+    <p class="title-xeque" *ngIf="xeque && !empateTextAtual">Em Xeque!</p>
     <p class="title-vitoria" *ngIf="vitoria">Vitória!</p>
     <p class="title-empate" *ngIf="empateTextAtual">{{empateTextAtual}}</p>
   </div>
