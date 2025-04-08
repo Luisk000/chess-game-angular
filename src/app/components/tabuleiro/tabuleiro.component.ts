@@ -19,6 +19,7 @@ import { RoqueService } from '../../services/roque.service';
 import { PeaoService } from '../../services/peao.service';
 import { EmpateService } from '../../services/empate.service';
 import { getAnimationData } from '../../move-animation.helper';
+import { XequeRoqueService } from '../../services/xeque-roque.service';
 
 @Component({
   selector: 'app-tabuleiro',
@@ -59,6 +60,7 @@ export class TabuleiroComponent implements OnInit {
     private pecaService: PecaService,
     private xequeService: XequeService,
     private roqueService: RoqueService,
+    private xequeRoqueService: XequeRoqueService,
     private peaoService: PeaoService,
     private preparacaoService: PreparacaoService,
     private empateService: EmpateService
@@ -127,7 +129,11 @@ export class TabuleiroComponent implements OnInit {
             this.tabuleiroJogo
           );
           
-          this.verificarSegurancaAposMovimentos(casa.peca, colIndex, caIndex)  
+          this.verificarSegurancaAposMovimentos(
+            casa.peca, 
+            colIndex, 
+            caIndex
+          );
         }
       }
     }
@@ -241,14 +247,16 @@ export class TabuleiroComponent implements OnInit {
       return this.posicaoReiTimePreto;
   }
 
+  setPosicaoRei(rei: Rei,  posicao: Posicao){
+    if (rei.cor === 'branco') 
+      this.posicaoReiTimeBranco = posicao;
+    else 
+      this.posicaoReiTimePreto = posicao;
+  }
+
   verificarXequePeca(peca: Peca, posicao: Posicao) {
     if (peca instanceof Rei) 
-    {
-      if (peca.cor === 'branco') 
-        this.posicaoReiTimeBranco = posicao;
-      else 
-        this.posicaoReiTimePreto = posicao;
-    }
+      this.setPosicaoRei(peca, posicao)
 
     let posicaoRei = this.getPosicaoRei(this.timeJogando);
 
@@ -261,34 +269,14 @@ export class TabuleiroComponent implements OnInit {
   }
 
   verificarRoqueInicio(peca: Peca) {
-    if ((peca instanceof Torre || peca instanceof Rei) &&
-      this.xequeService.casaXeque == undefined)
-    {
-      let posicaoRoque = this.roqueService.verificarPosicaoRoque(peca);
-      if (posicaoRoque != "") {
-        if (posicaoRoque === "preto" || posicaoRoque === "branco"){
-          this.posicaoRoque = this.xequeService.verificarSegurancaAposRoqueDuplo(
-            peca.cor, 
-            posicaoRoque, 
-            this.tabuleiroJogo
-          );
-        }
-        else if (
-          this.xequeService.verificarSegurancaAposRoque(
-          peca.cor, 
-          posicaoRoque, 
-          this.tabuleiroJogo) == true
-        )
-          this.posicaoRoque = posicaoRoque;
-      } 
-    }
-    else this.posicaoRoque = '';
+    this.posicaoRoque = this.xequeRoqueService.verificarRoqueInicio(peca, this.tabuleiroJogo);
   }
 
   verificarRoqueFinal(peca: Peca) {
     if (peca instanceof Torre || peca instanceof Rei) {
       this.posicaoRoque = '';
-      if (peca.iniciando == true) peca.iniciando = false;
+      if (peca.iniciando == true) 
+        peca.iniciando = false;
     }
   }
 
@@ -305,25 +293,14 @@ export class TabuleiroComponent implements OnInit {
   prepararJogoAposRoque(posicaoRoque: string){
     this.apagarLocaisAnteriores();
     this.mudarTimeJogando();
-    this.setPosicaoReiRoque(posicaoRoque);
+    this.roqueService.setPosicaoReiRoque(
+      posicaoRoque, 
+      this.posicaoReiTimeBranco, 
+      this.posicaoReiTimePreto
+    );
   }
 
-  setPosicaoReiRoque(posicao: string) {
-    switch (posicao){
-      case 'branco-right':
-        this.posicaoReiTimeBranco = new Posicao(7, 6);
-        break;
-      case 'preto-right':
-        this.posicaoReiTimePreto = new Posicao(0, 6);
-        break;
-      case 'branco-left': 
-        this.posicaoReiTimeBranco = new Posicao(7, 2);
-        break;
-      case 'preto-left':
-        this.posicaoReiTimePreto = new Posicao(0, 2); 
-        break;
-    }
-  }
+
 
   confirmarPecaPeaoPromovido($event: Peca) {
     this.peaoService.confirmarPecaPeaoPromovido($event, this.posicaoPromocao, this.tabuleiroJogo)
@@ -389,6 +366,7 @@ export class TabuleiroComponent implements OnInit {
 
   drop(event: any, coluna: number, linha: number) {
     this.casaDragging = undefined;
+    this.posicaoRoque = "";
     this.moverPeca(event.container.data, coluna, linha);
   }
 

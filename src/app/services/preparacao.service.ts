@@ -36,8 +36,8 @@ export class PreparacaoService {
 
   async prepararPecas(tabuleiro: Casa[][], pecaService: PecaService) {
    for (let i = 0; i <= 7; i++) {
-      tabuleiro[1][i].peca = new Peao('preto', pecaService);
-      tabuleiro[6][i].peca = new Peao('branco', pecaService);
+      /* tabuleiro[1][i].peca = new Peao('preto', pecaService);
+      tabuleiro[6][i].peca = new Peao('branco', pecaService); */
     }  
 
     tabuleiro[0][0].peca = new Torre('preto', pecaService);
