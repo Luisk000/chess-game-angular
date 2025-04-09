@@ -56,7 +56,7 @@ export class TabuleiroComponent implements OnInit {
   casaDragging: Casa | undefined;
   dragging = false;
 
-  roqueRealizado = false;
+  animacaoRoquePosicao = "";
 
   constructor(
     private pecaService: PecaService,
@@ -94,8 +94,10 @@ export class TabuleiroComponent implements OnInit {
       this.sendPecaCapturada(data);
     })
 
-    this.roqueService.realizarRoqueObs.subscribe(() => {
-      this.roqueRealizado = true;
+    this.roqueService.realizarRoqueObs.subscribe((data) => {
+      console.log(this.animacaoRoquePosicao)
+      this.animacaoRoquePosicao = data;
+      console.log(this.animacaoRoquePosicao)
     })
   }
   
@@ -329,41 +331,58 @@ export class TabuleiroComponent implements OnInit {
   }
 
   getAnimation(peca: Peca, coluna: number, linha: number) {
-    /*  if (!this.dragging)
+    if (this.animacaoRoquePosicao)
+      return this.getAnimationRoque(new Posicao(coluna, linha))
+    
+    if (!this.dragging)
       return getAnimationData(peca, this.posicaoSelecionada, coluna, linha)
     else 
       return ''; 
- */
-    if (this.roqueRealizado == true)
-      return this.getAnimationRoque(
-        peca,
-        new Posicao(7, 4),
-        new Posicao(7, 6),
-        new Posicao(7, 7),
-        new Posicao(7, 5)
-      )
-      else
-        return '';
   }
 
-  getAnimationRoque(peca: Peca, posicaoRei: Posicao, novaPosicaoRei: Posicao, posicaoTorre: Posicao, novaPosicaoTorre: Posicao){
-    if (peca instanceof Rei){
-      var rei = this.tabuleiroJogo[novaPosicaoRei.coluna][novaPosicaoRei.linha].peca!
-      console.log(rei)
-      console.log("roque rei aqui")
-      return getAnimationData(rei, posicaoRei, novaPosicaoRei.coluna, novaPosicaoRei.linha)
+  getAnimationRoque(posicaoAtual: Posicao){
+    let posicaoRei: Posicao;
+    let novaPosicaoRei: Posicao;
+    let posicaoTorre: Posicao;
+    let novaPosicaoTorre: Posicao;
+
+    if (this.animacaoRoquePosicao == "branco-left"){
+      posicaoRei = new Posicao(7, 4);
+      novaPosicaoRei = new Posicao(7, 2);
+      posicaoTorre = new Posicao(7, 0);
+      novaPosicaoTorre = new Posicao(7, 3);
     }
-    else if (peca instanceof Torre){
-      var torre = this.tabuleiroJogo[novaPosicaoTorre.coluna][novaPosicaoTorre.linha].peca!
-      console.log(torre)
-      console.log("roque torre aqui")
-      return getAnimationData(torre, posicaoTorre, novaPosicaoTorre.coluna, novaPosicaoTorre.linha)
+    else if (this.animacaoRoquePosicao == "branco-right"){
+      posicaoRei = new Posicao(7, 4);
+      novaPosicaoRei = new Posicao(7, 6);
+      posicaoTorre = new Posicao(7, 7);
+      novaPosicaoTorre = new Posicao(7, 5);
+    }
+    else if (this.animacaoRoquePosicao == "preto-left"){
+      posicaoRei = new Posicao(7, 4);
+      novaPosicaoRei = new Posicao(7, 2);
+      posicaoTorre = new Posicao(7, 0);
+      novaPosicaoTorre = new Posicao(7, 3);
+    }
+    else if (this.animacaoRoquePosicao == "preto-right"){
+      posicaoRei = new Posicao(0, 4);
+      novaPosicaoRei = new Posicao(0, 6);
+      posicaoTorre = new Posicao(0, 7);
+      novaPosicaoTorre = new Posicao(0, 5);
+    }
+
+    if (novaPosicaoRei!.coluna == posicaoAtual.coluna && novaPosicaoRei!.linha == posicaoAtual.linha)
+    {   
+      var rei = this.tabuleiroJogo[novaPosicaoRei!.coluna][novaPosicaoRei!.linha].peca!
+      return getAnimationData(rei, posicaoRei!, novaPosicaoRei!.coluna, novaPosicaoRei!.linha)
+    }
+    else if (novaPosicaoTorre!.coluna == posicaoAtual.coluna && novaPosicaoTorre!.linha == posicaoAtual.linha)
+    {
+      var torre = this.tabuleiroJogo[novaPosicaoTorre!.coluna][novaPosicaoTorre!.linha].peca!
+      return getAnimationData(torre, posicaoTorre!, novaPosicaoTorre!.coluna, novaPosicaoTorre!.linha)
     }
     else 
       return '';
-    
-
-
   }
 
   async reiniciarPartida(){

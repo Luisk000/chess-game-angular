@@ -5,6 +5,7 @@ import { Casa } from '../models/casa.model';
 import { PecaService } from './peca.service';
 import { Posicao } from '../models/posicao.model';
 import { Subject } from 'rxjs';
+import { Peca } from '../models/peca.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class RoqueService {
   private verificarSegurancaRoqueSubject = new Subject<void>();
   verificarSegurancaRoqueObs = this.verificarSegurancaRoqueSubject.asObservable();
 
-  private realizarRoqueSubject = new Subject<void>();
+  private realizarRoqueSubject = new Subject<string>();
   realizarRoqueObs = this.realizarRoqueSubject.asObservable();
 
   constructor() {}
@@ -41,6 +42,8 @@ export class RoqueService {
 
   verificarPosicaoRoque(peca: Torre | Rei): string {
     let posicaoRoque = '';
+    this.realizarRoqueSubject.next('')
+    
     if (peca.cor == 'branco') {
       if (peca.roquePequeno == true && peca.roqueGrande == true)
         posicaoRoque = 'branco';
@@ -86,27 +89,40 @@ export class RoqueService {
       tabuleiro[7][4].peca = undefined;
       tabuleiro[7][6].peca = new Rei('branco', pecaService);
       tabuleiro[7][5].peca = new Torre('branco', pecaService);
-      tabuleiro[7][6].peca!.animationState = 'moved';
-      tabuleiro[7][5].peca!.animationState = 'moved';
-      this.realizarRoqueSubject.next()
+
+      this.realizarAnimacao(tabuleiro[7][6].peca!, tabuleiro[7][5].peca!, posicao)
+
     } else if (posicao == 'preto-right') {
       tabuleiro[0][7].peca = undefined;
       tabuleiro[0][4].peca = undefined;
       tabuleiro[0][6].peca = new Rei('preto', pecaService);
       tabuleiro[0][5].peca = new Torre('preto', pecaService);
+
+      this.realizarAnimacao(tabuleiro[0][6].peca!, tabuleiro[0][5].peca!, posicao)
     }
     if (posicao == 'branco-left') {
       tabuleiro[7][0].peca = undefined;
       tabuleiro[7][4].peca = undefined;
       tabuleiro[7][2].peca = new Rei('branco', pecaService);
       tabuleiro[7][3].peca = new Torre('branco', pecaService);
-    } else if (posicao == 'preto-left') {
+
+      this.realizarAnimacao(tabuleiro[7][2].peca!, tabuleiro[7][3].peca!, posicao)
+    } 
+    else if (posicao == 'preto-left') {
       tabuleiro[0][0].peca = undefined;
       tabuleiro[0][4].peca = undefined;
       tabuleiro[0][2].peca = new Rei('preto', pecaService);
       tabuleiro[0][3].peca = new Torre('preto', pecaService);
+
+      this.realizarAnimacao(tabuleiro[0][2].peca!, tabuleiro[0][3].peca!, posicao)
     }
     return tabuleiro;
+  }
+
+  private realizarAnimacao(rei: Peca, torre: Peca, posicao: string){
+    rei.animationState = 'moved';
+    torre.animationState = 'moved';
+    this.realizarRoqueSubject.next(posicao)
   }
 
   private verificarRoqueRei(time: string, tabuleiro: Casa[][]): boolean {
