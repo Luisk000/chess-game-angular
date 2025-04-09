@@ -14,6 +14,9 @@ export class RoqueService {
   private verificarSegurancaRoqueSubject = new Subject<void>();
   verificarSegurancaRoqueObs = this.verificarSegurancaRoqueSubject.asObservable();
 
+  private realizarRoqueSubject = new Subject<void>();
+  realizarRoqueObs = this.realizarRoqueSubject.asObservable();
+
   constructor() {}
 
   verificarRoquePequeno(time: string, tabuleiro: Casa[][]): boolean {
@@ -83,6 +86,9 @@ export class RoqueService {
       tabuleiro[7][4].peca = undefined;
       tabuleiro[7][6].peca = new Rei('branco', pecaService);
       tabuleiro[7][5].peca = new Torre('branco', pecaService);
+      tabuleiro[7][6].peca!.animationState = 'moved';
+      tabuleiro[7][5].peca!.animationState = 'moved';
+      this.realizarRoqueSubject.next()
     } else if (posicao == 'preto-right') {
       tabuleiro[0][7].peca = undefined;
       tabuleiro[0][4].peca = undefined;
