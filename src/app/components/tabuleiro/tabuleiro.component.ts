@@ -95,7 +95,6 @@ export class TabuleiroComponent implements OnInit {
     })
 
     this.roqueService.realizarRoqueObs.subscribe((data) => {
-      console.log(this.animacaoRoquePosicao)
       this.animacaoRoquePosicao = data;
       console.log(this.animacaoRoquePosicao)
     })
@@ -230,6 +229,7 @@ export class TabuleiroComponent implements OnInit {
   }
 
   resetAnimationState(){
+    this.animacaoRoquePosicao = '';
     this.tabuleiroJogo.map((coluna) => {
       coluna.map((casa) => {
         if (casa.peca)
@@ -359,10 +359,10 @@ export class TabuleiroComponent implements OnInit {
       novaPosicaoTorre = new Posicao(7, 5);
     }
     else if (this.animacaoRoquePosicao == "preto-left"){
-      posicaoRei = new Posicao(7, 4);
-      novaPosicaoRei = new Posicao(7, 2);
-      posicaoTorre = new Posicao(7, 0);
-      novaPosicaoTorre = new Posicao(7, 3);
+      posicaoRei = new Posicao(0, 4);
+      novaPosicaoRei = new Posicao(0, 2);
+      posicaoTorre = new Posicao(0, 0);
+      novaPosicaoTorre = new Posicao(0, 3);
     }
     else if (this.animacaoRoquePosicao == "preto-right"){
       posicaoRei = new Posicao(0, 4);

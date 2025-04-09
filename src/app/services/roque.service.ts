@@ -42,8 +42,7 @@ export class RoqueService {
 
   verificarPosicaoRoque(peca: Torre | Rei): string {
     let posicaoRoque = '';
-    this.realizarRoqueSubject.next('')
-    
+
     if (peca.cor == 'branco') {
       if (peca.roquePequeno == true && peca.roqueGrande == true)
         posicaoRoque = 'branco';
