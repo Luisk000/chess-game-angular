@@ -34,8 +34,10 @@ export class PainelComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['empate'] && changes['empate'].currentValue == false)
-      this.rodada = 0;   
+    if ((changes['vitoria'] && changes['vitoria'].currentValue == false) ||
+        (changes['empate'] && changes['empate'].currentValue == false) ||
+        (changes['derrota'] && changes['derrota'].currentValue == false))
+      this.rodada = 0;  
     
     if (changes['jogando'] && changes['jogando'].currentValue == true) 
       this.rodada++;

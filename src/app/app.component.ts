@@ -102,6 +102,7 @@ export class AppComponent {
     this.empateTextAtual = "";
     this.empatePopUp = false;
 
+    this.xeque = false;
     this.xequeMate = false;
 
     this.tabuleiroComponent.reiniciarPartida();
