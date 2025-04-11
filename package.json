@@ -1,29 +1,30 @@
 {
   "name": "chess-game",
   "version": "1.0.0",
+  "main": "electron.main.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-
-    "build": "ng build"
-
+    "start": "electron .",
+    "build": "ng build --configuration production",
+    "electron:build": "npm run build && electron-builder"
   },
   "build": {
-    "options": {
-      "outputPath": "dist/chess-game/browser/index.html"
-    },
     "appId": "com.chess-game",
-    "files": [
-      "dist/",
-      "electron.main.js"
-    ],
+    
     "directories": {
       "buildResources": "assets"
     },
     "win": {
-      "target": "nsis"
+      "target": "portable" 
+    },
+    "mac": {
+      "target": []
+    },
+    "linux": {
+      "target": []
     }
   },
+  "electronBuilderDisableCodeSigning": true,
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.1.0",

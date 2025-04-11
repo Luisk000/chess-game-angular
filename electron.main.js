@@ -11,17 +11,13 @@ function createWindow() {
     }
   });
 
-  win.loadFile(path.join(__dirname, 'dist/chess-game/browser/index.html'));
+  win.loadFile(path.join(__dirname, 'src', 'index.html'));
+
+  win.webContents.openDevTools();
 }
 
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
-
+app.whenReady().then(createWindow);
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
+
