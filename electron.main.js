@@ -11,7 +11,7 @@ function createWindow() {
     }
   });
 
-  win.loadFile(path.join(__dirname, 'src', 'index.html'));
+  win.loadFile(path.join(__dirname, 'dist', 'chess-game', 'browser', 'index.html'));
 
   win.webContents.openDevTools();
 }
