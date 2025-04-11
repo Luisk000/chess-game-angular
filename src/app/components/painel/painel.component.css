@@ -3,13 +3,13 @@
     height: 554px;
     padding: 10px;
     border-radius: 10px;
-    border: 3px solid rgba(0, 0, 0, 0.1);
     background: radial-gradient(
         circle at center,
-        #693514 0%,
+        #7a401c 0%,
         #743A10 50%,
         #5a2a11 100%
     );
+    border: 3px solid transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
