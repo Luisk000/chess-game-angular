@@ -23,8 +23,8 @@
         cdkDropList
         [id]="'posicao' + col + ca"
         [cdkDropListData]="casa"
-        [cdkDropListConnectedTo]="getIds()"    
         [cdkDropListSortingDisabled]="true"     
+        [cdkDropListConnectedTo]="getIds()"    
         (cdkDropListDropped)="drop($event, col, ca)"   
       >
         <span *ngIf="casa.peca" [@move]="getAnimation(casa.peca, col, ca)">
@@ -36,13 +36,14 @@
               'peca-jogando': casa.peca.cor === timeJogando && !jogoParado && !casaDragging
             }"
             [class.hidden]="casaDragging == casa && casa.cor == 'LimeGreen'"                  
-            [cdkDragDisabled]="casa.peca.cor != timeJogando || jogoParado"
             
-            cdkDrag      
-            (cdkDragStarted)="startMovement()"
+            cdkDrag    
+            (cdkDragStarted)="dragging = true"
+            (cdkDragExited)="casaDragging = undefined"
+            [cdkDragDisabled]="casa.peca.cor != timeJogando || jogoParado"
+
             (cdkDragEntered)="enterCasa($event)"
-            (cdkDragExited)="exitCasa()"
-            (mousedown)="mostrarAcoesPossiveis(casa.peca, col, ca)" 
+            (mousedown)="mostrarAcoesPossiveis(casa.peca, col, ca)"   
           />
           
         </span>

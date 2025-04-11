@@ -6,6 +6,7 @@ import { PecaService } from './peca.service';
 import { Posicao } from '../models/posicao.model';
 import { Subject } from 'rxjs';
 import { Peca } from '../models/peca.model';
+import { getAnimationData } from '../move-animation.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -213,5 +214,50 @@ export class RoqueService {
     )
       return true;
     else return false;
+  }
+
+  getAnimationRoque(posicaoAtual: Posicao, animacaoRoquePosicao: string, tabuleiro: Casa[][]){
+    let posicaoRei: Posicao;
+    let novaPosicaoRei: Posicao;
+    let posicaoTorre: Posicao;
+    let novaPosicaoTorre: Posicao;
+
+    if (animacaoRoquePosicao == "branco-left"){
+      posicaoRei = new Posicao(7, 4);
+      novaPosicaoRei = new Posicao(7, 2);
+      posicaoTorre = new Posicao(7, 0);
+      novaPosicaoTorre = new Posicao(7, 3);
+    }
+    else if (animacaoRoquePosicao == "branco-right"){
+      posicaoRei = new Posicao(7, 4);
+      novaPosicaoRei = new Posicao(7, 6);
+      posicaoTorre = new Posicao(7, 7);
+      novaPosicaoTorre = new Posicao(7, 5);
+    }
+    else if (animacaoRoquePosicao == "preto-left"){
+      posicaoRei = new Posicao(0, 4);
+      novaPosicaoRei = new Posicao(0, 2);
+      posicaoTorre = new Posicao(0, 0);
+      novaPosicaoTorre = new Posicao(0, 3);
+    }
+    else if (animacaoRoquePosicao == "preto-right"){
+      posicaoRei = new Posicao(0, 4);
+      novaPosicaoRei = new Posicao(0, 6);
+      posicaoTorre = new Posicao(0, 7);
+      novaPosicaoTorre = new Posicao(0, 5);
+    }
+
+    if (novaPosicaoRei!.coluna == posicaoAtual.coluna && novaPosicaoRei!.linha == posicaoAtual.linha)
+    {   
+      var rei = tabuleiro[novaPosicaoRei!.coluna][novaPosicaoRei!.linha].peca!
+      return getAnimationData(rei, posicaoRei!, novaPosicaoRei!.coluna, novaPosicaoRei!.linha)
+    }
+    else if (novaPosicaoTorre!.coluna == posicaoAtual.coluna && novaPosicaoTorre!.linha == posicaoAtual.linha)
+    {
+      var torre = tabuleiro[novaPosicaoTorre!.coluna][novaPosicaoTorre!.linha].peca!
+      return getAnimationData(torre, posicaoTorre!, novaPosicaoTorre!.coluna, novaPosicaoTorre!.linha)
+    }
+    else 
+      return '';
   }
 }

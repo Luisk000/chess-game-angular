@@ -99,8 +99,6 @@ export class TabuleiroComponent implements OnInit {
       console.log(this.animacaoRoquePosicao)
     })
   }
-  
-  //#region all
 
   async ngOnInit() {
     await this.prepararTabuleiro();
@@ -121,9 +119,9 @@ export class TabuleiroComponent implements OnInit {
   }
 
   async verificarMovimentos() {
-    for (let colIndex = 0; colIndex <= 7; colIndex++) {
-      for (let caIndex = 0; caIndex <= 7; caIndex++) {
-
+    for (let colIndex = 0; colIndex <= 7; colIndex++) 
+      for (let caIndex = 0; caIndex <= 7; caIndex++) 
+      {
         var casa = this.tabuleiroJogo[colIndex][caIndex];
         if (casa.peca)
         {
@@ -137,12 +135,8 @@ export class TabuleiroComponent implements OnInit {
           );
           
           this.verificarSegurancaAposMovimentos(
-            casa.peca, 
-            colIndex, 
-            caIndex
-          );
-        }
-      }
+            casa.peca, colIndex, caIndex);
+        }     
     }
   }
 
@@ -295,11 +289,11 @@ export class TabuleiroComponent implements OnInit {
       this.pecaService
     );
     
-    this.posicaoRoque = '';
     this.prepararJogoAposRoque(posicaoRoque)
   }
 
   prepararJogoAposRoque(posicaoRoque: string){
+    this.posicaoRoque = '';
     this.apagarLocaisAnteriores();
     this.mudarTimeJogando();
     this.roqueService.setPosicaoReiRoque(
@@ -308,8 +302,6 @@ export class TabuleiroComponent implements OnInit {
       this.posicaoReiTimePreto
     );
   }
-
-
 
   confirmarPecaPeaoPromovido($event: Peca) {
     this.peaoService.confirmarPecaPeaoPromovido($event, this.posicaoPromocao, this.tabuleiroJogo)
@@ -332,57 +324,15 @@ export class TabuleiroComponent implements OnInit {
 
   getAnimation(peca: Peca, coluna: number, linha: number) {
     if (this.animacaoRoquePosicao)
-      return this.getAnimationRoque(new Posicao(coluna, linha))
+      return this.roqueService.getAnimationRoque(
+        new Posicao(coluna, linha), 
+        this.animacaoRoquePosicao, 
+        this.tabuleiroJogo)
     
     if (!this.dragging)
       return getAnimationData(peca, this.posicaoSelecionada, coluna, linha)
     else 
       return ''; 
-  }
-
-  getAnimationRoque(posicaoAtual: Posicao){
-    let posicaoRei: Posicao;
-    let novaPosicaoRei: Posicao;
-    let posicaoTorre: Posicao;
-    let novaPosicaoTorre: Posicao;
-
-    if (this.animacaoRoquePosicao == "branco-left"){
-      posicaoRei = new Posicao(7, 4);
-      novaPosicaoRei = new Posicao(7, 2);
-      posicaoTorre = new Posicao(7, 0);
-      novaPosicaoTorre = new Posicao(7, 3);
-    }
-    else if (this.animacaoRoquePosicao == "branco-right"){
-      posicaoRei = new Posicao(7, 4);
-      novaPosicaoRei = new Posicao(7, 6);
-      posicaoTorre = new Posicao(7, 7);
-      novaPosicaoTorre = new Posicao(7, 5);
-    }
-    else if (this.animacaoRoquePosicao == "preto-left"){
-      posicaoRei = new Posicao(0, 4);
-      novaPosicaoRei = new Posicao(0, 2);
-      posicaoTorre = new Posicao(0, 0);
-      novaPosicaoTorre = new Posicao(0, 3);
-    }
-    else if (this.animacaoRoquePosicao == "preto-right"){
-      posicaoRei = new Posicao(0, 4);
-      novaPosicaoRei = new Posicao(0, 6);
-      posicaoTorre = new Posicao(0, 7);
-      novaPosicaoTorre = new Posicao(0, 5);
-    }
-
-    if (novaPosicaoRei!.coluna == posicaoAtual.coluna && novaPosicaoRei!.linha == posicaoAtual.linha)
-    {   
-      var rei = this.tabuleiroJogo[novaPosicaoRei!.coluna][novaPosicaoRei!.linha].peca!
-      return getAnimationData(rei, posicaoRei!, novaPosicaoRei!.coluna, novaPosicaoRei!.linha)
-    }
-    else if (novaPosicaoTorre!.coluna == posicaoAtual.coluna && novaPosicaoTorre!.linha == posicaoAtual.linha)
-    {
-      var torre = this.tabuleiroJogo[novaPosicaoTorre!.coluna][novaPosicaoTorre!.linha].peca!
-      return getAnimationData(torre, posicaoTorre!, novaPosicaoTorre!.coluna, novaPosicaoTorre!.linha)
-    }
-    else 
-      return '';
   }
 
   async reiniciarPartida(){
@@ -406,19 +356,14 @@ export class TabuleiroComponent implements OnInit {
     this.dragging = false;
 
     await this.prepararTabuleiro();
-    this.verificarMovimentos();
+    await this.verificarMovimentos();
   }
-
-  //#endregion
-
-  //#region Dragging
 
   getIds() {
     return this.tabuleiroJogo
       .map((casa, col) =>
         this.tabuleiroJogo[col].map((casa, ca) => 'posicao' + col + ca)
-      )
-      .flat();
+      ).flat();
   }
 
   drop(event: any, coluna: number, linha: number) {
@@ -431,21 +376,12 @@ export class TabuleiroComponent implements OnInit {
     this.casaDragging = event.container.data;
   }
 
-  exitCasa() {
-    this.casaDragging = undefined;
-  }
-
-  startMovement() {
-    this.dragging = true;
-  }
-
   @HostListener('document:mouseup')
   draggingEnd() {
-    if (this.dragging) {
+    if (this.dragging)
       this.apagarLocaisAnteriores();
-    }
+    
     this.dragging = false;
   }
 
-  //#endregion
 }
