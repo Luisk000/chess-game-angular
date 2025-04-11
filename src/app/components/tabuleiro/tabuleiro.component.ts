@@ -14,7 +14,7 @@ import { PecaService } from '../../services/peca.service';
 import { Posicao } from '../../models/posicao.model';
 import { XequeService } from '../../services/xeque.service';
 import { PreparacaoService } from '../../services/preparacao.service';
-import { move } from '../../animations';
+import { fade, move } from '../../animations';
 import { RoqueService } from '../../services/roque.service';
 import { PeaoService } from '../../services/peao.service';
 import { EmpateService } from '../../services/empate.service';
@@ -27,7 +27,7 @@ import { XequeRoqueService } from '../../services/xeque-roque.service';
 
   templateUrl: './tabuleiro.component.html',
   styleUrl: './tabuleiro.component.css',
-  animations: [move]
+  animations: [move, fade]
 })
 export class TabuleiroComponent implements OnInit {
   @Output() pecaCapturadaEmit = new EventEmitter<Peca>();

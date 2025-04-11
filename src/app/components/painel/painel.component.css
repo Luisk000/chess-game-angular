@@ -13,6 +13,8 @@
     box-shadow: 14px 10px 98px 25px rgba(0,0,0,0.5);
     -webkit-box-shadow: 14px 10px 98px 25px rgba(0,0,0,0.5);
     -moz-box-shadow: 14px 10px 98px 25px rgba(0,0,0,0.5);   
+
+    transition: border 0.3s ease;
 }
 
 .jogando {

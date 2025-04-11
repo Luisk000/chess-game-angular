@@ -37,6 +37,7 @@
   <div class="pecas-capturadas">
     <div>
       <img
+        @fade
         *ngFor="let pecaCapturada of pecasCapturadas"
         src="{{ pecaCapturada.imagem }}"
       />

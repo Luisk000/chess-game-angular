@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Peca } from '../../models/peca.model';
+import { fade } from '../../animations';
 
 @Component({
   selector: 'app-painel',
   standalone: false,
   
   templateUrl: './painel.component.html',
-  styleUrl: './painel.component.css'
+  styleUrl: './painel.component.css',
+  animations: [fade]
 })
 export class PainelComponent implements OnInit, OnChanges {
 
