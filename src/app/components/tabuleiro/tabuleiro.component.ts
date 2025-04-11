@@ -206,10 +206,8 @@ export class TabuleiroComponent implements OnInit {
   }
 
   apagarPecaPosicaoAnterior(){
-    let posicaoAnterior = 
-    this.tabuleiroJogo[this.posicaoSelecionada!.coluna][
-      this.posicaoSelecionada!.linha
-      ]
+    let posicaoAnterior = this.tabuleiroJogo
+      [this.posicaoSelecionada!.coluna][this.posicaoSelecionada!.linha]
   
     posicaoAnterior.peca = undefined;
   }
@@ -228,7 +226,6 @@ export class TabuleiroComponent implements OnInit {
       coluna.map((casa) => {
         if (casa.peca)
           casa.peca.animationState = 'void'
-        
       });
     });
   }
@@ -382,6 +379,14 @@ export class TabuleiroComponent implements OnInit {
       this.apagarLocaisAnteriores();
     
     this.dragging = false;
+  }
+
+  isPromocao(coluna: number, linha: number){
+    return this.posicaoPromocao?.coluna == coluna && this.posicaoPromocao?.linha == linha
+  }
+
+  isPecaJogando(peca: Peca){
+    return peca.cor === this.timeJogando && !this.jogoParado && !this.casaDragging
   }
 
 }
