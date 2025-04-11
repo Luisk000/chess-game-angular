@@ -4,8 +4,8 @@
     padding: 10px;
     border-radius: 10px;
     background: radial-gradient(
-        circle at center,
-        #7a401c 0%,
+        ellipse  at center,
+        #753d1b 0%,
         #743A10 50%,
         #5a2a11 100%
     );
