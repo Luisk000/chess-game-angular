@@ -1,0 +1,12 @@
+directories:
+  output: dist
+  buildResources: assets
+appId: com.chess-game
+win:
+  target: portable
+mac:
+  target: []
+linux:
+  target: []
+files: []
+electronVersion: 35.1.5

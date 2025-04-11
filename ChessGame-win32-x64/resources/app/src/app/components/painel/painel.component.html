@@ -1,0 +1,45 @@
+<div
+  class="painel"
+  [ngClass]="{
+    branco: time === 'branco',
+    preto: time === 'preto',
+    jogando: jogando == true
+  }"
+>
+  <div class="painel-title">
+    <p class="title">{{ title }}</p>
+  </div>
+  <div class="title-rodada">
+    <p *ngIf="rodada != 0"
+      [ngStyle]="jogando == true?{'color': '#32CD32'} : {'color': 'rgba(0, 0, 0, 0.2)'}"
+    >
+      RODADA: {{rodada}}
+    </p>
+  </div>
+  <div class="title-jogando">
+    <p class="title-xeque" *ngIf="xeque && !empateTextAtual">Em Xeque!</p>
+    <p class="title-vitoria" *ngIf="vitoria">Vitória!</p>
+    <p class="title-empate" *ngIf="empateTextAtual">{{empateTextAtual}}</p>
+  </div>
+  <div class="botao-box" >
+    <button 
+      *ngIf="vitoria || derrota || empate"
+      class="botao-jogar-novamente"
+      (click)="jogarNovamente()"
+    >Jogar Novamente</button>
+    <button 
+      *ngIf="empateTextOpcional"
+      class="botao-opcao-empatar"
+      (click)="pedirEmpate()"
+    >Pedir Empate</button>
+  </div>
+
+  <div class="pecas-capturadas">
+    <div>
+      <img
+        *ngFor="let pecaCapturada of pecasCapturadas"
+        src="{{ pecaCapturada.imagem }}"
+      />
+    </div>
+  </div>
+</div>

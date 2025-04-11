@@ -1,0 +1,42 @@
+.widget-promocao{
+    width: 140px;
+    height: 140px;
+    background-color: saddlebrown;
+    border-radius: 5px;
+    display: flex;
+    position: absolute;
+
+    -webkit-box-shadow: 0px -1px 37px 5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px -1px 37px 5px rgba(0,0,0,0.75);
+    box-shadow: 0px -1px 37px 5px rgba(0,0,0,0.75);   
+}
+
+.time-preto{
+    margin-top: -140px;
+}
+
+
+.left{
+    margin-left: -30px;
+}
+
+.right{
+    margin-left: -170px;
+}
+
+.opcoes-pecas{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+img{
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.15);
+}

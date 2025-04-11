@@ -1,0 +1,90 @@
+<div class="tabuleiro">
+  <div class="casas-tabuleiro">
+    <div class="coluna" *ngFor="let coluna of tabuleiroBackground">
+      <div
+        class="casa"
+        *ngFor="let casa of coluna"
+        [ngStyle]="{ 'background-color': casa.cor }"
+      ></div>
+    </div>
+  </div>
+  <div class="casas-acao">
+    <div class="coluna" *ngFor="let coluna of tabuleiroJogo; let col = index">
+      <div
+        *ngFor="let casa of coluna; let ca = index"
+        (click)="moverPeca(casa, col, ca)"
+
+        class="casa"  
+        [ngClass]="{
+          'acao-possivel': casa.cor === 'LimeGreen' && !jogoParado,
+          'xeque': casa.cor === 'red' && !jogoParado,
+        }"
+
+        cdkDropList
+        [id]="'posicao' + col + ca"
+        [cdkDropListData]="casa"
+        [cdkDropListSortingDisabled]="true"     
+        [cdkDropListConnectedTo]="getIds()"    
+        (cdkDropListDropped)="drop($event, col, ca)"   
+      >
+        <span *ngIf="casa.peca" [@move]="getAnimation(casa.peca, col, ca)">
+          <img
+            src="{{ casa.peca.imagem }}"
+
+            class="imagem-peca"  
+            [ngClass]="{ 'peca-jogando': isPecaJogando(casa.peca) }"
+            [class.hidden]="casaDragging == casa && casa.cor == 'LimeGreen'"                  
+            
+            cdkDrag    
+            (cdkDragStarted)="dragging = true"
+            (cdkDragExited)="casaDragging = undefined"
+            [cdkDragDisabled]="casa.peca.cor != timeJogando || jogoParado"
+
+            (cdkDragEntered)="enterCasa($event)"
+            (mousedown)="mostrarAcoesPossiveis(casa.peca, col, ca)"   
+          />
+          
+        </span>
+        <app-tabuleiro-promocao
+          @fade
+          *ngIf="isPromocao(col, ca) && casa.peca"
+
+          [time]="casa.peca.cor"
+          [linha]="ca"
+          (confirmarPeca)="confirmarPecaPeaoPromovido($event)"
+        ></app-tabuleiro-promocao>
+      </div>
+    </div>
+  </div>
+</div>
+
+<span *ngIf="!dragging">
+  <app-tabuleiro-roque
+    *ngIf="posicaoRoque === 'branco-left' || posicaoRoque === 'branco'"
+    [marginTop]="-55"
+    [marginLeft]="110"
+    [width]="150"
+    (click)="realizarRoque('branco-left')"
+  ></app-tabuleiro-roque>
+  <app-tabuleiro-roque
+    *ngIf="posicaoRoque === 'preto-left' || posicaoRoque === 'preto'"
+    [marginTop]="-546"
+    [marginLeft]="110"
+    [width]="150"
+    (click)="realizarRoque('preto-left')"
+  ></app-tabuleiro-roque>
+  <app-tabuleiro-roque
+    *ngIf="posicaoRoque === 'branco-right' || posicaoRoque === 'branco'"
+    [marginTop]="-56"
+    [marginLeft]="390"
+    [width]="80"
+    (click)="realizarRoque('branco-right')"
+  ></app-tabuleiro-roque>
+  <app-tabuleiro-roque
+    *ngIf="posicaoRoque === 'preto-right' || posicaoRoque === 'preto'"
+    [marginTop]="-546"
+    [marginLeft]="390"
+    [width]="80"
+    (click)="realizarRoque('preto-right')"
+  ></app-tabuleiro-roque>
+</span>

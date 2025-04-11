@@ -1,0 +1,39 @@
+<div class="background">
+  <app-painel
+    time="branco"
+    [jogando]="jogador1Jogando"
+    [pecasCapturadas]="pecasCapturadasJogador1"
+    [xeque]="xequeJogador1"
+    [vitoria]="vitoriaJogador1"
+    [derrota]="vitoriaJogador2"
+    [empate]="empate"
+    [empateTextAtual]="empateTextAtual"
+    [empateTextOpcional]="empateTextOpcional"
+    (reiniciarPartida)="reiniciarPartida()"
+    (empatarEmit)="empatar($event)"
+  ></app-painel>
+  <app-tabuleiro
+    (pecaCapturadaEmit)="adicionarPecaCapturada($event)"
+    (timeJogandoEmit)="mudarTimeJogando()"
+    (xequeEmit)="mostrarXeque()"
+    (xequeMateEmit)="mostrarXequeMate()"
+    (empateEmit)="empatar($event)"
+    (empateOpcionalEmit)="mostrarOpcaoEmpatar($event)"
+  ></app-tabuleiro>
+  <app-painel
+    time="preto"
+    [jogando]="jogador2Jogando"
+    [pecasCapturadas]="pecasCapturadasJogador2"
+    [xeque]="xequeJogador2"
+    [vitoria]="vitoriaJogador2"
+    [derrota]="vitoriaJogador1"
+    [empate]="empate"
+    [empateTextAtual]="empateTextAtual"
+    [empateTextOpcional]="empateTextOpcional"
+    (reiniciarPartida)="reiniciarPartida()"
+    (empatarEmit)="empatar($event)"
+  ></app-painel>
+  <div class="popup-text xeque" *ngIf="xeque" @fade>XEQUE</div>
+  <div class="popup-text xeque-mate" *ngIf="xequeMate" @fade>XEQUE-MATE</div>
+  <div class="popup-text empate" *ngIf="empatePopUp" @fade>EMPATE</div>
+</div>
