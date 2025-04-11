@@ -4,12 +4,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "electron": "npx electron .",
-    "build": "ng build --configuration production",
-    "electron:build": "electron-builder"
+
+    "build": "ng build"
+
   },
   "build": {
-    "appId": "com.seuapp.angular",
+    "options": {
+      "outputPath": "dist/chess-game/browser/index.html"
+    },
+    "appId": "com.chess-game",
     "files": [
       "dist/",
       "electron.main.js"
