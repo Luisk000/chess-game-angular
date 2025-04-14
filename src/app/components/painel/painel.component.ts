@@ -24,6 +24,8 @@ export class PainelComponent implements OnInit, OnChanges {
   @Input() empate = false;
   @Input() empateTextAtual = "";
   @Input() empateTextOpcional = "";
+  @Input() reinicioTick = false;
+
 
   @Output() reiniciarPartida = new EventEmitter();
   @Output() empatarEmit = new EventEmitter<string>();
@@ -36,10 +38,11 @@ export class PainelComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes['vitoria'] && changes['vitoria'].currentValue == false) ||
-        (changes['empate'] && changes['empate'].currentValue == false) ||
-        (changes['derrota'] && changes['derrota'].currentValue == false))
-      this.rodada = 0;  
+    if ((changes['reinicioTick']))
+        this.rodada = 0 
+
+    if ((changes['reinicioTick']) && !changes['jogando'] && this.time == "branco")
+      this.rodada = 1 
     
     if (changes['jogando'] && changes['jogando'].currentValue == true) 
       this.rodada++;

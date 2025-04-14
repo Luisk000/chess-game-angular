@@ -9,6 +9,7 @@
     [empate]="empate"
     [empateTextAtual]="empateTextAtual"
     [empateTextOpcional]="empateTextOpcional"
+    [reinicioTick]="reinicioTick"
     (reiniciarPartida)="reiniciarPartida()"
     (empatarEmit)="empatar($event)"
   ></app-painel>
@@ -30,10 +31,13 @@
     [empate]="empate"
     [empateTextAtual]="empateTextAtual"
     [empateTextOpcional]="empateTextOpcional"
+    [reinicioTick]="reinicioTick"
     (reiniciarPartida)="reiniciarPartida()"
     (empatarEmit)="empatar($event)"
   ></app-painel>
   <div class="popup-text xeque" *ngIf="xeque" @fade>XEQUE</div>
   <div class="popup-text xeque-mate" *ngIf="xequeMate" @fade>XEQUE-MATE</div>
   <div class="popup-text empate" *ngIf="empatePopUp" @fade>EMPATE</div>
+  
 </div>
+<app-botao-reiniciar (reiniciarEmit)="reiniciarPartida()"></app-botao-reiniciar>

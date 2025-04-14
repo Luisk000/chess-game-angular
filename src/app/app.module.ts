@@ -9,6 +9,7 @@ import { TabuleiroPromocaoComponent } from './components/tabuleiro/tabuleiro-pro
 import { TabuleiroRoqueComponent } from './components/tabuleiro/tabuleiro-roque/tabuleiro-roque.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { BotaoReiniciarComponent } from './components/botao-reiniciar/botao-reiniciar.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
     TabuleiroComponent,
     PainelComponent,
     TabuleiroPromocaoComponent,
-    TabuleiroRoqueComponent
+    TabuleiroRoqueComponent,
+    BotaoReiniciarComponent
   ],
   imports: [
     BrowserModule,

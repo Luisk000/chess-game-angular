@@ -3,6 +3,7 @@ import { Peca } from './models/peca.model';
 import { fade } from './animations';
 import { TabuleiroComponent } from './components/tabuleiro/tabuleiro.component';
 import { Rei } from './models/pecas/rei.model';
+import { PainelComponent } from './components/painel/painel.component';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,10 @@ export class AppComponent {
   xeque = false;
   xequeMate = false;
 
+  reinicioTick = false;
+
   @ViewChild(TabuleiroComponent) tabuleiroComponent!: TabuleiroComponent;
+  @ViewChild(PainelComponent) painelComponent!: PainelComponent;
 
   adicionarPecaCapturada(event: any){
     let peca: Peca = event;
@@ -104,7 +108,8 @@ export class AppComponent {
 
     this.xeque = false;
     this.xequeMate = false;
-
+    
+    this.reinicioTick = !this.reinicioTick
     this.tabuleiroComponent.reiniciarPartida();
   }
 
