@@ -1,6 +1,6 @@
-# Release 
+# Versão 1.0 pode ser instalada em:
 
-Versão 1.0
+[Baixar versão 1.0.0 para Windows](https://github.com/Luisk000/chess-game-angular/releases/download/v1.0.0/chess-game.zip)
 
 # ChessGame
 
